@@ -5,6 +5,7 @@ import java.util.List;
 public class Model {
 	private View view;
 	private List<AlarmView> listAlarm;
+	private AlarmView selectedAlarm = null;
 	
 	public Model(){}
 	
