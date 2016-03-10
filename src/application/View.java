@@ -1,11 +1,17 @@
 package application;
 	
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
@@ -31,6 +37,8 @@ public class View {
 			Rectangle botLeftRect = new Rectangle();
 			Rectangle botRightRect = new Rectangle();
 			
+			ListView<AlarmView> scrollAlarm = new ListView<AlarmView>();
+			
 			Button buttonAddAlarmRandom = new Button();
 			
 			/* Mise à jour controller */
@@ -46,7 +54,7 @@ public class View {
 			botLeft.setLayoutX(0);
 			botLeft.setLayoutY(200);
 			
-			botRight.setLayoutX(500);
+			botRight.setLayoutX(485);
 			botRight.setLayoutY(200);
 			
 			/* Réglages des rectangles */
@@ -63,6 +71,10 @@ public class View {
 			botRightRect.setHeight(550);
 			botRightRect.setFill(Color.ALICEBLUE);
 			
+			/* Réglage du scrollList */
+			scrollAlarm.setPrefWidth(515);
+			scrollAlarm.setPrefHeight(550);
+			
 			/* Positionnement des boutons */
 			
 			buttonAddAlarmRandom.setLayoutX(5);
@@ -72,9 +84,10 @@ public class View {
 
 				@Override
 				public void handle(ActionEvent arg0) {
-					AlarmView a = new AlarmView(new Alarm());
+					AlarmView a = new AlarmView(new Alarm());	
 					
-					botRight.getChildren().add(a);
+					
+					scrollAlarm.getItems().add(a);					
 				}
 				
 			});
@@ -87,6 +100,7 @@ public class View {
 			botLeft.getChildren().add(buttonAddAlarmRandom);
 			
 			botRight.getChildren().add(botRightRect);
+			botRight.getChildren().add(scrollAlarm);
 			
 			root.getChildren().add(top);
 			root.getChildren().add(botLeft);

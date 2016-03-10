@@ -2,13 +2,17 @@ package application;
 
 import java.util.List;
 
+import javafx.scene.control.ListView;
+
 public class Model {
 	private View view;
-	private List<AlarmView> listAlarm;
-	private AlarmView selectedAlarm = null;
+	private ListView<AlarmView> listAlarm;
 	
 	public Model(){}
 	
+	public void addAlarm(AlarmView a){
+		
+	}
 	
 	/* Getter/Setters */
 	
