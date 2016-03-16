@@ -1,10 +1,11 @@
 package application;
 
+import java.io.Serializable;
 import java.util.List;
 
 import application.alarm.AlarmView;
 
-public class Model {
+public class Model implements Serializable {
 	private View view;
 	private List<AlarmView> listAlarm;
 	

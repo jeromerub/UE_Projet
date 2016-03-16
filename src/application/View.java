@@ -74,6 +74,7 @@ public class View {
 			botRightRect.setFill(Color.ALICEBLUE);
 			
 			/* Réglage du scrollList */
+			
 			scrollAlarm.setPrefWidth(515);
 			scrollAlarm.setPrefHeight(550);
 			

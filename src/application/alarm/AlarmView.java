@@ -19,7 +19,7 @@ public class AlarmView extends Parent {
 	
 	public AlarmView(Alarm a){
 		Rectangle fond = new Rectangle();
-		ImageView img = new ImageView(new Image(AlarmView.class.getResourceAsStream("images/picto_alarme.png")));
+		ImageView img = new ImageView(new Image(AlarmView.class.getResourceAsStream("../images/picto_alarme.png")));
 		Text nom = new Text();
 		Text description = new Text();
 		
