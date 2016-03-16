@@ -2,6 +2,8 @@ package application;
 
 import java.util.List;
 
+import application.alarm.AlarmView;
+
 public class Model {
 	private View view;
 	private List<AlarmView> listAlarm;

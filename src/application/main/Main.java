@@ -1,5 +1,8 @@
-package application;
+package application.main;
 
+import application.Controller;
+import application.Model;
+import application.View;
 import javafx.application.Application;
 import javafx.stage.Stage;
 

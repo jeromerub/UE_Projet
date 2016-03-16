@@ -1,6 +1,8 @@
-package application;
+package application.alarm;
 
 import java.util.Random;
+
+import application.priorite.Priorite;
 
 public class Alarm {
 	

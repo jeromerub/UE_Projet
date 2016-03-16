@@ -1,4 +1,4 @@
-package application;
+package application.alarm;
 
 import javafx.scene.Parent;
 import javafx.scene.image.Image;
