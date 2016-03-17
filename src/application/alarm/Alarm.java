@@ -1,10 +1,12 @@
 package application.alarm;
 
+import java.io.Serializable;
 import java.util.Random;
 
 import application.priorite.Priorite;
 
-public class Alarm {
+public class Alarm implements Serializable  {
+	private static final long serialVersionUID = -8612689776852043766L;
 	
 	/* Attributs static alarme random */
 	private static int cptRandom = 0;

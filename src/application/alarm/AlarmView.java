@@ -15,7 +15,7 @@ public class AlarmView extends Parent {
 	public static final Color jaune = new Color(0.92, 0.84, 0.30, 1);
 	public static final Color vert = new Color(0.25, 0.85, 0.35, 1);
 	
-	private Alarm alarm;
+	public Alarm alarm;
 	
 	public AlarmView(Alarm a){
 		Rectangle fond = new Rectangle();
@@ -69,5 +69,9 @@ public class AlarmView extends Parent {
 		this.getChildren().add(img);
 		this.getChildren().add(nom);
 		this.getChildren().add(description);
+	}
+	
+	public Alarm getAlarm(){
+		return this.alarm;
 	}
 }

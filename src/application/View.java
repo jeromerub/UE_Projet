@@ -1,15 +1,9 @@
 package application;
-	
+
 import application.alarm.Alarm;
 import application.alarm.AlarmView;
-import javafx.application.Application;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -23,6 +17,8 @@ public class View {
 	
 	private static Stage pStage;
 	private Controller controller;
+	
+	private ListView<AlarmView> scrollAlarm;
 	
 	public View(Stage primaryStage, Controller c) {
 		try {
@@ -39,17 +35,25 @@ public class View {
 			Rectangle botLeftRect = new Rectangle();
 			Rectangle botRightRect = new Rectangle();
 			
-			ListView<AlarmView> scrollAlarm = new ListView<AlarmView>();
-			
 			Button buttonAddAlarmRandom = new Button();
+			Button buttonSaveAlarms = new Button();
+			
+			/* Ajout de la feuille de style css */
+			
+			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			
 			/* Mise à jour controller */
 			
 			this.controller = c;
 			
-			/* Ajout de la feuille de style css */
+			/* Chargement des alarmes */
 			
-			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+			this.scrollAlarm = new ListView<AlarmView>();
+			
+			for(Alarm a : this.getController().getModel().getListAlarm()){
+				this.scrollAlarm.getItems().add(new AlarmView(a));
+			}
+
 			
 			/* Positionnement des groupes */
 			
@@ -73,12 +77,12 @@ public class View {
 			botRightRect.setHeight(550);
 			botRightRect.setFill(Color.ALICEBLUE);
 			
-			/* Réglage du scrollList */
+			/* Paramétrage du scrollList */
 			
 			scrollAlarm.setPrefWidth(515);
 			scrollAlarm.setPrefHeight(550);
 			
-			/* Positionnement des boutons */
+			/* Paramétrage des boutons */
 			
 			buttonAddAlarmRandom.setLayoutX(5);
 			buttonAddAlarmRandom.setLayoutY(5);
@@ -86,14 +90,23 @@ public class View {
 			buttonAddAlarmRandom.setOnAction(new EventHandler<ActionEvent>(){
 
 				@Override
-				public void handle(ActionEvent arg0) {
-					AlarmView a = new AlarmView(new Alarm());	
-					
-					
-					scrollAlarm.getItems().add(a);					
+				public void handle(ActionEvent arg0) {			
+					getController().putAlarm(scrollAlarm);		
 				}
 				
 			});
+			
+			buttonSaveAlarms.setLayoutX(5);
+			buttonSaveAlarms.setLayoutY(40);
+			buttonSaveAlarms.setText("Save All");
+			buttonSaveAlarms.setOnAction(new EventHandler<ActionEvent>(){
+
+				@Override
+				public void handle(ActionEvent arg0) {
+					getController().saveAlarms();				
+				}
+				
+			});	
 			
 			/* Ajout éléments à la scène */			
 			
@@ -101,6 +114,7 @@ public class View {
 			
 			botLeft.getChildren().add(botLeftRect);
 			botLeft.getChildren().add(buttonAddAlarmRandom);
+			botLeft.getChildren().add(buttonSaveAlarms);
 			
 			botRight.getChildren().add(botRightRect);
 			botRight.getChildren().add(scrollAlarm);
