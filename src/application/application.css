@@ -1,9 +1,25 @@
 /* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
 
-#nom {
+#nom-alarmview {
 	-fx-font: 32px "Serif";
 }
 
-#desc {
+#desc-alarmview {
+	-fx-font: 20px "Serif";
+}
+
+#nom-infoalarm {
+	-fx-font: 20px "Serif";
+}
+
+#desc-infoalarm {
+	-fx-font: 20px "Serif";
+}
+
+#priorite-infoalarm {
+	-fx-font: 20px "Serif";
+}
+
+#treated-infoalarm {
 	-fx-font: 20px "Serif";
 }

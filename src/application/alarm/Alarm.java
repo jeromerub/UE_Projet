@@ -16,6 +16,7 @@ public class Alarm implements Serializable  {
 	private Priorite priorite;
 	private String nom;
 	private String desc;
+	private boolean isTreated;
 	
 	/* Génération d'une alarme aléatoire */
 	public Alarm(){
@@ -30,6 +31,7 @@ public class Alarm implements Serializable  {
 		}
 		
 		this.desc = "Alarme de priorité " + this.priorite;
+		this.isTreated = false;
 	}
 	
 	/* Génération d'une alarm avec un nom, une description aléatoire et une priorité aléatoire */
@@ -45,12 +47,14 @@ public class Alarm implements Serializable  {
 		}
 		
 		this.desc = "Alarme de priorité " + this.priorite;
+		this.isTreated = false;
 	}
 	
 	/* Génération d'une alarme avec un nom et une description et une priorité aléatoire */
 	public Alarm(String nom, String desc){
 		this.nom = nom;
 		this.desc = desc;
+		this.isTreated = false;
 		
 		switch(random(4)){
 			case 0: this.priorite = Priorite.Basse; break;
@@ -66,6 +70,7 @@ public class Alarm implements Serializable  {
 		this.nom = nom;
 		this.priorite = p;		
 		this.desc = desc;
+		this.isTreated = false;
 	}
 	
 	public String getNom(){
@@ -78,6 +83,14 @@ public class Alarm implements Serializable  {
 
 	public Priorite getPriorite(){
 		return this.priorite;
+	}
+	
+	public void setTreated(){
+		this.isTreated = true;
+	}
+	
+	public boolean isTreated(){
+		return this.isTreated;
 	}
 	
 	/* Affiche sur stdout des infos sur l'alarme */

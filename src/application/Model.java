@@ -51,6 +51,10 @@ public class Model implements Serializable {
 		this.listAlarm.add(a);
 	}
 	
+	public void removeAlarm(Alarm a){
+		this.listAlarm.remove(a);
+	}
+	
 	public List<Alarm> getListAlarm(){
 		return this.listAlarm;
 	}
