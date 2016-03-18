@@ -18,25 +18,32 @@ public class Controller {
 	}
 	
 	public void majInfoAlarm(AlarmView av, Text nom, Text desc, Text prio, Text treated){
-		nom.setText(av.getAlarm().getNom());
-		desc.setText(av.getAlarm().getDesc());
-		prio.setText("Priorité " + av.getAlarm().getPriorite());
-		
-		if(av.getAlarm().isTreated()) treated.setText("Alarme traitée");
-		else treated.setText("Alarme non-traitée");
+		if(av != null){
+			nom.setText(av.getAlarm().getNom());
+			desc.setText(av.getAlarm().getDesc());
+			prio.setText("Priorité " + av.getAlarm().getPriorite());
+			
+			if(av.getAlarm().isTreated()) treated.setText("Alarme traitée");
+			else treated.setText("Alarme non-traitée");
+		} else {
+			nom.setText("");
+			desc.setText("");
+			prio.setText("");
+			treated.setText("");
+		}
 	}
 	
 	public void putAlarm(ListView<AlarmView> list){
-		AlarmView a = new AlarmView(new Alarm());
+		AlarmView a = new AlarmView(new Alarm(), View.getPrimaryStage().getScene().getWidth() - 210);
 		
 		list.getItems().add(a);
 		this.getModel().addAlarm(a.getAlarm());
 	}
 	
 	public void deleteAlarm(ListView<AlarmView> list){
-		if(list.getSelectionModel().getSelectedItem() != null){
-			list.getItems().remove(list.getSelectionModel().getSelectedItem());
+		if(list.getSelectionModel().getSelectedItem() != null){	
 			this.getModel().removeAlarm(list.getSelectionModel().getSelectedItem().getAlarm());
+			list.getItems().remove(list.getSelectionModel().getSelectedItem());
 		}
 	}
 	
@@ -44,7 +51,7 @@ public class Controller {
 		ObjectOutputStream oos = null;
 		
 		try {
-			oos = new ObjectOutputStream(new FileOutputStream("alarms.txt"));
+			oos = new ObjectOutputStream(new FileOutputStream("alarms"));
 			oos.writeObject(this.getModel().getListAlarm());
 			oos.flush();
 			

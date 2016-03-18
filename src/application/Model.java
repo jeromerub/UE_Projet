@@ -20,7 +20,7 @@ public class Model implements Serializable {
 		/* A la création on charge les alarmes dans le model */
 		
 		try {
-			ObjectInputStream ois = new ObjectInputStream(new FileInputStream("alarms.txt"));
+			ObjectInputStream ois = new ObjectInputStream(new FileInputStream("alarms"));
 			
 			this.listAlarm = (List<Alarm>) ois.readObject();
 			

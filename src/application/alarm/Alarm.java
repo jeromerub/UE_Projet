@@ -9,7 +9,7 @@ public class Alarm implements Serializable  {
 	private static final long serialVersionUID = -8612689776852043766L;
 	
 	/* Attributs static alarme random */
-	private static int cptRandom = 0;
+	public static int cptRandom = 0;
 	private static Random random = new Random(123456789L);
 	
 	/* Attributs */

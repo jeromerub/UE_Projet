@@ -9,7 +9,6 @@ import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -19,7 +18,7 @@ import javafx.stage.Stage;
 
 public class View {
 	
-	private static Stage pStage;
+	private static Stage pStage = null;
 	private Controller controller;
 	
 	private ListView<AlarmView> scrollAlarm;
@@ -62,8 +61,18 @@ public class View {
 			this.scrollAlarm = new ListView<AlarmView>();
 			
 			for(Alarm a : this.getController().getModel().getListAlarm()){
-				this.scrollAlarm.getItems().add(new AlarmView(a));
+				this.scrollAlarm.getItems().add(new AlarmView(a, scene.getWidth() - 210));
 			}
+			
+			/* Permet de ne jamais avoir 2 alarmes identiques (provisoire) */
+			
+			if((this.scrollAlarm.getItems().size() - 1) != -1)
+				Alarm.cptRandom = Integer.parseInt(this.scrollAlarm.getItems().get(this.scrollAlarm.getItems().size() - 1).getAlarm().getNom().substring(7));
+			
+			/* Réglage de la scène */
+			
+			primaryStage.setMinHeight(390);
+			primaryStage.setMinWidth(718);
 			
 			/* Définition style des labels */
 			
@@ -88,7 +97,7 @@ public class View {
 			botLeft.setLayoutX(0);
 			botLeft.setLayoutY(200);
 			
-			botRight.setLayoutX(485);
+			botRight.setLayoutX(200);
 			botRight.setLayoutY(200);
 			
 			/* Réglages des rectangles */
@@ -97,19 +106,23 @@ public class View {
 			topRect.setHeight(200);
 			topRect.setFill(Color.DARKGREY);
 
-			botLeftRect.setWidth(500);
+			botLeftRect.setWidth(200);
 			botLeftRect.setHeight(550);
 			botLeftRect.setFill(Color.CORNSILK);
 
-			botRightRect.setWidth(500);
+			botRightRect.setWidth(800);
 			botRightRect.setHeight(550);
 			botRightRect.setFill(Color.ALICEBLUE);
 			
 			/* Paramétrage du scrollList */
-			
-			scrollAlarm.setPrefWidth(515);
+
+			scrollAlarm.setPrefWidth(800);
 			scrollAlarm.setPrefHeight(550);
 			
+			for(AlarmView av : scrollAlarm.getItems()){
+				av.setFondWidth(scene.getWidth() - 210);
+			}
+
 			scrollAlarm.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<AlarmView>() {
 
 			    @Override
@@ -118,10 +131,33 @@ public class View {
 			    }
 			});
 			
+			/* Responsive Design */
+			
+			scene.widthProperty().addListener(new ChangeListener<Number>() {
+			    @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth, Number newSceneWidth) {
+			    	topRect.setWidth(newSceneWidth.floatValue());
+					botRightRect.setWidth(newSceneWidth.floatValue() - 200);
+					scrollAlarm.setPrefWidth(newSceneWidth.floatValue());
+					
+					for(AlarmView av : scrollAlarm.getItems()){
+						av.setFondWidth(newSceneWidth.floatValue() - 210);
+					}
+			    }
+			});
+			
+			scene.heightProperty().addListener(new ChangeListener<Number>() {
+			    @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneHeight, Number newSceneHeight) {
+			    	botLeftRect.setHeight(newSceneHeight.floatValue() - 200);
+			    	botRightRect.setHeight(newSceneHeight.floatValue() - 200);
+			    	scrollAlarm.setPrefHeight(newSceneHeight.floatValue() - 200);
+			    }
+			});
+			
 			/* Paramétrage des boutons */
 			
 			buttonAddAlarmRandom.setLayoutX(5);
 			buttonAddAlarmRandom.setLayoutY(5);
+			buttonAddAlarmRandom.setPrefWidth(190);
 			buttonAddAlarmRandom.setText("Add Random Alarm");
 			buttonAddAlarmRandom.setOnAction(new EventHandler<ActionEvent>(){
 				
@@ -136,6 +172,7 @@ public class View {
 			
 			buttonSaveAlarms.setLayoutX(5);
 			buttonSaveAlarms.setLayoutY(40);
+			buttonSaveAlarms.setPrefWidth(190);
 			buttonSaveAlarms.setText("Save All");
 			buttonSaveAlarms.setOnAction(new EventHandler<ActionEvent>(){
 
@@ -150,6 +187,7 @@ public class View {
 			
 			buttonDeleteAlarm.setLayoutX(5);
 			buttonDeleteAlarm.setLayoutY(75);
+			buttonDeleteAlarm.setPrefWidth(190);
 			buttonDeleteAlarm.setText("Delete Alarm");
 			buttonDeleteAlarm.setOnAction(new EventHandler<ActionEvent>(){
 
@@ -164,6 +202,7 @@ public class View {
 			
 			buttonTreatAlarm.setLayoutX(5);
 			buttonTreatAlarm.setLayoutY(110);
+			buttonTreatAlarm.setPrefWidth(190);
 			buttonTreatAlarm.setText("Treat Alarm");
 			buttonTreatAlarm.setOnAction(new EventHandler<ActionEvent>(){
 
