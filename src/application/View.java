@@ -47,6 +47,8 @@ public class View {
 			Button buttonSaveAlarms = new Button();
 			Button buttonDeleteAlarm = new Button();
 			Button buttonTreatAlarm = new Button();
+			Button buttonSortByTime = new Button();
+			Button buttonSortByPriority = new Button();
 			
 			/* Ajout de la feuille de style css */
 			
@@ -71,7 +73,7 @@ public class View {
 			
 			/* Réglage de la scène */
 			
-			primaryStage.setMinHeight(390);
+			primaryStage.setMinHeight(425);
 			primaryStage.setMinWidth(718);
 			
 			/* Définition style des labels */
@@ -215,6 +217,36 @@ public class View {
 				
 			});	
 			
+			buttonSortByTime.setLayoutX(5);
+			buttonSortByTime.setLayoutY(145);
+			buttonSortByTime.setPrefWidth(90);
+			buttonSortByTime.setText("Sort Time");
+			buttonSortByTime.setOnAction(new EventHandler<ActionEvent>(){
+
+				/* Tri part date de création */
+				
+				@Override
+				public void handle(ActionEvent arg0) {
+					getController().sortAlarmsByTime(scrollAlarm);				
+				}
+				
+			});	
+			
+			buttonSortByPriority.setLayoutX(105);
+			buttonSortByPriority.setLayoutY(145);
+			buttonSortByPriority.setPrefWidth(90);
+			buttonSortByPriority.setText("Sort Prio");
+			buttonSortByPriority.setOnAction(new EventHandler<ActionEvent>(){
+
+				//* Tri part priorité */
+				
+				@Override
+				public void handle(ActionEvent arg0) {
+					getController().sortAlarmsByPriority(scrollAlarm);				
+				}
+				
+			});	
+			
 			/* Ajout éléments à la scène */			
 			
 			top.getChildren().add(topRect);
@@ -228,6 +260,8 @@ public class View {
 			botLeft.getChildren().add(buttonSaveAlarms);
 			botLeft.getChildren().add(buttonDeleteAlarm);
 			botLeft.getChildren().add(buttonTreatAlarm);
+			botLeft.getChildren().add(buttonSortByTime);
+			botLeft.getChildren().add(buttonSortByPriority);
 			
 			botRight.getChildren().add(botRightRect);
 			botRight.getChildren().add(scrollAlarm);

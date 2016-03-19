@@ -4,6 +4,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import application.alarm.Alarm;
 import application.alarm.AlarmView;
@@ -17,6 +21,7 @@ public class Controller {
 		this.model = m;
 	}
 	
+	/* Mise a jour des label en haut (top) */
 	public void majInfoAlarm(AlarmView av, Text nom, Text desc, Text prio, Text treated){
 		if(av != null){
 			nom.setText(av.getAlarm().getNom());
@@ -33,13 +38,15 @@ public class Controller {
 		}
 	}
 	
+	/* Ajoute une alarme aléatoire dans le model, puis dans la view */
 	public void putAlarm(ListView<AlarmView> list){
 		AlarmView a = new AlarmView(new Alarm(), View.getPrimaryStage().getScene().getWidth() - 210);
 		
-		list.getItems().add(a);
 		this.getModel().addAlarm(a.getAlarm());
+		list.getItems().add(a);
 	}
 	
+	/* Supprime l'alarme selectionnée dans le model et la view */
 	public void deleteAlarm(ListView<AlarmView> list){
 		if(list.getSelectionModel().getSelectedItem() != null){	
 			this.getModel().removeAlarm(list.getSelectionModel().getSelectedItem().getAlarm());
@@ -47,12 +54,16 @@ public class Controller {
 		}
 	}
 	
+	/* Sauvegarde le contexte (Alarmes + Tri) dans un fichier qui sera chargé à l'ouverture */
 	public void saveAlarms(){
 		ObjectOutputStream oos = null;
 		
 		try {
 			oos = new ObjectOutputStream(new FileOutputStream("alarms"));
 			oos.writeObject(this.getModel().getListAlarm());
+			oos.writeBoolean(this.getModel().getSortedTime());
+			oos.writeBoolean(this.getModel().getSortedPrio());
+			oos.writeBoolean(this.getModel().getSortedReverse());
 			oos.flush();
 			
 		} catch (FileNotFoundException e) {
@@ -71,10 +82,98 @@ public class Controller {
 	    }
 	}
 	
+	/*  Traite une alarme */
 	public void treatAlarm(ListView<AlarmView> list, Text treated){
 		if(list.getSelectionModel().getSelectedItem() != null){
 			treated.setText("Alarme traitée");
 			list.getSelectionModel().getSelectedItem().setTreated();	
+		}
+	}
+	
+	/* Tri la liste d'alarme chronologiquement dans le model et la view */
+	public void sortAlarmsByTime(ListView<AlarmView> listview){
+		List<Alarm> listmodel = this.getModel().getListAlarm();
+		
+		/* Permet d'alterner l'ordre du tri a chaque appel */
+		if(!this.getModel().getSortedTime() || this.getModel().getSortedReverse()){
+			
+			/* Tri de la liste du model par date croissante */
+			Collections.sort(listmodel, new Comparator<Alarm>(){
+				public int compare(Alarm a1, Alarm a2){
+					return a1.getTimestamp().compareTo(a2.getTimestamp());
+				}
+			});
+			
+			/* MaJ de la liste du model */
+			this.getModel().setListAlarm(listmodel);
+			this.getModel().setSortedTime();
+			this.getModel().setSortedNormal();
+			
+		} else {
+			
+			/* Tri de la liste du model par date décroissante */
+			Collections.sort(listmodel, new Comparator<Alarm>(){
+				public int compare(Alarm a1, Alarm a2){
+					return a2.getTimestamp().compareTo(a1.getTimestamp());
+				}
+			});
+			
+			/* MaJ de la liste du model */
+			this.getModel().setListAlarm(listmodel);
+			this.getModel().setSortedTime();
+			this.getModel().setSortedReverse();
+			
+		}
+		
+		/* Vidage de la ListView */
+		listview.getItems().clear();
+		
+		/* MaJ de la ListView */
+		for(Alarm a : listmodel){
+			listview.getItems().add(new AlarmView(a, View.getPrimaryStage().getScene().getWidth() - 210));
+		}
+	}
+
+	/* Tri la liste d'alarme par priorité dans le model et la view */
+	public void sortAlarmsByPriority(ListView<AlarmView> listview){
+		List<Alarm> listmodel = this.getModel().getListAlarm();
+		
+		/* Permet d'alterner l'ordre du tri a chaque appel */
+		if(!this.getModel().getSortedPrio() || this.getModel().getSortedReverse()){
+			
+			/* Tri de la liste du model par priorité */
+			Collections.sort(listmodel, new Comparator<Alarm>(){
+				public int compare(Alarm a1, Alarm a2){
+					return a2.getPriorite().compareTo(a1.getPriorite());
+				}
+			});
+			
+			/* MaJ de la liste du model */
+			this.getModel().setListAlarm(listmodel);
+			this.getModel().setSortedPrio();
+			this.getModel().setSortedNormal();
+			
+		} else {
+			
+			/* Tri de la liste du model par priorité */
+			Collections.sort(listmodel, new Comparator<Alarm>(){
+				public int compare(Alarm a1, Alarm a2){
+					return a1.getPriorite().compareTo(a2.getPriorite());
+				}
+			});
+			
+			/* MaJ de la liste du model */
+			this.getModel().setListAlarm(listmodel);
+			this.getModel().setSortedPrio();
+			this.getModel().setSortedReverse();
+		}
+		
+		/* Vidage de la ListView */
+		listview.getItems().clear();
+		
+		/* MaJ de la ListView */
+		for(Alarm a : listmodel){
+			listview.getItems().add(new AlarmView(a, View.getPrimaryStage().getScene().getWidth() - 210));
 		}
 	}
 	

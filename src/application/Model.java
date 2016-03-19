@@ -16,13 +16,20 @@ public class Model implements Serializable {
 	private transient View view;
 	private List<Alarm> listAlarm = new ArrayList<Alarm>();
 	
+	private boolean isSortedTime = true;
+	private boolean isSortedPrio = false;
+	private boolean isSortedReverse = false;
+	
 	public Model(){		
-		/* A la création on charge les alarmes dans le model */
+		/* A la création on charge les alarmes et le type de tri dans le model */
 		
 		try {
 			ObjectInputStream ois = new ObjectInputStream(new FileInputStream("alarms"));
 			
 			this.listAlarm = (List<Alarm>) ois.readObject();
+			this.isSortedTime = (boolean) ois.readBoolean();
+			this.isSortedPrio = (boolean) ois.readBoolean();
+			this.isSortedReverse = (boolean) ois.readBoolean();
 			
 			ois.close();
 			
@@ -57,5 +64,39 @@ public class Model implements Serializable {
 	
 	public List<Alarm> getListAlarm(){
 		return this.listAlarm;
+	}
+	
+	public void setListAlarm(List<Alarm> newlist){
+		this.listAlarm = newlist;
+	}
+	
+	public boolean getSortedTime(){
+		return this.isSortedTime;
+	}
+	
+	public boolean getSortedPrio(){
+		return this.isSortedPrio;
+	}
+	
+	public boolean getSortedReverse(){
+		return this.isSortedReverse;
+	}
+	
+	public void setSortedTime(){
+		this.isSortedTime = true;
+		this.isSortedPrio = false;
+	}
+	
+	public void setSortedPrio(){
+		this.isSortedTime = false;
+		this.isSortedPrio = true;
+	}
+	
+	public void setSortedNormal(){
+		this.isSortedReverse = false;
+	}
+	
+	public void setSortedReverse(){
+		this.isSortedReverse = true;
 	}
 }

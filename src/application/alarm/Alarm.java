@@ -1,6 +1,8 @@
 package application.alarm;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.Random;
 
 import application.priorite.Priorite;
@@ -17,9 +19,13 @@ public class Alarm implements Serializable  {
 	private String nom;
 	private String desc;
 	private boolean isTreated;
+	private Timestamp created;
 	
 	/* Génération d'une alarme aléatoire */
 	public Alarm(){
+		Date d = new Date();
+		
+		this.created = new Timestamp(d.getTime());
 		this.nom = "Alarme " + ++cptRandom;
 		
 		switch(random(4)){
@@ -32,10 +38,14 @@ public class Alarm implements Serializable  {
 		
 		this.desc = "Alarme de priorité " + this.priorite;
 		this.isTreated = false;
+		
 	}
 	
 	/* Génération d'une alarm avec un nom, une description aléatoire et une priorité aléatoire */
 	public Alarm(String nom){
+		Date d = new Date();
+		
+		this.created = new Timestamp(d.getTime());
 		this.nom = nom;
 		
 		switch(random(4)){
@@ -52,6 +62,9 @@ public class Alarm implements Serializable  {
 	
 	/* Génération d'une alarme avec un nom et une description et une priorité aléatoire */
 	public Alarm(String nom, String desc){
+		Date d = new Date();
+		
+		this.created = new Timestamp(d.getTime());
 		this.nom = nom;
 		this.desc = desc;
 		this.isTreated = false;
@@ -67,6 +80,9 @@ public class Alarm implements Serializable  {
 	
 	/* Génération d'une alarme avec un nom, une description et une priorité */
 	public Alarm(String nom, String desc, Priorite p){
+		Date d = new Date();
+		
+		this.created = new Timestamp(d.getTime());
 		this.nom = nom;
 		this.priorite = p;		
 		this.desc = desc;
@@ -83,6 +99,10 @@ public class Alarm implements Serializable  {
 
 	public Priorite getPriorite(){
 		return this.priorite;
+	}
+	
+	public Timestamp getTimestamp(){
+		return this.created;
 	}
 	
 	public void setTreated(){
