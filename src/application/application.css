@@ -33,17 +33,19 @@
 }
 
 #nom-infoalarm {
-	-fx-font: 20px "Serif";
+	-fx-font: 28px "Serif";
 }
 
 #desc-infoalarm {
-	-fx-font: 20px "Serif";
+	-fx-font-size: 20px;
+	-fx-font-family: "Serif";
+	-fx-text-fill: black;
 }
 
 #priorite-infoalarm {
-	-fx-font: 20px "Serif";
+	-fx-font: 24px "Serif";
 }
 
 #treated-infoalarm {
-	-fx-font: 20px "Serif";
+	-fx-font: 24px "Serif";
 }

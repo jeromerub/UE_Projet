@@ -4,13 +4,13 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
 import application.alarm.Alarm;
 import application.alarm.AlarmView;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.text.Text;
 
@@ -22,11 +22,11 @@ public class Controller {
 	}
 	
 	/* Mise a jour des label en haut (top) */
-	public void majInfoAlarm(AlarmView av, Text nom, Text desc, Text prio, Text treated){
+	public void majInfoAlarm(AlarmView av, Text nom, Label desc, Text prio, Text treated){
 		if(av != null){
 			nom.setText(av.getAlarm().getNom());
 			desc.setText(av.getAlarm().getDesc());
-			prio.setText("Priorité " + av.getAlarm().getPriorite());
+			prio.setText("Priorité : " + av.getAlarm().getPriorite());
 			
 			if(av.getAlarm().isTreated()) treated.setText("Alarme traitée");
 			else treated.setText("Alarme non-traitée");
@@ -93,6 +93,10 @@ public class Controller {
 	/* Tri la liste d'alarme chronologiquement dans le model et la view */
 	public void sortAlarmsByTime(ListView<AlarmView> listview){
 		List<Alarm> listmodel = this.getModel().getListAlarm();
+		AlarmView selected = null;
+		
+		/* Mémorisation de la sélection */
+		selected = listview.getSelectionModel().getSelectedItem();
 		
 		/* Permet d'alterner l'ordre du tri a chaque appel */
 		if(!this.getModel().getSortedTime() || this.getModel().getSortedReverse()){
@@ -132,11 +136,21 @@ public class Controller {
 		for(Alarm a : listmodel){
 			listview.getItems().add(new AlarmView(a, View.getPrimaryStage().getScene().getWidth() - 210));
 		}
+		
+		/* Selection de l'item selected */
+		if(selected != null) {
+			listview.getSelectionModel().select(selected);
+			listview.scrollTo(selected);
+		}
 	}
 
 	/* Tri la liste d'alarme par priorité dans le model et la view */
 	public void sortAlarmsByPriority(ListView<AlarmView> listview){
 		List<Alarm> listmodel = this.getModel().getListAlarm();
+		AlarmView selected = null;
+
+		/* Mémorisation de la sélection */
+		selected = listview.getSelectionModel().getSelectedItem();
 		
 		/* Permet d'alterner l'ordre du tri a chaque appel */
 		if(!this.getModel().getSortedPrio() || this.getModel().getSortedReverse()){
@@ -174,6 +188,12 @@ public class Controller {
 		/* MaJ de la ListView */
 		for(Alarm a : listmodel){
 			listview.getItems().add(new AlarmView(a, View.getPrimaryStage().getScene().getWidth() - 210));
+		}
+		
+		/* Selection de l'item selected */
+		if(selected != null) {
+			listview.getSelectionModel().select(selected);
+			listview.scrollTo(selected);
 		}
 	}
 	

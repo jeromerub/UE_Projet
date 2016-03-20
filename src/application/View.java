@@ -9,6 +9,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -39,7 +40,7 @@ public class View {
 			Rectangle botRightRect = new Rectangle();
 			
 			Text nomAlarm = new Text();
-			Text descAlarm = new Text();
+			Label descAlarm = new Label();
 			Text prioriteAlarm = new Text();
 			Text treatedAlarm = new Text();
 			
@@ -79,19 +80,21 @@ public class View {
 			/* Définition style des labels */
 			
 			nomAlarm.setLayoutX(20);
-			nomAlarm.setLayoutY(30);
+			nomAlarm.setLayoutY(40);
 			nomAlarm.setId("nom-infoalarm");
 			
 			descAlarm.setLayoutX(20);
-			descAlarm.setLayoutY(60);
+			descAlarm.setLayoutY(50);
+			descAlarm.setPrefWidth(960);
+			descAlarm.setWrapText(true);
 			descAlarm.setId("desc-infoalarm");
 			
 			prioriteAlarm.setLayoutX(20);
-			prioriteAlarm.setLayoutY(90);
+			prioriteAlarm.setLayoutY(180);
 			prioriteAlarm.setId("priorite-infoalarm");
 			
-			treatedAlarm.setLayoutX(20);
-			treatedAlarm.setLayoutY(120);
+			treatedAlarm.setLayoutX(250);
+			treatedAlarm.setLayoutY(180);
 			treatedAlarm.setId("treated-infoalarm");
 			
 			/* Positionnement des groupes */
@@ -139,6 +142,7 @@ public class View {
 			    @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth, Number newSceneWidth) {
 			    	topRect.setWidth(newSceneWidth.floatValue());
 					botRightRect.setWidth(newSceneWidth.floatValue() - 200);
+					descAlarm.setPrefWidth(newSceneWidth.floatValue() - 40);
 					scrollAlarm.setPrefWidth(newSceneWidth.floatValue());
 					
 					for(AlarmView av : scrollAlarm.getItems()){

@@ -1,9 +1,10 @@
 package application.alarm;
 
-import application.View;
+import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.SwipeEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
@@ -27,6 +28,27 @@ public class AlarmView extends Parent {
 		
 		this.alarm = a;
 		this.fond = new Rectangle();
+		
+		/* OnTouch Listeners */
+		this.setOnSwipeRight(new EventHandler<SwipeEvent>() {
+			
+			/* Suppression swipe right */
+	        @Override 
+	        public void handle(SwipeEvent event) {
+	            
+	        }
+	        
+		});
+
+		this.setOnSwipeLeft(new EventHandler<SwipeEvent>() {
+			
+			/* Traitement swipe left */
+		    @Override 
+		    public void handle(SwipeEvent event) {
+		        setTreated();
+		    }
+		    
+		});
 		
 		fond.setX(0);
 		fond.setY(0);

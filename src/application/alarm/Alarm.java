@@ -8,7 +8,7 @@ import java.util.Random;
 import application.priorite.Priorite;
 
 public class Alarm implements Serializable  {
-	private static final long serialVersionUID = -8612689776852043766L;
+	private static final long serialVersionUID = 1L;
 	
 	/* Attributs static alarme random */
 	public static int cptRandom = 0;

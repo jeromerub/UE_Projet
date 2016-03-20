@@ -20,6 +20,7 @@ public class Model implements Serializable {
 	private boolean isSortedPrio = false;
 	private boolean isSortedReverse = false;
 	
+	@SuppressWarnings("unchecked")
 	public Model(){		
 		/* A la création on charge les alarmes et le type de tri dans le model */
 		
