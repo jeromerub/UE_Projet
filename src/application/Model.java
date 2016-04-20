@@ -43,7 +43,7 @@ public class Model implements Serializable {
 		} catch (ClassNotFoundException e) {
 	        e.printStackTrace();
 	    } catch (FileNotFoundException e) {
-			e.printStackTrace();
+			save();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
