@@ -1,19 +1,30 @@
 package application;
 
+import java.util.Optional;
+
 import application.alarm.Alarm;
 import application.alarm.AlarmView;
+
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+
 import javafx.scene.Group;
 import javafx.scene.Scene;
+
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Alert.AlertType;
+
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+
 import javafx.stage.Stage;
 
 
@@ -23,10 +34,14 @@ public class View {
 	private Controller controller;
 	
 	private ListView<AlarmView> scrollAlarm;
+	private Text nomAlarm;
+	private Label descAlarm;
+	private Text prioriteAlarm;
+	private Text treatedAlarm;
 	
 	public View(Stage primaryStage, Controller c) {
 		try {
-			/* Déclarations */
+			/* DÃ©clarations */
 			
 			Group root = new Group();
 			Scene scene = new Scene(root, 1000, 750, Color.BEIGE);
@@ -39,23 +54,26 @@ public class View {
 			Rectangle botLeftRect = new Rectangle();
 			Rectangle botRightRect = new Rectangle();
 			
-			Text nomAlarm = new Text();
-			Label descAlarm = new Label();
-			Text prioriteAlarm = new Text();
-			Text treatedAlarm = new Text();
-			
 			Button buttonAddAlarmRandom = new Button();
-			Button buttonSaveAlarms = new Button();
+			Button buttonResetAlarms = new Button();
 			Button buttonDeleteAlarm = new Button();
 			Button buttonTreatAlarm = new Button();
 			Button buttonSortByTime = new Button();
 			Button buttonSortByPriority = new Button();
 			
+			/* Init attributs */
+			
+			this.nomAlarm = new Text();
+			this.descAlarm = new Label();
+			this.prioriteAlarm = new Text();
+			this.treatedAlarm = new Text();
+			this.setPrimaryStage(primaryStage);
+			
 			/* Ajout de la feuille de style css */
 			
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			
-			/* Mise à jour controller */
+			/* Mise ï¿½ jour controller */
 			
 			this.controller = c;
 			
@@ -64,7 +82,7 @@ public class View {
 			this.scrollAlarm = new ListView<AlarmView>();
 			
 			for(Alarm a : this.getController().getModel().getListAlarm()){
-				this.scrollAlarm.getItems().add(new AlarmView(a, scene.getWidth() - 210));
+				this.scrollAlarm.getItems().add(new AlarmView(a, scene.getWidth() - 210, this));
 			}
 			
 			/* Permet de ne jamais avoir 2 alarmes identiques (provisoire) */
@@ -72,12 +90,12 @@ public class View {
 			if((this.scrollAlarm.getItems().size() - 1) != -1)
 				Alarm.cptRandom = Integer.parseInt(this.scrollAlarm.getItems().get(this.scrollAlarm.getItems().size() - 1).getAlarm().getNom().substring(7));
 			
-			/* Réglage de la scène */
+			/* RÃ©glage de la scÃ¨ne */
 			
 			primaryStage.setMinHeight(425);
 			primaryStage.setMinWidth(718);
 			
-			/* Définition style des labels */
+			/* DÃ©finition style des labels */
 			
 			nomAlarm.setLayoutX(20);
 			nomAlarm.setLayoutY(40);
@@ -105,7 +123,7 @@ public class View {
 			botRight.setLayoutX(200);
 			botRight.setLayoutY(200);
 			
-			/* Réglages des rectangles */
+			/* RÃ©glage des rectangles */
 			
 			topRect.setWidth(1000);
 			topRect.setHeight(200);
@@ -119,7 +137,7 @@ public class View {
 			botRightRect.setHeight(550);
 			botRightRect.setFill(Color.ALICEBLUE);
 			
-			/* Paramétrage du scrollList */
+			/* ParamÃ©trage du scrollList */
 
 			scrollAlarm.setPrefWidth(800);
 			scrollAlarm.setPrefHeight(550);
@@ -132,7 +150,7 @@ public class View {
 
 			    @Override
 			    public void changed(ObservableValue<? extends AlarmView> observable, AlarmView oldValue, AlarmView newValue) {
-			        getController().majInfoAlarm(newValue, nomAlarm, descAlarm, prioriteAlarm, treatedAlarm);
+			        getController().majInfoAlarm();
 			    }
 			});
 			
@@ -147,6 +165,7 @@ public class View {
 					
 					for(AlarmView av : scrollAlarm.getItems()){
 						av.setFondWidth(newSceneWidth.floatValue() - 210);
+						av.setDeleteLayoutX(newSceneWidth.floatValue() - 270);
 					}
 			    }
 			});
@@ -159,7 +178,7 @@ public class View {
 			    }
 			});
 			
-			/* Paramétrage des boutons */
+			/* ParamÃ©trage des boutons */
 			
 			buttonAddAlarmRandom.setLayoutX(5);
 			buttonAddAlarmRandom.setLayoutY(5);
@@ -167,37 +186,37 @@ public class View {
 			buttonAddAlarmRandom.setText("Add Random Alarm");
 			buttonAddAlarmRandom.setOnAction(new EventHandler<ActionEvent>(){
 				
-				/* Ajout d'une alarme aléatoire */
+				/* Ajout d'une alarme alÃ©atoire */
 				
 				@Override
 				public void handle(ActionEvent arg0) {			
-					getController().putAlarm(scrollAlarm);		
+					getController().putAlarm();		
 				}
 				
 			});
 			
-			buttonSaveAlarms.setLayoutX(5);
-			buttonSaveAlarms.setLayoutY(40);
-			buttonSaveAlarms.setPrefWidth(190);
-			buttonSaveAlarms.setText("Save All");
-			buttonSaveAlarms.setOnAction(new EventHandler<ActionEvent>(){
+			buttonResetAlarms.setLayoutX(5);
+			buttonResetAlarms.setLayoutY(75);
+			buttonResetAlarms.setPrefWidth(190);
+			buttonResetAlarms.setText("Reset All");
+			buttonResetAlarms.setOnAction(new EventHandler<ActionEvent>(){
 
 				/* Sauvegarde des alarmes */
 				
 				@Override
 				public void handle(ActionEvent arg0) {
-					getController().saveAlarms();				
+					getController().resetAlarms();				
 				}
 				
-			});	
+			});
 			
 			buttonDeleteAlarm.setLayoutX(5);
-			buttonDeleteAlarm.setLayoutY(75);
+			buttonDeleteAlarm.setLayoutY(110);
 			buttonDeleteAlarm.setPrefWidth(190);
 			buttonDeleteAlarm.setText("Delete Alarm");
 			buttonDeleteAlarm.setOnAction(new EventHandler<ActionEvent>(){
 
-				/* Suppresion d'une alarme aléatoire */
+				/* Suppresion d'une alarme */
 				
 				@Override
 				public void handle(ActionEvent arg0) {
@@ -207,27 +226,27 @@ public class View {
 			});	
 			
 			buttonTreatAlarm.setLayoutX(5);
-			buttonTreatAlarm.setLayoutY(110);
+			buttonTreatAlarm.setLayoutY(145);
 			buttonTreatAlarm.setPrefWidth(190);
 			buttonTreatAlarm.setText("Treat Alarm");
 			buttonTreatAlarm.setOnAction(new EventHandler<ActionEvent>(){
 
-				/* Traitement d'une alarme aléatoire */
+				/* Traitement d'une alarme */
 				
 				@Override
 				public void handle(ActionEvent arg0) {
-					getController().treatAlarm(scrollAlarm, treatedAlarm);				
+					getController().treatAlarm(scrollAlarm);				
 				}
 				
 			});	
 			
 			buttonSortByTime.setLayoutX(5);
-			buttonSortByTime.setLayoutY(145);
+			buttonSortByTime.setLayoutY(180);
 			buttonSortByTime.setPrefWidth(90);
 			buttonSortByTime.setText("Sort Time");
 			buttonSortByTime.setOnAction(new EventHandler<ActionEvent>(){
 
-				/* Tri part date de création */
+				/* Tri part date de crÃ©ation */
 				
 				@Override
 				public void handle(ActionEvent arg0) {
@@ -237,12 +256,12 @@ public class View {
 			});	
 			
 			buttonSortByPriority.setLayoutX(105);
-			buttonSortByPriority.setLayoutY(145);
+			buttonSortByPriority.setLayoutY(180);
 			buttonSortByPriority.setPrefWidth(90);
 			buttonSortByPriority.setText("Sort Prio");
 			buttonSortByPriority.setOnAction(new EventHandler<ActionEvent>(){
 
-				//* Tri part priorité */
+				/* Tri part prioritÃ© */
 				
 				@Override
 				public void handle(ActionEvent arg0) {
@@ -251,7 +270,7 @@ public class View {
 				
 			});	
 			
-			/* Ajout éléments à la scène */			
+			/* Ajout Ã©lÃ©ments Ã  la scÃ¨ne */			
 			
 			top.getChildren().add(topRect);
 			top.getChildren().add(nomAlarm);
@@ -261,7 +280,7 @@ public class View {
 			
 			botLeft.getChildren().add(botLeftRect);
 			botLeft.getChildren().add(buttonAddAlarmRandom);
-			botLeft.getChildren().add(buttonSaveAlarms);
+			botLeft.getChildren().add(buttonResetAlarms);
 			botLeft.getChildren().add(buttonDeleteAlarm);
 			botLeft.getChildren().add(buttonTreatAlarm);
 			botLeft.getChildren().add(buttonSortByTime);
@@ -274,20 +293,72 @@ public class View {
 			root.getChildren().add(botLeft);
 			root.getChildren().add(botRight);
 			
-			this.setPrimaryStage(primaryStage);
-			
 			primaryStage.setScene(scene);
 			primaryStage.show();
 			
-		/* Récupération des exceptions potentielles */
+		/* Catch exceptions */
 			
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public Controller getController(){
-		return this.controller;
+	public void refreshTopDesc(){
+		AlarmView alarm = this.scrollAlarm.getSelectionModel().getSelectedItem();
+		
+		if(alarm != null){
+			this.nomAlarm.setText(alarm.getAlarm().getNom());
+			this.descAlarm.setText(alarm.getAlarm().getDesc());
+			this.prioriteAlarm.setText("PrioritÃ© : " + alarm.getAlarm().getPriorite());
+			
+			if(alarm.getAlarm().isTreated()) this.treatedAlarm.setText("Alarme traitÃ©e");
+			else this.treatedAlarm.setText("Alarme non-traitÃ©e");
+		} else {
+			this.nomAlarm.setText("");
+			this.descAlarm.setText("");
+			this.prioriteAlarm.setText("");
+			this.treatedAlarm.setText("");
+		}
+	}
+	
+	public void refreshList(){
+		ListView<AlarmView> list = this.getController().getAlarmsAsListView();	
+		this.setListView(list);
+	}
+	
+	public ButtonType popDeleteDialog(Alarm a){
+		Alert dialog = new Alert(AlertType.CONFIRMATION);
+		Optional<ButtonType> result;
+		
+		dialog.setTitle("Confirmation");
+		dialog.setHeaderText("Supprimer une alarme.");
+		dialog.setContentText("Etes-vous sur de vouloir supprimer cette alarme : " + a.getNom());
+		
+		result = dialog.showAndWait();
+		
+		return result.get();
+	}
+	
+	public ButtonType popResetDialog(){
+		Alert dialog = new Alert(AlertType.CONFIRMATION);
+		Optional<ButtonType> result;
+		
+		dialog.setTitle("Confirmation");
+		dialog.setHeaderText("Reinitialiser les alarme.");
+		dialog.setContentText("Etes-vous sur de vouloir rÃ©initialiser les alarmes ?");
+		
+		result = dialog.showAndWait();
+		
+		return result.get();
+	}
+	
+	public ListView<AlarmView> getListView(){
+		return this.scrollAlarm;
+	}
+	
+	public void setListView(ListView<AlarmView> list){
+		this.scrollAlarm.setItems(null);
+		this.scrollAlarm.setItems(list.getItems());
 	}
 	
 	public static Stage getPrimaryStage() {
@@ -297,4 +368,8 @@ public class View {
     private void setPrimaryStage(Stage pStage) {
         View.pStage = pStage;
     }
+	
+	public Controller getController(){
+		return this.controller;
+	}
 }

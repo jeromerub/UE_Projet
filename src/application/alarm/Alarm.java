@@ -21,7 +21,7 @@ public class Alarm implements Serializable  {
 	private boolean isTreated;
 	private Timestamp created;
 	
-	/* Génération d'une alarme aléatoire */
+	/* GÃ©nÃ©ration  d'une alarme alÃ©atoire */
 	public Alarm(){
 		Date d = new Date();
 		
@@ -36,49 +36,12 @@ public class Alarm implements Serializable  {
 			default: System.out.println("Err rand");
 		}
 		
-		this.desc = "Alarme de priorité " + this.priorite;
+		this.desc = "Alarme de prioritÃ© " + this.priorite;
 		this.isTreated = false;
 		
 	}
 	
-	/* Génération d'une alarm avec un nom, une description aléatoire et une priorité aléatoire */
-	public Alarm(String nom){
-		Date d = new Date();
-		
-		this.created = new Timestamp(d.getTime());
-		this.nom = nom;
-		
-		switch(random(4)){
-			case 0: this.priorite = Priorite.Basse; break;
-			case 1: this.priorite = Priorite.Moyenne; break;
-			case 2: this.priorite = Priorite.Haute; break;
-			case 3: this.priorite = Priorite.Max; break;
-			default: System.out.println("Err rand");
-		}
-		
-		this.desc = "Alarme de priorité " + this.priorite;
-		this.isTreated = false;
-	}
-	
-	/* Génération d'une alarme avec un nom et une description et une priorité aléatoire */
-	public Alarm(String nom, String desc){
-		Date d = new Date();
-		
-		this.created = new Timestamp(d.getTime());
-		this.nom = nom;
-		this.desc = desc;
-		this.isTreated = false;
-		
-		switch(random(4)){
-			case 0: this.priorite = Priorite.Basse; break;
-			case 1: this.priorite = Priorite.Moyenne; break;
-			case 2: this.priorite = Priorite.Haute; break;
-			case 3: this.priorite = Priorite.Max; break;
-			default: System.out.println("Err rand");
-		}		
-	}
-	
-	/* Génération d'une alarme avec un nom, une description et une priorité */
+	/* CrÃ©ation d'une alarme avec un nom, une description et une prioritï¿½ */
 	public Alarm(String nom, String desc, Priorite p){
 		Date d = new Date();
 		
@@ -120,7 +83,7 @@ public class Alarm implements Serializable  {
 		System.out.println();
 	}
 	
-	/* Génére un nombre entre 0 (inclu) et high (exclu) */
+	/* GÃ©nÃ¨re un nombre entre 0 (inclu) et high (exclu) */
 	private static int random(int high) {
 		return random.nextInt(high);
 	}

@@ -1,10 +1,18 @@
 package application.alarm;
 
+import application.View;
+
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.input.SwipeEvent;
+import javafx.scene.input.TouchEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
@@ -20,41 +28,34 @@ public class AlarmView extends Parent {
 	
 	private Alarm alarm;
 	private Rectangle fond;
+	private ButtonDelete delete;
+	private boolean isDeleteVisible;
 	
-	public AlarmView(Alarm a, double width){
+	public AlarmView(Alarm a, double width, View view){
 		ImageView img = new ImageView(new Image(AlarmView.class.getResourceAsStream("../images/picto_alarme.png")));
+		AlarmView current = this;
 		Text nom = new Text();
 		Text description = new Text();
+		ContextMenu menu = new ContextMenu();
+		MenuItem suppr = new MenuItem();
 		
+		this.delete = new ButtonDelete(view, current);;
 		this.alarm = a;
 		this.fond = new Rectangle();
 		
-		/* OnTouch Listeners */
-		this.setOnSwipeRight(new EventHandler<SwipeEvent>() {
-			
-			/* Suppression swipe right */
-	        @Override 
-	        public void handle(SwipeEvent event) {
-	            
-	        }
-	        
-		});
-
-		this.setOnSwipeLeft(new EventHandler<SwipeEvent>() {
-			
-			/* Traitement swipe left */
-		    @Override 
-		    public void handle(SwipeEvent event) {
-		        setTreated();
-		    }
-		    
-		});
+		/* Stylisation */
 		
-		fond.setX(0);
-		fond.setY(0);
-		fond.setWidth(width);
-		fond.setHeight(130);
-		fond.setId("list-rect");
+		this.fond.setX(0);
+		this.fond.setY(0);
+		this.fond.setWidth(width);
+		this.fond.setHeight(130);
+		this.fond.setId("list-rect");
+
+		this.delete.setLayoutX(width - 60);
+		this.delete.setLayoutY(10);
+		this.delete.setId("delete-button");
+		this.delete.setVisible(false);
+		this.isDeleteVisible = false;
 		
 		this.getStyleClass().add("list-cell-alarm");
 		
@@ -80,6 +81,8 @@ public class AlarmView extends Parent {
 			}
 		}
 		
+		suppr.setText("Supprimer " + this.alarm.getNom());
+		
 		img.setScaleX(0.9);
 		img.setScaleY(0.9);
 
@@ -95,10 +98,86 @@ public class AlarmView extends Parent {
 		description.setFill(Color.WHITE);
 		description.setId("desc-alarmview");
 		
+		/* MenuItem Listener */
+		
+		suppr.setOnAction(new EventHandler<ActionEvent>(){
+			
+			/* Suppression : MenuItem "Supprimer" */
+			@Override
+			public void handle(ActionEvent event){
+				view.getController().deleteAlarm(current);
+			}
+		});
+		
+		/* OnClick Listeners */
+		
+		this.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			
+			/* Menu Contextuel : click droit */
+	        @Override 
+	        public void handle(MouseEvent event) {
+	        	if (event.getButton() == MouseButton.SECONDARY) {
+                    menu.show(current, event.getScreenX(), event.getScreenY());
+                } else {
+                	menu.hide();
+                }
+	            event.consume();
+	        }
+	        
+		});
+		
+		/* OnTouch Listeners */
+		
+		this.setOnTouchPressed(new EventHandler<TouchEvent>() {
+			
+			/* On cache les bouton supprimer quand on touche un item */
+	        @Override 
+	        public void handle(TouchEvent event) {
+	        	for(AlarmView av : view.getListView().getItems()){
+	        		av.hideDelete();
+	        	}
+	        	
+	            event.consume();
+	        }
+	        
+		});
+		
+		this.setOnSwipeLeft(new EventHandler<SwipeEvent>() {
+			
+			/* Suppression : swipe right */
+	        @Override 
+	        public void handle(SwipeEvent event) {
+	            revealDelete();
+	            event.consume();
+	        }
+	        
+		});
+
+		this.setOnSwipeRight(new EventHandler<SwipeEvent>() {
+			
+			/* Cacher bouton // Traitement : swipe left */
+		    @Override 
+		    public void handle(SwipeEvent event) {
+		    	if(isDeleteVisible){
+		    		hideDelete();
+		    	} else {
+		    		setTreated();
+		    	}
+		    	
+		        event.consume();
+		    }
+		    
+		});
+		
+		/* Ajout des éléments */
+		
+		menu.getItems().add(suppr);
+		
 		this.getChildren().add(fond);
 		this.getChildren().add(img);
 		this.getChildren().add(nom);
 		this.getChildren().add(description);
+		this.getChildren().add(delete);
 	}
 	
 	public Alarm getAlarm(){
@@ -107,6 +186,20 @@ public class AlarmView extends Parent {
 	
 	public void setFondWidth(double val){
 		this.fond.setWidth(val);
+	}
+	
+	public void setDeleteLayoutX(double val){
+		this.delete.setLayoutX(val);
+	}
+	
+	public void hideDelete(){
+		this.isDeleteVisible = false;
+		this.delete.setVisible(false);
+	}
+	
+	public void revealDelete(){
+		this.isDeleteVisible = true;
+		this.delete.setVisible(true);
 	}
 	
 	public void setTreated(){
