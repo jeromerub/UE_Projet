@@ -15,8 +15,8 @@ import java.util.List;
 import application.alarm.Alarm;
 
 /**
- * @author Floo'
  * Classe représentant notre modèle de données.
+ * @author Floo'
  */
 public class Model implements Serializable {
 	private static final long serialVersionUID = 1L;

@@ -8,8 +8,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 /**
- * @author Floo'
  * Représentation graphique du bouton de suppression qui apparait au swipe
+ * @author Floo'
  */
 public class ButtonDelete extends Parent {
 	

@@ -18,8 +18,8 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
 /**
- * @author Floo'
  * Classe qui représente graphiquement une alarme.
+ * @author Floo'
  */
 public class AlarmView extends Parent {
 	

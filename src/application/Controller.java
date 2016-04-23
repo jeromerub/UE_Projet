@@ -9,8 +9,8 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ListView;
 
 /**
- * @author Floo'
  * Classe représentant le controlleur.
+ * @author Floo'
  */
 public class Controller {
 	private Model model;

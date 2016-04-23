@@ -8,8 +8,8 @@ import java.util.Random;
 import application.priorite.Priorite;
 
 /**
- * @author Floo'
  * Classe qui représente une alarme.
+ * @author Floo'
  */
 public class Alarm implements Serializable  {
 	private static final long serialVersionUID = 1L;

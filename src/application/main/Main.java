@@ -7,8 +7,8 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 
 /**
- * @author Floo'
  * Classe Main, qui instancie notre MVC et lance notre gestionnaire
+ * @author Floo'
  */
 public class Main extends Application {
 	@Override

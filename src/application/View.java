@@ -27,10 +27,9 @@ import javafx.scene.text.Text;
 
 import javafx.stage.Stage;
 
-
 /**
- * @author Floo'
  * Classe représentant la vue du logiciel.
+ * @author Floo'
  */
 public class View {
 	
