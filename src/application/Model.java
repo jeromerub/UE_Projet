@@ -14,6 +14,10 @@ import java.util.List;
 
 import application.alarm.Alarm;
 
+/**
+ * @author Floo'
+ * Classe représentant notre modèle de données.
+ */
 public class Model implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
@@ -24,9 +28,13 @@ public class Model implements Serializable {
 	private boolean isSortedPrio = false;
 	private boolean isSortedReverse = false;
 	
+	/**
+	 * Chargement du modèle, si le fichier n'existe pas, il est crée.
+	 */
 	@SuppressWarnings("unchecked")
-	public Model(){		
-		/* A la cr�ation on charge les alarmes et le type de tri dans le model */
+	public Model(){	
+		
+		/* A la création on charge les alarmes et le type de tri dans le model */
 		
 		try {
 			ObjectInputStream ois = new ObjectInputStream(new FileInputStream("alarms"));
@@ -49,6 +57,9 @@ public class Model implements Serializable {
 		}
 	}
 	
+	/**
+	 * Sauvegarde le contexte du modèle dans un fichier "alarms".
+	 */
 	public void save(){
 		ObjectOutputStream oos = null;
 		
@@ -76,35 +87,59 @@ public class Model implements Serializable {
 	    }
 	}
 	
+	/**
+	 * Indique a la vue de rafraichir l'affichage.
+	 */
 	public void notifyView(){
 		this.getView().refreshList();
 		this.getView().refreshTopDesc();
 	}
 	
+	/**
+	 * Ajoute une alarme à la liste.
+	 * @param a 
+	 * 			Alarme à ajouter.
+	 */
 	public void addAlarm(Alarm a){
 		this.listAlarm.add(a);
 		save();
 		notifyView();
 	}
 	
+	/**
+	 * Supprime une alarme de la liste.
+	 * @param a 
+	 * 			Alarme à supprimer.
+	 */
 	public void removeAlarm(Alarm a){
 		this.listAlarm.remove(a);
 		save();
 		notifyView();
 	}	
 	
+	/**
+	 * Traite une alarme de la liste.
+	 * @param a 
+	 * 			Alarme à traiter.
+	 */
 	public void treatAlarm(Alarm a){
 		a.setTreated();
 		save();
 		notifyView();
 	}
 	
+	/**
+	 * Vide la liste d'alarme.
+	 */
 	public void clear(){
 		this.listAlarm.clear();
 		save();
 		notifyView();
 	}
 
+	/**
+	 * Tri la liste dans l'ordre chronologique.
+	 */
 	public void sortByTimeUp(){
 		Collections.sort(this.listAlarm, new Comparator<Alarm>(){
 			public int compare(Alarm a1, Alarm a2){
@@ -119,6 +154,9 @@ public class Model implements Serializable {
 		notifyView();
 	}
 	
+	/**
+	 * Tri la liste dans l'ordre anti-chronologique.
+	 */
 	public void sortByTimeDown(){
 		Collections.sort(this.listAlarm, new Comparator<Alarm>(){
 			public int compare(Alarm a1, Alarm a2){
@@ -133,6 +171,9 @@ public class Model implements Serializable {
 		notifyView();
 	}
 	
+	/**
+	 * Tri la liste par priorité (plus grande à plus petite).
+	 */
 	public void sortByPrioUp(){
 		Collections.sort(this.listAlarm, new Comparator<Alarm>(){
 			public int compare(Alarm a1, Alarm a2){
@@ -147,6 +188,9 @@ public class Model implements Serializable {
 		notifyView();
 	}
 	
+	/**
+	 * Tri la liste par priorité (plus petite à plus grande).
+	 */
 	public void sortByPrioDown(){
 		Collections.sort(this.listAlarm, new Comparator<Alarm>(){
 			public int compare(Alarm a1, Alarm a2){
@@ -163,48 +207,83 @@ public class Model implements Serializable {
 	
 	/* Getter/Setters */
 	
+	/**
+	 * @return La vue.
+	 */
 	public View getView(){
 		return this.view;
 	}
 	
+	/**
+	 * @param v
+	 * 			La nouvelle vue.
+	 */
 	public void setView(View v){
 		this.view = v;
 	}
 	
+	/**
+	 * @return La liste d'alarmes.
+	 */
 	public List<Alarm> getListAlarm(){
 		return this.listAlarm;
 	}
 	
+	/**
+	 * @param newlist
+	 * 			La nouvelle liste.
+	 */
 	public void setListAlarm(List<Alarm> newlist){
 		this.listAlarm = newlist;
 	}
 	
+	/**
+	 * @return "True" si trié par chronologie.
+	 */
 	public boolean getSortedTime(){
 		return this.isSortedTime;
 	}
 	
+	/**
+	 * @return "True" si trié par priorité.
+	 */
 	public boolean getSortedPrio(){
 		return this.isSortedPrio;
 	}
 	
+	/**
+	 * @return "True" si trié par ordre inverse (antichronologique ou priorité faible à max).
+	 */
 	public boolean getSortedReverse(){
 		return this.isSortedReverse;
 	}
 	
+	/**
+	 * Indique que le tri est chronologique.
+	 */
 	public void setSortedTime(){
 		this.isSortedTime = true;
 		this.isSortedPrio = false;
 	}
 	
+	/**
+	 * Indique que le tri est par priorité.
+	 */
 	public void setSortedPrio(){
 		this.isSortedTime = false;
 		this.isSortedPrio = true;
 	}
 	
+	/**
+	 * Indique que le tri est normal (chronologique ou priorité max à faible).
+	 */
 	public void setSortedNormal(){
 		this.isSortedReverse = false;
 	}
 	
+	/**
+	 * Indique que le tri est normal (anti-chronologique ou priorité faible à max).
+	 */
 	public void setSortedReverse(){
 		this.isSortedReverse = true;
 	}

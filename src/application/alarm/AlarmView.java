@@ -17,6 +17,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
+/**
+ * @author Floo'
+ * Classe qui représente graphiquement une alarme.
+ */
 public class AlarmView extends Parent {
 	
 	/* Constantes code couleurs */
@@ -31,6 +35,15 @@ public class AlarmView extends Parent {
 	private ButtonDelete delete;
 	private boolean isDeleteVisible;
 	
+	/**
+	 * Création de la représentation d'une alarme.
+	 * @param a 
+	 * 			Alarme à référencer.
+	 * @param width 
+	 * 			Largeur de l'élément.
+	 * @param view 
+	 * 			Vue du logiciel.
+	 */
 	public AlarmView(Alarm a, double width, View view){
 		ImageView img = new ImageView(new Image(AlarmView.class.getResourceAsStream("../images/picto_alarme.png")));
 		AlarmView current = this;
@@ -105,7 +118,7 @@ public class AlarmView extends Parent {
 			/* Suppression : MenuItem "Supprimer" */
 			@Override
 			public void handle(ActionEvent event){
-				view.getController().deleteAlarm(current);
+				view.getController().deleteAlarm(current.getAlarm());
 			}
 		});
 		
@@ -180,28 +193,52 @@ public class AlarmView extends Parent {
 		this.getChildren().add(delete);
 	}
 	
+	/**
+	 * @return Alarme référencée.
+	 */
 	public Alarm getAlarm(){
 		return this.alarm;
 	}
 	
+	/**
+	 * Change la largeur de notre représentation de l'alarme.
+	 * (responsive)
+	 * @param val
+	 * 			Nouvelle largeur.
+	 */
 	public void setFondWidth(double val){
 		this.fond.setWidth(val);
 	}
 	
+	/**
+	 * Changer le décalage X du bouton de suppression.
+	 * (responsive)
+	 * @param val
+	 * 			Nouveau décalage.
+	 */
 	public void setDeleteLayoutX(double val){
 		this.delete.setLayoutX(val);
 	}
 	
+	/**
+	 * Cache le bouton supprimer.
+	 */
 	public void hideDelete(){
 		this.isDeleteVisible = false;
 		this.delete.setVisible(false);
 	}
 	
+	/**
+	 * Révèle le bouton supprimer.
+	 */
 	public void revealDelete(){
 		this.isDeleteVisible = true;
 		this.delete.setVisible(true);
 	}
 	
+	/**
+	 * Traite l'alarme référencée.
+	 */
 	public void setTreated(){
 		this.alarm.setTreated();
 		this.fond.setFill(gris);;

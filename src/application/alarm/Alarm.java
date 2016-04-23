@@ -7,6 +7,10 @@ import java.util.Random;
 
 import application.priorite.Priorite;
 
+/**
+ * @author Floo'
+ * Classe qui représente une alarme.
+ */
 public class Alarm implements Serializable  {
 	private static final long serialVersionUID = 1L;
 	
@@ -21,7 +25,9 @@ public class Alarm implements Serializable  {
 	private boolean isTreated;
 	private Timestamp created;
 	
-	/* Génération  d'une alarme aléatoire */
+	/**
+	 * Génération  d'une alarme aléatoire.
+	 */
 	public Alarm(){
 		Date d = new Date();
 		
@@ -41,7 +47,15 @@ public class Alarm implements Serializable  {
 		
 	}
 	
-	/* Création d'une alarme avec un nom, une description et une priorit� */
+	/**
+	 * Création d'une alarme avec un nom, une description et une priorité.
+	 * @param nom 
+	 * 			Nom de l'alarme.
+	 * @param desc 
+	 * 			Description de l'alarme.
+	 * @param p 
+	 * 			Priorité de l'alarme.
+	 */
 	public Alarm(String nom, String desc, Priorite p){
 		Date d = new Date();
 		
@@ -52,38 +66,54 @@ public class Alarm implements Serializable  {
 		this.isTreated = false;
 	}
 	
+	/**
+	 * @return Nom de l'alarme.
+	 */
 	public String getNom(){
 		return this.nom;
 	}
 	
+	/**
+	 * @return Description de l'alarme.
+	 */
 	public String getDesc(){
 		return this.desc;
 	}
 
+	/**
+	 * @return Priorité de l'alarme.
+	 */
 	public Priorite getPriorite(){
 		return this.priorite;
 	}
 	
+	/**
+	 * @return Timestamp à la création de l'alarme.
+	 */
 	public Timestamp getTimestamp(){
 		return this.created;
 	}
 	
+	/**
+	 * Passe une alarme dans l'état "traitée".
+	 */
 	public void setTreated(){
 		this.isTreated = true;
 	}
 	
+	/**
+	 * @return True si l'alarme est traitée, False sinon.
+	 */
 	public boolean isTreated(){
 		return this.isTreated;
 	}
 	
-	/* Affiche sur stdout des infos sur l'alarme */
-	public void display(){
-		System.out.println(nom);
-		System.out.println(desc);
-		System.out.println();
-	}
-	
-	/* Génère un nombre entre 0 (inclu) et high (exclu) */
+	/** 
+	 * Génère un nombre entre 0 (inclu) et high (exclu).
+	 * @param high
+	 * 			Borne supérieure exclue.
+	 * @return Nombre aléatoire généré.
+	 */
 	private static int random(int high) {
 		return random.nextInt(high);
 	}

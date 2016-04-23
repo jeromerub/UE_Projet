@@ -28,6 +28,10 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 
+/**
+ * @author Floo'
+ * Classe représentant la vue du logiciel.
+ */
 public class View {
 	
 	private static Stage pStage = null;
@@ -39,6 +43,13 @@ public class View {
 	private Text prioriteAlarm;
 	private Text treatedAlarm;
 	
+	/**
+	 * Création de la vue.
+	 * @param primaryStage 
+	 * 			Notre fenêtre.
+	 * @param c 
+	 * 			Le controlleur.
+	 */
 	public View(Stage primaryStage, Controller c) {
 		try {
 			/* Déclarations */
@@ -61,6 +72,10 @@ public class View {
 			Button buttonSortByTime = new Button();
 			Button buttonSortByPriority = new Button();
 			
+			/* Paramètres de la fenêtre */
+			
+			primaryStage.setTitle("Gestionnaire d'alarmes multimodal 1.0");
+			
 			/* Init attributs */
 			
 			this.nomAlarm = new Text();
@@ -73,7 +88,7 @@ public class View {
 			
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			
-			/* Mise � jour controller */
+			/* Mise à jour controller */
 			
 			this.controller = c;
 			
@@ -201,7 +216,7 @@ public class View {
 			buttonResetAlarms.setText("Reset All");
 			buttonResetAlarms.setOnAction(new EventHandler<ActionEvent>(){
 
-				/* Sauvegarde des alarmes */
+				/* Réinitialisation des alarmes */
 				
 				@Override
 				public void handle(ActionEvent arg0) {
@@ -220,7 +235,7 @@ public class View {
 				
 				@Override
 				public void handle(ActionEvent arg0) {
-					getController().deleteAlarm(scrollAlarm);				
+					getController().deleteAlarm(getSelectedAlarm());				
 				}
 				
 			});	
@@ -235,7 +250,7 @@ public class View {
 				
 				@Override
 				public void handle(ActionEvent arg0) {
-					getController().treatAlarm(scrollAlarm);				
+					getController().treatAlarm(getSelectedAlarm());				
 				}
 				
 			});	
@@ -246,11 +261,11 @@ public class View {
 			buttonSortByTime.setText("Sort Time");
 			buttonSortByTime.setOnAction(new EventHandler<ActionEvent>(){
 
-				/* Tri part date de création */
+				/* Tri par date de création */
 				
 				@Override
 				public void handle(ActionEvent arg0) {
-					getController().sortAlarmsByTime(scrollAlarm);				
+					getController().sortAlarmsByTime();				
 				}
 				
 			});	
@@ -261,11 +276,11 @@ public class View {
 			buttonSortByPriority.setText("Sort Prio");
 			buttonSortByPriority.setOnAction(new EventHandler<ActionEvent>(){
 
-				/* Tri part priorité */
+				/* Tri par priorité */
 				
 				@Override
 				public void handle(ActionEvent arg0) {
-					getController().sortAlarmsByPriority(scrollAlarm);				
+					getController().sortAlarmsByPriority();				
 				}
 				
 			});	
@@ -303,6 +318,9 @@ public class View {
 		}
 	}
 	
+	/**
+	 * Rafraichissement des infos sur l'alarme selectionnée.
+	 */
 	public void refreshTopDesc(){
 		AlarmView alarm = this.scrollAlarm.getSelectionModel().getSelectedItem();
 		
@@ -321,11 +339,20 @@ public class View {
 		}
 	}
 	
+	/**
+	 * Rafraichissement de la liste d'alarme.
+	 */
 	public void refreshList(){
 		ListView<AlarmView> list = this.getController().getAlarmsAsListView();	
 		this.setListView(list);
 	}
 	
+	/**
+	 * Affiche un popUp de validation de suppression et attend la réponse.
+	 * @param a 
+	 * 			Alarme à supprimer.
+	 * @return La réponse de l'utilisateur (OK ou Annuler).
+	 */
 	public ButtonType popDeleteDialog(Alarm a){
 		Alert dialog = new Alert(AlertType.CONFIRMATION);
 		Optional<ButtonType> result;
@@ -339,6 +366,10 @@ public class View {
 		return result.get();
 	}
 	
+	/**
+	 * Affiche un popUp de validation de réinitialisation et attend la réponse.
+	 * @return La réponse de l'utilisateur (OK ou Annuler)
+	 */
 	public ButtonType popResetDialog(){
 		Alert dialog = new Alert(AlertType.CONFIRMATION);
 		Optional<ButtonType> result;
@@ -352,23 +383,47 @@ public class View {
 		return result.get();
 	}
 	
+	public Alarm getSelectedAlarm(){
+		if(this.scrollAlarm.getSelectionModel().getSelectedItem() != null){
+			return this.scrollAlarm.getSelectionModel().getSelectedItem().getAlarm();
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * @return Liste des alarmes graphiques.
+	 */
 	public ListView<AlarmView> getListView(){
 		return this.scrollAlarm;
 	}
 	
+	/**	
+	 * @param list
+	 * 			Nouvelle liste d'alarmes graphique.
+	 */
 	public void setListView(ListView<AlarmView> list){
 		this.scrollAlarm.setItems(null);
 		this.scrollAlarm.setItems(list.getItems());
 	}
 	
+	/**
+	 * @return Référence vers l'objet Stage.
+	 */
 	public static Stage getPrimaryStage() {
         return pStage;
     }
 
+    /**
+     * @param pStage
+     */
     private void setPrimaryStage(Stage pStage) {
         View.pStage = pStage;
     }
 	
+	/**
+	 * @return Le controlleur
+	 */
 	public Controller getController(){
 		return this.controller;
 	}

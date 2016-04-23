@@ -7,11 +7,25 @@ import javafx.scene.input.TouchEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
+/**
+ * @author Floo'
+ * Représentation graphique du bouton de suppression qui apparait au swipe
+ */
 public class ButtonDelete extends Parent {
+	
+	/**
+	 * Création d'un Bouton de suppression pour une AlarmView donnée
+	 * @param view 
+	 * 			Vue du logiciel.
+	 * @param av 
+	 * 			AlarmView référencé par le bouton.
+	 */
 	public ButtonDelete(View view, AlarmView av){
 		Rectangle rect = new Rectangle(4, 4, 40, 40);
 		Rectangle line1 = new Rectangle(4, 4, 30, 5);
 		Rectangle line2 = new Rectangle(4, 4, 30, 5);
+		
+		/* Stylisation */
 		
 		rect.setStrokeWidth(5);
 		rect.setStroke(Color.BLACK);
@@ -29,14 +43,14 @@ public class ButtonDelete extends Parent {
 		line2.setLayoutX(5);
 		line2.setLayoutY(18);
 		
-		/* Ajout de l'évènement touch */
+		/* OnTouch Listeners */
 		
 		this.setOnTouchPressed(new EventHandler<TouchEvent>() {
 			
-			/* Traitement swipe left */
+			/* Suppression : Touch Pressed */
 		    @Override 
 		    public void handle(TouchEvent event) {
-		        view.getController().deleteAlarm(av);
+		        view.getController().deleteAlarm(av.getAlarm());
 		        event.consume();
 		    }
 		    

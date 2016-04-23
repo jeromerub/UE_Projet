@@ -8,13 +8,26 @@ import application.alarm.AlarmView;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ListView;
 
+/**
+ * @author Floo'
+ * Classe représentant le controlleur.
+ */
 public class Controller {
 	private Model model;
 	
+	/**
+	 * Création du controlleur.
+	 * @param m
+	 * 			La modèle de donnée à utiliser.
+	 */
 	public Controller(Model m){
 		this.model = m;
 	}
 	
+	/**
+	 * Convertie la liste d'alarme du modèle en liste d'alarmes graphique pour la vue.
+	 * @return La liste d'alarme convertie en liste d'objets graphiques.
+	 */
 	public ListView<AlarmView> getAlarmsAsListView(){
 		List<Alarm> modelList = this.getModel().getListAlarm();
 		ListView<AlarmView> viewList = new ListView<AlarmView>();
@@ -26,54 +39,58 @@ public class Controller {
 		return viewList;
 	}
 	
-	/* Mise a jour des label en haut (top) */
+	/**
+	 * Met à jour les infos affichée en haut.
+	 */
 	public void majInfoAlarm(){
 		this.getModel().getView().refreshTopDesc();
 	}
 	
-	/* Ajoute une alarme aléatoire dans le model, puis dans la view */
+	/**
+	 * Ajoute une alarme aléatoire.
+	 */
 	public void putAlarm(){
 		Alarm a = new Alarm();
 		this.getModel().addAlarm(a);
 	}
 	
-	/* Supprime l'alarme selectionnée dans le model et la view */
-	public void deleteAlarm(ListView<AlarmView> list){
-		if(list.getSelectionModel().getSelectedItem() != null){	
-			Alarm selected = list.getSelectionModel().getSelectedItem().getAlarm();
-			
-			if (this.getModel().getView().popDeleteDialog(selected) == ButtonType.OK){
-				this.getModel().removeAlarm(selected);
+	/**
+	 * Action de suppression de l'alarme selectionnée (pop-up + suppression).
+	 * @param a
+	 * 			Alarme à supprimer.
+	 */
+	public void deleteAlarm(Alarm a){
+		if(a != null){	 
+			if (this.getModel().getView().popDeleteDialog(a) == ButtonType.OK){
+				this.getModel().removeAlarm(a);
 			}
 		}
 	}
 	
-	/* Supprime l'alarme selectionnée dans le model et la view a l'aide d'un swipe */
-	public void deleteAlarm(AlarmView swiped){
-		if(swiped != null){	
-			Alarm selected = swiped.getAlarm();
-			
-			if (this.getModel().getView().popDeleteDialog(selected) == ButtonType.OK){
-				this.getModel().removeAlarm(selected);
-			}
-		}
-	}
-	
+	/**
+	 * Action de réinitialisation (pop-up + suppression).
+	 */
 	public void resetAlarms(){
 		if(this.getModel().getView().popResetDialog() == ButtonType.OK){
 			this.getModel().clear();
 		}
 	}
 	
-	/*  Traite une alarme */
-	public void treatAlarm(ListView<AlarmView> list){
-		if(list.getSelectionModel().getSelectedItem() != null){
-			this.getModel().treatAlarm(list.getSelectionModel().getSelectedItem().getAlarm());	
+	/**
+	 * Traitement d'une alarme.
+	 * @param a
+	 * 			Alarme à traiter.
+	 */
+	public void treatAlarm(Alarm a){
+		if(a != null){
+			this.getModel().treatAlarm(a);	
 		}
 	}
 	
-	/* Tri la liste d'alarme chronologiquement dans le model et la view */
-	public void sortAlarmsByTime(ListView<AlarmView> listview){
+	/**
+	 * Tri la liste d'alarme chronologiquement.
+	 */
+	public void sortAlarmsByTime(){
 		
 		/* Permet d'alterner l'ordre du tri a chaque appel */
 		if(!this.getModel().getSortedTime() || this.getModel().getSortedReverse()){
@@ -87,8 +104,10 @@ public class Controller {
 		}
 	}
 
-	/* Tri la liste d'alarme par priorité dans le model et la view */
-	public void sortAlarmsByPriority(ListView<AlarmView> listview){
+	/**
+	 * Tri la liste d'alarme par priorité.
+	 */
+	public void sortAlarmsByPriority(){
 		
 		/* Permet d'alterner l'ordre du tri a chaque appel */
 		if(!this.getModel().getSortedPrio() || this.getModel().getSortedReverse()){
@@ -102,6 +121,9 @@ public class Controller {
 		}
 	}
 	
+	/**
+	 * @return Le modèle de données.
+	 */
 	public Model getModel(){
 		return this.model;
 	}
