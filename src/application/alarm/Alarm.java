@@ -5,6 +5,13 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Random;
 
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
+import javax.sound.sampled.Line;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.Mixer;
+
 import application.priorite.Priorite;
 
 /**
@@ -32,14 +39,14 @@ public class Alarm implements Serializable  {
 	public Alarm(){
 		Date d = new Date();
 		
-		// permet de définir aléatoirement si un alarme est sonore ou visuel
-		Random rand = new Random();
-		int nombreAleatoire = rand.nextInt(2 - 1 + 1) + 1;
-		if (nombreAleatoire == 1){
+
+		// permet de définir si une alarme sera sonore ou visuelle en fonction du volume
+		if (true){
 			this.audioVisuel = "audio";
 		} else {
 			this.audioVisuel = "visuel";
 		}
+
 		
 		this.created = new Timestamp(d.getTime());
 		this.nom = "Alarme " + ++cptRandom;
@@ -131,6 +138,7 @@ public class Alarm implements Serializable  {
 	public String getAudioVisuel(){
 		return this.audioVisuel;
 	}
+	
 }
 
 
