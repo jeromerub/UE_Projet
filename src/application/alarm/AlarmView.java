@@ -29,6 +29,8 @@ public class AlarmView extends Parent {
 	public static final Color jaune = new Color(0.83, 0.80, 0.08, 1);
 	public static final Color vert = new Color(0.18, 0.69, 0, 1);
 	public static final Color gris = new Color(0.65, 0.65, 0.65, 1);
+	public static final Color blanc = new Color(1, 1, 1, 1);
+	
 	
 	private Alarm alarm;
 	private Rectangle fond;
@@ -75,23 +77,28 @@ public class AlarmView extends Parent {
 		if(this.alarm.isTreated()){
 			this.fond.setFill(gris);
 		} else {
-			switch(this.alarm.getPriorite()){
-				case Basse:
-					fond.setFill(vert);
-					break;
-					
-				case Moyenne:
-					fond.setFill(jaune);
-					break;
-					
-				case Haute:
-					fond.setFill(orange);
-					break;
-					
-				case Max:
-					fond.setFill(rouge);
-					break;
+			if (this.alarm.getAudioVisuel().equals("audio")){
+				fond.setFill(blanc);
+			} else {
+				switch(this.alarm.getPriorite()){
+					case Basse:
+						fond.setFill(vert);
+						break;
+						
+					case Moyenne:
+						fond.setFill(jaune);
+						break;
+						
+					case Haute:
+						fond.setFill(orange);
+						break;
+						
+					case Max:
+						fond.setFill(rouge);
+						break;
+				}
 			}
+			
 		}
 		
 		suppr.setText("Supprimer " + this.alarm.getNom());
@@ -102,13 +109,13 @@ public class AlarmView extends Parent {
 		nom.setText(this.alarm.getNom());
 		nom.setLayoutX(140);
 		nom.setLayoutY(55);
-		nom.setFill(Color.WHITE);
+		nom.setFill(Color.BLACK);
 		nom.setId("nom-alarmview");
 		
 		description.setText(this.alarm.getDesc());
 		description.setLayoutX(140);
 		description.setLayoutY(75);
-		description.setFill(Color.WHITE);
+		description.setFill(Color.BLACK);
 		description.setId("desc-alarmview");
 		
 		/* MenuItem Listener */

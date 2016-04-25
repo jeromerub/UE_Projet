@@ -1,10 +1,11 @@
 package application;
 
+import java.io.File;
 import java.util.Optional;
 
 import application.alarm.Alarm;
 import application.alarm.AlarmView;
-
+import application.priorite.Priorite;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 
@@ -19,6 +20,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.control.Alert.AlertType;
 
 import javafx.scene.paint.Color;
@@ -426,4 +429,45 @@ public class View {
 	public Controller getController(){
 		return this.controller;
 	}
+	
+	/**
+	 * @param Priorité de l'alarm qui doit etre émise 
+	 * @throws IOException 
+	 * @throws UnsupportedAudioFileException 
+	 */
+	public void emettreSon(Priorite p){
+		File f = null;
+		Media media;
+		MediaPlayer mediaPlayer;
+		
+		if (p.equals(Priorite.Max)){
+			f = new File("src/application/son/alarmMax.mp3");
+		}
+		if (p.equals(Priorite.Haute)){
+			f = new File("src/application/son/alarm.mp3");
+		}
+		if (p.equals(Priorite.Moyenne)){
+			f = new File("src/application/son/alarmMoy.mp3");
+		}
+		if (p.equals(Priorite.Basse)){
+			f = new File("src/application/son/alarmBas.mp3");
+		}
+		media = new Media(f.toURI().toString());
+		mediaPlayer = new MediaPlayer(media);
+		mediaPlayer.play();
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+

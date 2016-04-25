@@ -24,12 +24,22 @@ public class Alarm implements Serializable  {
 	private String desc;
 	private boolean isTreated;
 	private Timestamp created;
+	private String audioVisuel;
 	
 	/**
 	 * Génération  d'une alarme aléatoire.
 	 */
 	public Alarm(){
 		Date d = new Date();
+		
+		// permet de définir aléatoirement si un alarme est sonore ou visuel
+		Random rand = new Random();
+		int nombreAleatoire = rand.nextInt(2 - 1 + 1) + 1;
+		if (nombreAleatoire == 1){
+			this.audioVisuel = "audio";
+		} else {
+			this.audioVisuel = "visuel";
+		}
 		
 		this.created = new Timestamp(d.getTime());
 		this.nom = "Alarme " + ++cptRandom;
@@ -42,7 +52,7 @@ public class Alarm implements Serializable  {
 			default: System.out.println("Err rand");
 		}
 		
-		this.desc = "Alarme de priorité " + this.priorite;
+		this.desc = "Type alarm: " + this.audioVisuel +  "  - Alarme de priorité " + this.priorite;
 		this.isTreated = false;
 		
 	}
@@ -117,4 +127,13 @@ public class Alarm implements Serializable  {
 	private static int random(int high) {
 		return random.nextInt(high);
 	}
+	
+	public String getAudioVisuel(){
+		return this.audioVisuel;
+	}
 }
+
+
+
+
+

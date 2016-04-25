@@ -101,6 +101,9 @@ public class Model implements Serializable {
 	 * 			Alarme à ajouter.
 	 */
 	public void addAlarm(Alarm a){
+		if (a.getAudioVisuel().equals("audio")){
+			this.view.emettreSon(a.getPriorite());
+		}
 		this.listAlarm.add(a);
 		save();
 		notifyView();
