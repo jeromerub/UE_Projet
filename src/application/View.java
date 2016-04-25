@@ -213,7 +213,9 @@ public class View {
 			/* Responsive Design */
 			
 			scene.widthProperty().addListener(new ChangeListener<Number>() {
-			    @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth, Number newSceneWidth) {
+				
+			    @Override 
+			    public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth, Number newSceneWidth) {
 			    	topRect.setWidth(newSceneWidth.floatValue());
 					botRightRect.setWidth(newSceneWidth.floatValue() - 200);
 					descAlarm.setPrefWidth(newSceneWidth.floatValue() - 40);
@@ -227,7 +229,9 @@ public class View {
 			});
 			
 			scene.heightProperty().addListener(new ChangeListener<Number>() {
-			    @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneHeight, Number newSceneHeight) {
+				
+			    @Override 
+			    public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneHeight, Number newSceneHeight) {
 			    	botLeftRect.setHeight(newSceneHeight.floatValue() - 200);
 			    	botRightRect.setHeight(newSceneHeight.floatValue() - 200);
 			    	scrollAlarm.setPrefHeight(newSceneHeight.floatValue() - 200);
@@ -424,6 +428,36 @@ public class View {
 		return result.get();
 	}
 	
+	/**
+	 * Emet un son pour une alarme.
+	 */
+	public void emettreSon(){
+		for (int i = 0; i < this.listMediaPlayer.size(); ++i){
+			this.listMediaPlayer.get(i).stop();
+		}
+		if (this.plusHautePriorite.equals(Priorite.Basse)){
+			this.listMediaPlayer.get(0).play();
+		}
+		if (this.plusHautePriorite.equals(Priorite.Moyenne)){
+			this.listMediaPlayer.get(1).play();
+		}
+		if (this.plusHautePriorite.equals(Priorite.Haute)){
+			this.listMediaPlayer.get(2).play();
+		}
+		if (this.plusHautePriorite.equals(Priorite.Max)){
+			this.listMediaPlayer.get(3).play();
+		}
+	}
+	
+	/**
+	 * Arrete tout les sons.
+	 */
+	public void stopSon(){
+		for (int i = 0; i < this.listMediaPlayer.size(); ++i){
+			this.listMediaPlayer.get(i).stop();
+		}
+	}
+	
 	public Alarm getSelectedAlarm(){
 		if(this.scrollAlarm.getSelectionModel().getSelectedItem() != null){
 			return this.scrollAlarm.getSelectionModel().getSelectedItem().getAlarm();
@@ -484,36 +518,4 @@ public class View {
 	public void setNbAlarm(int nbAlarm) {
 		this.nbAlarm = nbAlarm;
 	}
-	
-	/**
-	 * @param Priorité de l'alarm qui doit etre émise 
-	 * @throws IOException 
-	 * @throws UnsupportedAudioFileException 
-	 */
-	public void emettreSon(){
-		for (int i = 0; i < this.listMediaPlayer.size(); ++i){
-			this.listMediaPlayer.get(i).stop();
-		}
-		if (this.plusHautePriorite.equals(Priorite.Basse)){
-			this.listMediaPlayer.get(0).play();
-		}
-		if (this.plusHautePriorite.equals(Priorite.Moyenne)){
-			this.listMediaPlayer.get(1).play();
-		}
-		if (this.plusHautePriorite.equals(Priorite.Haute)){
-			this.listMediaPlayer.get(2).play();
-		}
-		if (this.plusHautePriorite.equals(Priorite.Max)){
-			this.listMediaPlayer.get(3).play();
-		}
-	}
-	
-	public void stopSon(){
-		for (int i = 0; i < this.listMediaPlayer.size(); ++i){
-			this.listMediaPlayer.get(i).stop();
-		}
-	}
 }
-
-
-
