@@ -393,6 +393,34 @@ public class View {
 		return result.get();
 	}
 	
+	/**
+	 * Emet un son selon la priorité.
+	 * @param Priorité de l'alarm qui doit etre émise 
+	 * @throws IOException 
+	 * @throws UnsupportedAudioFileException 
+	 */
+	public void emettreSon(Priorite p){
+		File f = new File("src/application/son/alarm.mp3");
+		Media media = new Media(f.toURI().toString());
+		MediaPlayer mediaPlayer = new MediaPlayer(media);
+		
+		
+		if (p.equals(Priorite.Max)){
+			mediaPlayer.setVolume(1);
+		}
+		if (p.equals(Priorite.Haute)){
+			mediaPlayer.setVolume(0.75);
+		}
+		if (p.equals(Priorite.Moyenne)){
+			mediaPlayer.setVolume(0.5);
+		}
+		if (p.equals(Priorite.Basse)){
+			mediaPlayer.setVolume(0.25);
+		}
+		
+		mediaPlayer.play();
+	}
+	
 	public Alarm getSelectedAlarm(){
 		if(this.scrollAlarm.getSelectionModel().getSelectedItem() != null){
 			return this.scrollAlarm.getSelectionModel().getSelectedItem().getAlarm();
@@ -436,33 +464,5 @@ public class View {
 	 */
 	public Controller getController(){
 		return this.controller;
-	}
-	
-	/**
-	 * Emet un son selon la priorité.
-	 * @param Priorité de l'alarm qui doit etre émise 
-	 * @throws IOException 
-	 * @throws UnsupportedAudioFileException 
-	 */
-	public void emettreSon(Priorite p){
-		File f = new File("src/application/son/alarm.mp3");
-		Media media = new Media(f.toURI().toString());
-		MediaPlayer mediaPlayer = new MediaPlayer(media);
-		
-		
-		if (p.equals(Priorite.Max)){
-			mediaPlayer.setVolume(1);
-		}
-		if (p.equals(Priorite.Haute)){
-			mediaPlayer.setVolume(0.75);
-		}
-		if (p.equals(Priorite.Moyenne)){
-			mediaPlayer.setVolume(0.5);
-		}
-		if (p.equals(Priorite.Basse)){
-			mediaPlayer.setVolume(0.25);
-		}
-		
-		mediaPlayer.play();
 	}
 }
