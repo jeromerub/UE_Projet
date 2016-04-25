@@ -177,7 +177,9 @@ public class View {
 			/* Responsive Design */
 			
 			scene.widthProperty().addListener(new ChangeListener<Number>() {
-			    @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth, Number newSceneWidth) {
+				
+			    @Override 
+			    public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth, Number newSceneWidth) {
 			    	topRect.setWidth(newSceneWidth.floatValue());
 					botRightRect.setWidth(newSceneWidth.floatValue() - 200);
 					descAlarm.setPrefWidth(newSceneWidth.floatValue() - 40);
@@ -191,7 +193,9 @@ public class View {
 			});
 			
 			scene.heightProperty().addListener(new ChangeListener<Number>() {
-			    @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneHeight, Number newSceneHeight) {
+				
+			    @Override 
+			    public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneHeight, Number newSceneHeight) {
 			    	botLeftRect.setHeight(newSceneHeight.floatValue() - 200);
 			    	botRightRect.setHeight(newSceneHeight.floatValue() - 200);
 			    	scrollAlarm.setPrefHeight(newSceneHeight.floatValue() - 200);
@@ -390,8 +394,6 @@ public class View {
 		return result.get();
 	}
 	
-
-	
 	/**
 	 * Emet un son 
 	 */
@@ -410,7 +412,6 @@ public class View {
 		mediaPlayer1.play();
 		mediaPlayer2.play();
 	}
-	
 	
 	/**
 	 * Affiche une nouvelle fenêtre avec les infos de la dernière alarme
@@ -508,16 +509,3 @@ public class View {
 		return this.controller;
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
