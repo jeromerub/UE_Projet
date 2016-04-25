@@ -1,10 +1,14 @@
 package application;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+
 
 import application.alarm.Alarm;
 import application.alarm.AlarmView;
-
+import application.priorite.Priorite;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 
@@ -19,6 +23,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.control.Alert.AlertType;
 
 import javafx.scene.paint.Color;
@@ -32,6 +38,9 @@ import javafx.stage.Stage;
  * @author Floo'
  */
 public class View {
+	private Priorite plusHautePriorite = Priorite.Basse;
+	final List<MediaPlayer> listMediaPlayer = new ArrayList<MediaPlayer>(4);
+	private int nbAlarm = 0;
 	
 	private static Stage pStage = null;
 	private Controller controller;
@@ -50,6 +59,32 @@ public class View {
 	 * 			Le controlleur.
 	 */
 	public View(Stage primaryStage, Controller c) {
+		File f1 = null, f2 = null, f3 = null, f4 = null;
+		Media media;
+		MediaPlayer mediaPlayer;
+		
+		f1 = new File("src/application/son/alarmBas.mp3");
+		media = new Media(f1.toURI().toString());
+		mediaPlayer = new MediaPlayer(media);
+		this.listMediaPlayer.add(mediaPlayer);
+		
+		f2 = new File("src/application/son/alarmMoy.mp3");
+		media = new Media(f2.toURI().toString());
+		mediaPlayer = new MediaPlayer(media);
+		this.listMediaPlayer.add(mediaPlayer);
+		
+		f3 = new File("src/application/son/alarm.mp3");
+		media = new Media(f3.toURI().toString());
+		mediaPlayer = new MediaPlayer(media);
+		this.listMediaPlayer.add(mediaPlayer);
+		
+		f4 = new File("src/application/son/alarmMax.mp3");
+		media = new Media(f4.toURI().toString());
+		mediaPlayer = new MediaPlayer(media);
+		this.listMediaPlayer.add(mediaPlayer);
+		
+		
+		
 		try {
 			/* Déclarations */
 			
@@ -97,6 +132,13 @@ public class View {
 			
 			for(Alarm a : this.getController().getModel().getListAlarm()){
 				this.scrollAlarm.getItems().add(new AlarmView(a, scene.getWidth() - 210, this));
+				this.nbAlarm ++;
+				if (a.getPriorite().compareTo(this.plusHautePriorite) > 0){
+					this.plusHautePriorite = a.getPriorite();
+				}
+			}
+			if (this.nbAlarm > 0){
+				this.emettreSon();
 			}
 			
 			/* Permet de ne jamais avoir 2 alarmes identiques (provisoire) */
@@ -426,4 +468,52 @@ public class View {
 	public Controller getController(){
 		return this.controller;
 	}
+
+	public Priorite getPlusHautePriorite() {
+		return plusHautePriorite;
+	}
+
+	public void setPlusHautePriorite(Priorite plusHautePriorite) {
+		this.plusHautePriorite = plusHautePriorite;
+	}
+
+	public int getNbAlarm() {
+		return nbAlarm;
+	}
+
+	public void setNbAlarm(int nbAlarm) {
+		this.nbAlarm = nbAlarm;
+	}
+	
+	/**
+	 * @param Priorité de l'alarm qui doit etre émise 
+	 * @throws IOException 
+	 * @throws UnsupportedAudioFileException 
+	 */
+	public void emettreSon(){
+		for (int i = 0; i < this.listMediaPlayer.size(); ++i){
+			this.listMediaPlayer.get(i).stop();
+		}
+		if (this.plusHautePriorite.equals(Priorite.Basse)){
+			this.listMediaPlayer.get(0).play();
+		}
+		if (this.plusHautePriorite.equals(Priorite.Moyenne)){
+			this.listMediaPlayer.get(1).play();
+		}
+		if (this.plusHautePriorite.equals(Priorite.Haute)){
+			this.listMediaPlayer.get(2).play();
+		}
+		if (this.plusHautePriorite.equals(Priorite.Max)){
+			this.listMediaPlayer.get(3).play();
+		}
+	}
+	
+	public void stopSon(){
+		for (int i = 0; i < this.listMediaPlayer.size(); ++i){
+			this.listMediaPlayer.get(i).stop();
+		}
+	}
 }
+
+
+

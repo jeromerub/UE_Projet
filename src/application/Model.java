@@ -13,6 +13,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import application.alarm.Alarm;
+import application.priorite.Priorite;
 
 /**
  * Classe représentant notre modèle de données.
@@ -101,6 +102,11 @@ public class Model implements Serializable {
 	 * 			Alarme à ajouter.
 	 */
 	public void addAlarm(Alarm a){
+		this.view.setNbAlarm(this.view.getNbAlarm() + 1);
+		if(a.getPriorite().compareTo(this.getView().getPlusHautePriorite()) > 0){
+			this.getView().setPlusHautePriorite(a.getPriorite());
+		}
+		this.getView().emettreSon();
 		this.listAlarm.add(a);
 		save();
 		notifyView();
@@ -113,6 +119,27 @@ public class Model implements Serializable {
 	 */
 	public void removeAlarm(Alarm a){
 		this.listAlarm.remove(a);
+	
+		if (!a.isTreated()){	
+			this.listAlarm.remove(a);
+			if (this.getView().getNbAlarm() > 1){
+				this.getView().setNbAlarm(this.getView().getNbAlarm() - 1);
+				
+				this.getView().setPlusHautePriorite(Priorite.Basse);
+				for(Alarm cur : getListAlarm()){
+					if (cur.getPriorite().compareTo(this.getView().getPlusHautePriorite()) > 0 
+							&& cur.isTreated() == false){
+						this.getView().setPlusHautePriorite(cur.getPriorite());
+					}
+				}
+				
+				this.getView().emettreSon();
+			} else {
+				this.getView().setNbAlarm(0);
+				this.getView().setPlusHautePriorite(Priorite.Basse);
+				this.getView().stopSon();
+			}
+		}
 		save();
 		notifyView();
 	}	
@@ -124,6 +151,23 @@ public class Model implements Serializable {
 	 */
 	public void treatAlarm(Alarm a){
 		a.setTreated();
+		if (this.getView().getNbAlarm() > 1){
+			this.getView().setNbAlarm(this.getView().getNbAlarm() - 1);
+			
+			this.getView().setPlusHautePriorite(Priorite.Basse);
+			for(Alarm cur : getListAlarm()){
+				if (cur.getPriorite().compareTo(this.getView().getPlusHautePriorite()) > 0 
+						&& cur.isTreated() == false){
+					this.getView().setPlusHautePriorite(cur.getPriorite());
+				}
+			}
+			
+			this.getView().emettreSon();
+		} else {
+			this.getView().setNbAlarm(0);
+			this.getView().setPlusHautePriorite(Priorite.Basse);
+			this.getView().stopSon();
+		}
 		save();
 		notifyView();
 	}
@@ -132,6 +176,9 @@ public class Model implements Serializable {
 	 * Vide la liste d'alarme.
 	 */
 	public void clear(){
+		this.getView().setNbAlarm(0);
+		this.getView().setPlusHautePriorite(Priorite.Basse);
+		this.getView().stopSon();
 		this.listAlarm.clear();
 		save();
 		notifyView();
