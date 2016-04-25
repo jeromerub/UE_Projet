@@ -421,6 +421,9 @@ public class View {
 		mediaPlayer.play();
 	}
 	
+	/**
+	 * @return Alarme selectionnée.
+	 */
 	public Alarm getSelectedAlarm(){
 		if(this.scrollAlarm.getSelectionModel().getSelectedItem() != null){
 			return this.scrollAlarm.getSelectionModel().getSelectedItem().getAlarm();
