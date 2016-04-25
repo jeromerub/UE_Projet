@@ -382,6 +382,9 @@ public class View {
 		return result.get();
 	}
 	
+	/**
+	 * @return Alarme selectionnée.
+	 */
 	public Alarm getSelectedAlarm(){
 		if(this.scrollAlarm.getSelectionModel().getSelectedItem() != null){
 			return this.scrollAlarm.getSelectionModel().getSelectedItem().getAlarm();
