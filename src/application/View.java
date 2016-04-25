@@ -440,25 +440,34 @@ public class View {
 	 * @throws UnsupportedAudioFileException 
 	 */
 	public void emettreSon(Priorite p){
-		File f = new File("src/application/son/alarm.mp3");
-		Media media = new Media(f.toURI().toString());
-		MediaPlayer mediaPlayer = new MediaPlayer(media);
-		
+		File f;
+		Media media;
+		MediaPlayer mediaPlayer;
 		
 		if (p.equals(Priorite.Max)){
-			mediaPlayer.setVolume(1);
+			f = new File("src/application/son/alarmMax.mp3");
+			media = new Media(f.toURI().toString());
+			mediaPlayer = new MediaPlayer(media);
+			mediaPlayer.play();
 		}
 		if (p.equals(Priorite.Haute)){
-			mediaPlayer.setVolume(0.75);
+			f = new File("src/application/son/alarm.mp3");
+			media = new Media(f.toURI().toString());
+			mediaPlayer = new MediaPlayer(media);
+			mediaPlayer.play();
 		}
 		if (p.equals(Priorite.Moyenne)){
-			mediaPlayer.setVolume(0.5);
+			f = new File("src/application/son/alarmMoy.mp3");
+			media = new Media(f.toURI().toString());
+			mediaPlayer = new MediaPlayer(media);
+			mediaPlayer.play();
 		}
 		if (p.equals(Priorite.Basse)){
-			mediaPlayer.setVolume(0.25);
+			f = new File("src/application/son/alarmBas.mp3");
+			media = new Media(f.toURI().toString());
+			mediaPlayer = new MediaPlayer(media);
+			mediaPlayer.play();
 		}
-		
-		mediaPlayer.play();
 	}
 }
 
