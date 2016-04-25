@@ -390,6 +390,7 @@ public class View {
 	}
 	
 	/**
+	 * Emet un son selon priorité.
 	 * @param Priorité de l'alarm qui doit etre émise 
 	 * @throws IOException 
 	 * @throws UnsupportedAudioFileException 
@@ -417,6 +418,9 @@ public class View {
 		mediaPlayer.play();
 	}
 	
+	/**
+	 * @return Alarme selectionnée.
+	 */
 	public Alarm getSelectedAlarm(){
 		if(this.scrollAlarm.getSelectionModel().getSelectedItem() != null){
 			return this.scrollAlarm.getSelectionModel().getSelectedItem().getAlarm();
