@@ -102,10 +102,10 @@ public class Model implements Serializable {
 	 */
 	public void addAlarm(Alarm a){
 		this.listAlarm.add(a);
+		this.getView().emettreSon();
+		this.getView().newWindow(a);
 		save();
 		notifyView();
-		this.getView().emettreSon(a.getPriorite());
-		this.getView().newWindow(a);
 	}
 	
 	/**

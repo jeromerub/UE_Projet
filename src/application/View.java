@@ -390,6 +390,79 @@ public class View {
 		return result.get();
 	}
 	
+
+	
+	/**
+	 * Emet un son 
+	 */
+	public void emettreSon(){
+		File f1 = new File("src/application/son/alarm.mp3");
+		Media media1 = new Media(f1.toURI().toString());
+		MediaPlayer mediaPlayer1 = new MediaPlayer(media1);
+		
+		File f2 = new File("src/application/son/alarm.mp3");
+		Media media2 = new Media(f2.toURI().toString());
+		MediaPlayer mediaPlayer2 = new MediaPlayer(media2);
+		
+		mediaPlayer1.setBalance(-1);
+		mediaPlayer2.setBalance(1);
+		
+		mediaPlayer1.play();
+		mediaPlayer2.play();
+	}
+	
+	
+	/**
+	 * Affiche une nouvelle fenêtre avec les infos de la dernière alarme
+	 * @param a
+	 * 			Alarme a afficher
+	 */
+	public void newWindow(Alarm a){
+		Group root = new Group();
+        Scene scene = new Scene(root);
+
+        Stage stage = new Stage();
+        
+        Group groupNom = new Group();
+        Group groupDesc = new Group();
+        Group groupPriorite = new Group();
+		
+        Text nom = new Text(a.getNom());
+        Text desc = new Text(a.getDesc());
+        Text priorite = new Text("Priorité : " + a.getPriorite().toString());
+
+        stage.setScene(scene);
+        stage.setTitle(a.getNom());
+        stage.setMinWidth(800);
+        stage.setMinHeight(200);
+        stage.setX(50);
+        stage.setY(50);
+        
+        groupNom.setLayoutX(10);
+        groupNom.setLayoutY(80);
+        
+        groupDesc.setLayoutX(10);
+        groupDesc.setLayoutY(130);
+        
+        groupPriorite.setLayoutX(10);
+        groupPriorite.setLayoutY(180);
+        
+        groupNom.getChildren().add(nom);
+        groupDesc.getChildren().add(desc);
+        groupPriorite.getChildren().add(priorite);
+        
+        nom.setFont(new Font(80));
+        desc.setFont(new Font(58));
+        priorite.setFont(new Font(58));
+        
+        root.getChildren().add(groupNom);
+        root.getChildren().add(groupDesc);
+        root.getChildren().add(groupPriorite);
+        
+        stage.show();
+        //View.pStage.toFront();
+	}
+	
 	public Alarm getSelectedAlarm(){
 		if(this.scrollAlarm.getSelectionModel().getSelectedItem() != null){
 			return this.scrollAlarm.getSelectionModel().getSelectedItem().getAlarm();
@@ -433,60 +506,6 @@ public class View {
 	 */
 	public Controller getController(){
 		return this.controller;
-	}
-	
-	/**
-	 * @param Priorité de l'alarm qui doit etre émise 
-	 * @throws IOException 
-	 * @throws UnsupportedAudioFileException 
-	 */
-	public void emettreSon(Priorite p){
-		File f1 = new File("src/application/son/alarm.mp3");
-		Media media1 = new Media(f1.toURI().toString());
-		MediaPlayer mediaPlayer1 = new MediaPlayer(media1);
-		
-		File f2 = new File("src/application/son/alarm.mp3");
-		Media media2 = new Media(f2.toURI().toString());
-		MediaPlayer mediaPlayer2 = new MediaPlayer(media2);
-		
-		mediaPlayer1.setBalance(-1);
-		mediaPlayer2.setBalance(1);
-		
-		mediaPlayer1.play();
-		mediaPlayer2.play();
-	}
-	
-	
-	public void newWindow(Alarm a){
-		Group root = new Group();
-        Scene scene = new Scene(root);
-
-        Stage stage = new Stage();
-        stage.setScene(scene);
-        stage.setTitle(a.getNom());
-        
-        Group groupNom = new Group();
-        Group groupDesc = new Group();
-        Group groupPriorite = new Group();
-		
-        Text nom = new Text(a.getNom());
-        Text desc = new Text(a.getDesc());
-        Text priorite = new Text(a.getPriorite().toString());
-        
-        groupNom.getChildren().add(nom);
-        groupDesc.getChildren().add(desc);
-        groupPriorite.getChildren().add(priorite);
-        
-        nom.setFont(new Font(80));
-        desc.setFont(new Font(80));
-        priorite.setFont(new Font(80));
-        
-        root.getChildren().add(nom);
-        root.getChildren().add(desc);
-        root.getChildren().add(priorite);
-        
-        stage.show();
-        this.pStage.toFront();
 	}
 }
 
