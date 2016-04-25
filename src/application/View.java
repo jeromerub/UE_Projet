@@ -440,7 +440,7 @@ public class View {
 	 * @throws UnsupportedAudioFileException 
 	 */
 	public void emettreSon(Priorite p){
-		File f = new File("./son/alarm.mp3");
+		File f = new File("src/application/son/alarm.mp3");
 		Media media = new Media(f.toURI().toString());
 		MediaPlayer mediaPlayer = new MediaPlayer(media);
 		
