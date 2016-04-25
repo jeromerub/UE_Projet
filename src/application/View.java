@@ -464,6 +464,9 @@ public class View {
         //View.pStage.toFront();
 	}
 	
+	/**
+	 * @return Alarme selectionnée.
+	 */
 	public Alarm getSelectedAlarm(){
 		if(this.scrollAlarm.getSelectionModel().getSelectedItem() != null){
 			return this.scrollAlarm.getSelectionModel().getSelectedItem().getAlarm();
