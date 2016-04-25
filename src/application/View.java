@@ -28,6 +28,7 @@ import javafx.scene.control.Alert.AlertType;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 import javafx.stage.Stage;
@@ -440,25 +441,52 @@ public class View {
 	 * @throws UnsupportedAudioFileException 
 	 */
 	public void emettreSon(Priorite p){
-		File f = new File("src/application/son/alarm.mp3");
-		Media media = new Media(f.toURI().toString());
-		MediaPlayer mediaPlayer = new MediaPlayer(media);
+		File f1 = new File("src/application/son/alarm.mp3");
+		Media media1 = new Media(f1.toURI().toString());
+		MediaPlayer mediaPlayer1 = new MediaPlayer(media1);
 		
+		File f2 = new File("src/application/son/alarm.mp3");
+		Media media2 = new Media(f2.toURI().toString());
+		MediaPlayer mediaPlayer2 = new MediaPlayer(media2);
 		
-		if (p.equals(Priorite.Max)){
-			mediaPlayer.setVolume(1);
-		}
-		if (p.equals(Priorite.Haute)){
-			mediaPlayer.setVolume(0.75);
-		}
-		if (p.equals(Priorite.Moyenne)){
-			mediaPlayer.setVolume(0.5);
-		}
-		if (p.equals(Priorite.Basse)){
-			mediaPlayer.setVolume(0.25);
-		}
+		mediaPlayer1.setBalance(-1);
+		mediaPlayer2.setBalance(1);
 		
-		mediaPlayer.play();
+		mediaPlayer1.play();
+		mediaPlayer2.play();
+	}
+	
+	
+	public void newWindow(Alarm a){
+		Group root = new Group();
+        Scene scene = new Scene(root);
+
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.setTitle(a.getNom());
+        
+        Group groupNom = new Group();
+        Group groupDesc = new Group();
+        Group groupPriorite = new Group();
+		
+        Text nom = new Text(a.getNom());
+        Text desc = new Text(a.getDesc());
+        Text priorite = new Text(a.getPriorite().toString());
+        
+        groupNom.getChildren().add(nom);
+        groupDesc.getChildren().add(desc);
+        groupPriorite.getChildren().add(priorite);
+        
+        nom.setFont(new Font(80));
+        desc.setFont(new Font(80));
+        priorite.setFont(new Font(80));
+        
+        root.getChildren().add(nom);
+        root.getChildren().add(desc);
+        root.getChildren().add(priorite);
+        
+        stage.show();
+        this.pStage.toFront();
 	}
 }
 

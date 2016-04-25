@@ -105,6 +105,7 @@ public class Model implements Serializable {
 		save();
 		notifyView();
 		this.getView().emettreSon(a.getPriorite());
+		this.getView().newWindow(a);
 	}
 	
 	/**
