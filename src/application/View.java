@@ -1,10 +1,14 @@
 package application;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Optional;
 
+import javax.sound.sampled.UnsupportedAudioFileException;
+import javafx.scene.media.MediaPlayer;
 import application.alarm.Alarm;
 import application.alarm.AlarmView;
-
+import application.priorite.Priorite;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 
@@ -19,6 +23,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.media.Media;
 import javafx.scene.control.Alert.AlertType;
 
 import javafx.scene.paint.Color;
@@ -205,9 +210,11 @@ public class View {
 				@Override
 				public void handle(ActionEvent arg0) {			
 					getController().putAlarm();		
+					
 				}
 				
 			});
+			
 			
 			buttonResetAlarms.setLayoutX(5);
 			buttonResetAlarms.setLayoutY(75);
@@ -426,4 +433,44 @@ public class View {
 	public Controller getController(){
 		return this.controller;
 	}
+	
+	/**
+	 * @param Priorité de l'alarm qui doit etre émise 
+	 * @throws IOException 
+	 * @throws UnsupportedAudioFileException 
+	 */
+	public void emettreSon(Priorite p){
+		File f = new File("./son/alarm.mp3");
+		Media media = new Media(f.toURI().toString());
+		MediaPlayer mediaPlayer = new MediaPlayer(media);
+		
+		
+		if (p.equals(Priorite.Max)){
+			mediaPlayer.setVolume(1);
+		}
+		if (p.equals(Priorite.Haute)){
+			mediaPlayer.setVolume(0.75);
+		}
+		if (p.equals(Priorite.Moyenne)){
+			mediaPlayer.setVolume(0.5);
+		}
+		if (p.equals(Priorite.Basse)){
+			mediaPlayer.setVolume(0.25);
+		}
+		
+		mediaPlayer.play();
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -104,6 +104,7 @@ public class Model implements Serializable {
 		this.listAlarm.add(a);
 		save();
 		notifyView();
+		this.getView().emettreSon(a.getPriorite());
 	}
 	
 	/**
