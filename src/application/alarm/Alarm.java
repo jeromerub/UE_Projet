@@ -24,7 +24,7 @@ public class Alarm implements Serializable  {
 	private String desc;
 	private boolean isTreated;
 	private Timestamp created;
-	private String audioVisuel;
+	private String audioVisuel = "";
 	
 	/**
 	 * Génération  d'une alarme aléatoire.
