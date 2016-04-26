@@ -1,5 +1,6 @@
 package application.alarm;
 
+import java.io.File;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Date;
@@ -13,6 +14,8 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.Mixer;
 
 import application.priorite.Priorite;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 
 /**
  * Classe qui représente une alarme.
@@ -36,16 +39,12 @@ public class Alarm implements Serializable  {
 	/**
 	 * Génération  d'une alarme aléatoire.
 	 */
-	public Alarm(){
+	public Alarm(String audiovisuel){
 		Date d = new Date();
+		Media media;
+		MediaPlayer mediaPlayer;
 		
-
-		// permet de définir si une alarme sera sonore ou visuelle en fonction du volume
-		if (true){
-			this.audioVisuel = "audio";
-		} else {
-			this.audioVisuel = "visuel";
-		}
+		this.audioVisuel = audiovisuel;
 
 		
 		this.created = new Timestamp(d.getTime());
@@ -137,6 +136,10 @@ public class Alarm implements Serializable  {
 	
 	public String getAudioVisuel(){
 		return this.audioVisuel;
+	}
+	
+	public void setAudioVisuel(String audiovisuel){
+		this.audioVisuel=audiovisuel;
 	}
 	
 }

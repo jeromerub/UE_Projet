@@ -1,5 +1,6 @@
 package application;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -13,6 +14,9 @@ import java.util.Comparator;
 import java.util.List;
 
 import application.alarm.Alarm;
+import application.priorite.Priorite;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 
 /**
  * Classe représentant notre modèle de données.
@@ -100,9 +104,9 @@ public class Model implements Serializable {
 	 * @param a 
 	 * 			Alarme à ajouter.
 	 */
-	public void addAlarm(Alarm a){
+	public void addAlarm(Alarm a, float volume){
 		if (a.getAudioVisuel().equals("audio")){
-			this.view.emettreSon(a.getPriorite());
+			this.view.emettreSon(a.getPriorite(), volume);
 		}
 		this.listAlarm.add(a);
 		save();

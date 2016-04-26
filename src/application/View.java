@@ -392,10 +392,11 @@ public class View {
 	 * @throws IOException 
 	 * @throws UnsupportedAudioFileException 
 	 */
-	public void emettreSon(Priorite p){
+	public void emettreSon(Priorite p, float v){
 		File f = null;
 		Media media;
 		MediaPlayer mediaPlayer;
+		float nombreAleatoire;
 		
 		if (p.equals(Priorite.Max)){
 			f = new File("src/application/son/alarmMax.mp3");
@@ -411,6 +412,8 @@ public class View {
 		}
 		media = new Media(f.toURI().toString());
 		mediaPlayer = new MediaPlayer(media);
+		
+		mediaPlayer.setVolume(v);
 		mediaPlayer.play();
 	}
 	

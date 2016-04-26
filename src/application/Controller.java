@@ -50,8 +50,16 @@ public class Controller {
 	 * Ajoute une alarme aléatoire.
 	 */
 	public void putAlarm(){
-		Alarm a = new Alarm();
-		this.getModel().addAlarm(a);
+		float volume;
+		volume = (float)((Math.random() * ((9) + 1))/10);
+		Alarm a;
+		if (volume>0.5){
+			a = new Alarm("audio");
+		}
+		else{
+			a = new Alarm("visuel");
+		}
+		this.getModel().addAlarm(a, volume);
 	}
 	
 	/**
