@@ -4,7 +4,7 @@ import java.util.List;
 
 import application.alarm.Alarm;
 import application.alarm.AlarmView;
-
+import application.audiovisuel.AudioVisuel;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ListView;
 
@@ -33,7 +33,8 @@ public class Controller {
 		ListView<AlarmView> viewList = new ListView<AlarmView>();
 		
 		for(Alarm a : modelList){
-			viewList.getItems().add(new AlarmView(a, View.getPrimaryStage().getScene().getWidth() - 210, this.getModel().getView()));
+			if(a.getTypeAudioVisuel() != AudioVisuel.AUDIO)
+				viewList.getItems().add(new AlarmView(a, View.getPrimaryStage().getScene().getWidth() - 210, this.getModel().getView()));
 		}
 		
 		return viewList;
