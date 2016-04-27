@@ -49,3 +49,7 @@
 #treated-infoalarm {
 	-fx-font: 24px "Serif";
 }
+
+#onglet-text {
+	-fx-font: 18px "Serif";
+}

@@ -26,9 +26,26 @@ public class Controller {
 	
 	/**
 	 * Convertie la liste d'alarme du modèle en liste d'alarmes graphique pour la vue.
+	 * Récupère toute les alarmes.
 	 * @return La liste d'alarme convertie en liste d'objets graphiques.
 	 */
 	public ListView<AlarmView> getAlarmsAsListView(){
+		List<Alarm> modelList = this.getModel().getListAlarm();
+		ListView<AlarmView> viewList = new ListView<AlarmView>();
+		
+		for(Alarm a : modelList){
+				viewList.getItems().add(new AlarmView(a, View.getPrimaryStage().getScene().getWidth() - 210, this.getModel().getView()));
+		}
+		
+		return viewList;
+	}
+	
+	/**
+	 * Convertie la liste d'alarme du modèle en liste d'alarmes graphique pour la vue.
+	 * Ne récupère que les alarmes de type "Visuel" et "AudioVisuel".
+	 * @return La liste d'alarme convertie en liste d'objets graphiques.
+	 */
+	public ListView<AlarmView> getVisualAlarmsAsListView(){
 		List<Alarm> modelList = this.getModel().getListAlarm();
 		ListView<AlarmView> viewList = new ListView<AlarmView>();
 		

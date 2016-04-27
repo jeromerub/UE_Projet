@@ -19,8 +19,7 @@ public class Main extends Application {
 
 			Model model = new Model();
 			Controller controller = new Controller(model);
-			View view = new View(primaryStage, controller);
-			model.setView(view);	
+			View view = new View(primaryStage, controller);	
 			
 		} catch(Exception e) {
 			

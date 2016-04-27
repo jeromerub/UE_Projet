@@ -14,6 +14,7 @@ import java.util.List;
 
 import application.alarm.Alarm;
 import application.audiovisuel.AudioVisuel;
+import application.priorite.Priorite;
 
 /**
  * Classe représentant notre modèle de données.
@@ -103,8 +104,13 @@ public class Model implements Serializable {
 	 */
 	public void addAlarm(Alarm a){
 		this.listAlarm.add(a);
-		this.getView().emettreSon();
-		this.getView().newWindow(a);
+		
+		if(a.getTypeAudioVisuel() != AudioVisuel.AUDIO)
+			this.getView().newWindow(a);
+		
+		if(a.getPriorite().compareTo(getHigherPriority()) >= 0)
+			this.getView().emettreSon(a);
+		
 		save();
 		notifyView();
 	}
@@ -226,6 +232,22 @@ public class Model implements Serializable {
 	}
 	
 	/**
+	 * Retourne la plus haute priorite d'alarme. Par défaut retourne "Basse".
+	 * @return La priorité la plus haute parmis la liste.
+	 */
+	public Priorite getHigherPriority(){
+		Priorite result = Priorite.Basse;
+		
+		for(Alarm a : getListAlarm()){
+			if(a.getPriorite().compareTo(result) > 0)
+				result = a.getPriorite();
+				
+		}
+		
+		return result;
+	}
+	
+	/**
 	 * @return La liste d'alarmes.
 	 */
 	public List<Alarm> getListAlarm(){
@@ -233,7 +255,7 @@ public class Model implements Serializable {
 	}
 	
 	/**
-	 * @return La liste des alarmes Visuelles et AudioVIsuelles.
+	 * @return La liste des alarmes Visuelles et AudioVisuelles.
 	 */
 	public List<Alarm> getVisualListAlarm(){
 		List<Alarm> result = new ArrayList<Alarm>();
