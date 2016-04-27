@@ -43,12 +43,12 @@ public class View {
 	private Text treatedAlarm;
 	
 	
-	Button buttonAddAlarmRandom = new Button();
-	Button buttonResetAlarms = new Button();
-	Button buttonDeleteAlarm = new Button();
-	Button buttonTreatAlarm = new Button();
-	Button buttonSortByTime = new Button();
-	Button buttonSortByPriority = new Button();
+	Button buttonAddAlarmRandom;
+	Button buttonResetAlarms;
+	Button buttonDeleteAlarm;
+	Button buttonTreatAlarm;
+	Button buttonSortByTime ;
+	Button buttonSortByPriority;
 	
 	/**
 	 * Création de la vue.
@@ -72,8 +72,6 @@ public class View {
 			Rectangle botLeftRect = new Rectangle();
 			Rectangle botRightRect = new Rectangle();
 			
-			
-			
 			/* Paramètres de la fenêtre */
 			
 			primaryStage.setTitle("Gestionnaire d'alarmes multimodal 1.0");
@@ -84,6 +82,14 @@ public class View {
 			this.descAlarm = new Label();
 			this.prioriteAlarm = new Text();
 			this.treatedAlarm = new Text();
+			
+			this.buttonAddAlarmRandom = new Button();
+			this.buttonResetAlarms = new Button();
+			this.buttonDeleteAlarm = new Button();
+			this.buttonTreatAlarm = new Button();
+			this.buttonSortByTime = new Button();
+			this.buttonSortByPriority = new Button();
+		
 			this.setPrimaryStage(primaryStage);
 			
 			/* Ajout de la feuille de style css */
@@ -174,7 +180,9 @@ public class View {
 			/* Responsive Design */
 			
 			scene.widthProperty().addListener(new ChangeListener<Number>() {
-			    @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth, Number newSceneWidth) {
+				
+			    @Override 
+			    public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth, Number newSceneWidth) {
 			    	topRect.setWidth(newSceneWidth.floatValue());
 					botRightRect.setWidth(newSceneWidth.floatValue() - 200);
 					descAlarm.setPrefWidth(newSceneWidth.floatValue() - 40);
@@ -188,12 +196,28 @@ public class View {
 			});
 			
 			scene.heightProperty().addListener(new ChangeListener<Number>() {
-			    @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneHeight, Number newSceneHeight) {
+				
+			    @Override 
+			    public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneHeight, Number newSceneHeight) {
 			    	botLeftRect.setHeight(newSceneHeight.floatValue() - 200);
 			    	botRightRect.setHeight(newSceneHeight.floatValue() - 200);
 			    	scrollAlarm.setPrefHeight(newSceneHeight.floatValue() - 200);
 			    }
 			});
+			
+			/* Activations et désactivation boutons */
+			
+			switch (getController().getModel().getListAlarm().size()){
+				case 0:
+					disableButtonResetSortDeleteAndTreat();
+					break;
+				case 1:
+					disableButtonSortDeleteAndTreat();
+					break;
+				default:
+					disableButtonDeleteAndTreat();
+					break;
+			}
 			
 			/* Paramétrage des boutons */
 			
@@ -208,13 +232,16 @@ public class View {
 				@Override
 				public void handle(ActionEvent arg0) {			
 					getController().putAlarm();
+					
 					switch (getController().getModel().getListAlarm().size()){
-					case 0:
-						//Interdit
-					case 1:
-						disableButtonSortDeleteAndTreat();
-					default:
-						disableButtonDeleteAndTreat();
+						case 0:
+							//Interdit
+						case 1:
+							disableButtonSortDeleteAndTreat();
+							break;
+						default:
+							disableButtonDeleteAndTreat();
+							break;
 					}
 				}
 				
@@ -231,13 +258,17 @@ public class View {
 				@Override
 				public void handle(ActionEvent arg0) {
 					getController().resetAlarms();
+					
 					switch (getController().getModel().getListAlarm().size()){
-					case 0:
-						disableButtonResetSortDeleteAndTreat();
-					case 1:
-						disableButtonSortDeleteAndTreat();
-					default:
-						disableButtonDeleteAndTreat();
+						case 0:
+							disableButtonResetSortDeleteAndTreat();
+							break;
+						case 1:
+							disableButtonSortDeleteAndTreat();
+							break;
+						default:
+							disableButtonDeleteAndTreat();
+							break;
 					}
 				}
 				
@@ -253,14 +284,18 @@ public class View {
 				
 				@Override
 				public void handle(ActionEvent arg0) {
-					getController().deleteAlarm(getSelectedAlarm());	
+					getController().deleteAlarm(getSelectedAlarm());
+					
 					switch (getController().getModel().getListAlarm().size()){
-					case 0:
-						disableButtonResetSortDeleteAndTreat();
-					case 1:
-						disableButtonSortDeleteAndTreat();
-					default:
-						disableButtonDeleteAndTreat();
+						case 0:
+							disableButtonResetSortDeleteAndTreat();
+							break;
+						case 1:
+							disableButtonSortDeleteAndTreat();
+							break;
+						default:
+							disableButtonDeleteAndTreat();
+							break;
 					}
 				}
 				
@@ -277,13 +312,16 @@ public class View {
 				@Override
 				public void handle(ActionEvent arg0) {
 					getController().treatAlarm(getSelectedAlarm());
+					
 					switch (getController().getModel().getListAlarm().size()){
-					case 0:
-						//Interdit
-					case 1:
-						disableButtonSortDeleteAndTreat();
-					default:
-						disableButtonDeleteAndTreat();
+						case 0:
+							//Interdit
+						case 1:
+							disableButtonSortDeleteAndTreat();
+							break;
+						default:
+							disableButtonDeleteAndTreat();
+							break;
 					}
 				}
 				
@@ -300,13 +338,15 @@ public class View {
 				@Override
 				public void handle(ActionEvent arg0) {
 					getController().sortAlarmsByTime();
+					
 					switch (getController().getModel().getListAlarm().size()){
-					case 0:
-						//Interdit
-					case 1:
-						//Interdit
-					default:
-						disableButtonDeleteAndTreat();
+						case 0:
+							//Interdit
+						case 1:
+							//Interdit
+						default:
+							disableButtonDeleteAndTreat();
+							break;
 					}
 				}
 				
@@ -324,12 +364,13 @@ public class View {
 				public void handle(ActionEvent arg0) {
 					getController().sortAlarmsByPriority();
 					switch (getController().getModel().getListAlarm().size()){
-					case 0:
-						//Interdit
-					case 1:
-						//Interdit
-					default:
-						disableButtonDeleteAndTreat();
+						case 0:
+							//Interdit
+						case 1:
+							//Interdit
+						default:
+							disableButtonDeleteAndTreat();
+							break;
 					}
 				}
 				
@@ -377,31 +418,35 @@ public class View {
 		if(alarm != null){
 			if (alarm.getAlarm().isTreated()){
 				switch (getController().getModel().getListAlarm().size()){
-				case 0:
-					//Interdit
-				case 1:
-					System.out.println("coucou");
-					disableButtonSortAndTreat();
-				default:
-					disableButtonTreat();
+					case 0:
+						//Interdit
+					case 1:
+						disableButtonSortAndTreat();
+						break;
+					default:
+						disableButtonTreat();
+						break;
 				}
-			}
-			else{
+			} else {
 				switch (getController().getModel().getListAlarm().size()){
-				case 0:
-					//Interdit
-				case 1:
-					disableButtonSort();
-				default:
-					noDisableButton();
+					case 0:
+						//Interdit
+					case 1:
+						disableButtonSort();
+						break;
+					default:
+						noDisableButton();
+						break;
 				}
 			}
+			
 			this.nomAlarm.setText(alarm.getAlarm().getNom());
 			this.descAlarm.setText(alarm.getAlarm().getDesc());
 			this.prioriteAlarm.setText("Priorité : " + alarm.getAlarm().getPriorite());
 			
 			if(alarm.getAlarm().isTreated()) this.treatedAlarm.setText("Alarme traitée");
 			else this.treatedAlarm.setText("Alarme non-traitée");
+			
 		} else {
 			this.nomAlarm.setText("");
 			this.descAlarm.setText("");
@@ -500,7 +545,6 @@ public class View {
 	public Controller getController(){
 		return this.controller;
 	}
-	
 	
 	public void disableButtonDeleteAndTreat(){
 		buttonAddAlarmRandom.setDisable(false);
