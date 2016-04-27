@@ -42,6 +42,14 @@ public class View {
 	private Text prioriteAlarm;
 	private Text treatedAlarm;
 	
+	
+	Button buttonAddAlarmRandom = new Button();
+	Button buttonResetAlarms = new Button();
+	Button buttonDeleteAlarm = new Button();
+	Button buttonTreatAlarm = new Button();
+	Button buttonSortByTime = new Button();
+	Button buttonSortByPriority = new Button();
+	
 	/**
 	 * Création de la vue.
 	 * @param primaryStage 
@@ -64,12 +72,7 @@ public class View {
 			Rectangle botLeftRect = new Rectangle();
 			Rectangle botRightRect = new Rectangle();
 			
-			Button buttonAddAlarmRandom = new Button();
-			Button buttonResetAlarms = new Button();
-			Button buttonDeleteAlarm = new Button();
-			Button buttonTreatAlarm = new Button();
-			Button buttonSortByTime = new Button();
-			Button buttonSortByPriority = new Button();
+			
 			
 			/* Paramètres de la fenêtre */
 			
@@ -204,7 +207,15 @@ public class View {
 				
 				@Override
 				public void handle(ActionEvent arg0) {			
-					getController().putAlarm();		
+					getController().putAlarm();
+					switch (getController().getModel().getListAlarm().size()){
+					case 0:
+						//Interdit
+					case 1:
+						disableButtonSortDeleteAndTreat();
+					default:
+						disableButtonDeleteAndTreat();
+					}
 				}
 				
 			});
@@ -219,7 +230,15 @@ public class View {
 				
 				@Override
 				public void handle(ActionEvent arg0) {
-					getController().resetAlarms();				
+					getController().resetAlarms();
+					switch (getController().getModel().getListAlarm().size()){
+					case 0:
+						disableButtonResetSortDeleteAndTreat();
+					case 1:
+						disableButtonSortDeleteAndTreat();
+					default:
+						disableButtonDeleteAndTreat();
+					}
 				}
 				
 			});
@@ -234,7 +253,15 @@ public class View {
 				
 				@Override
 				public void handle(ActionEvent arg0) {
-					getController().deleteAlarm(getSelectedAlarm());				
+					getController().deleteAlarm(getSelectedAlarm());	
+					switch (getController().getModel().getListAlarm().size()){
+					case 0:
+						disableButtonResetSortDeleteAndTreat();
+					case 1:
+						disableButtonSortDeleteAndTreat();
+					default:
+						disableButtonDeleteAndTreat();
+					}
 				}
 				
 			});	
@@ -249,7 +276,15 @@ public class View {
 				
 				@Override
 				public void handle(ActionEvent arg0) {
-					getController().treatAlarm(getSelectedAlarm());				
+					getController().treatAlarm(getSelectedAlarm());
+					switch (getController().getModel().getListAlarm().size()){
+					case 0:
+						//Interdit
+					case 1:
+						disableButtonSortDeleteAndTreat();
+					default:
+						disableButtonDeleteAndTreat();
+					}
 				}
 				
 			});	
@@ -264,7 +299,15 @@ public class View {
 				
 				@Override
 				public void handle(ActionEvent arg0) {
-					getController().sortAlarmsByTime();				
+					getController().sortAlarmsByTime();
+					switch (getController().getModel().getListAlarm().size()){
+					case 0:
+						//Interdit
+					case 1:
+						//Interdit
+					default:
+						disableButtonDeleteAndTreat();
+					}
 				}
 				
 			});	
@@ -279,7 +322,15 @@ public class View {
 				
 				@Override
 				public void handle(ActionEvent arg0) {
-					getController().sortAlarmsByPriority();				
+					getController().sortAlarmsByPriority();
+					switch (getController().getModel().getListAlarm().size()){
+					case 0:
+						//Interdit
+					case 1:
+						//Interdit
+					default:
+						disableButtonDeleteAndTreat();
+					}
 				}
 				
 			});	
@@ -324,6 +375,27 @@ public class View {
 		AlarmView alarm = this.scrollAlarm.getSelectionModel().getSelectedItem();
 		
 		if(alarm != null){
+			if (alarm.getAlarm().isTreated()){
+				switch (getController().getModel().getListAlarm().size()){
+				case 0:
+					//Interdit
+				case 1:
+					System.out.println("coucou");
+					disableButtonSortAndTreat();
+				default:
+					disableButtonTreat();
+				}
+			}
+			else{
+				switch (getController().getModel().getListAlarm().size()){
+				case 0:
+					//Interdit
+				case 1:
+					disableButtonSort();
+				default:
+					noDisableButton();
+				}
+			}
 			this.nomAlarm.setText(alarm.getAlarm().getNom());
 			this.descAlarm.setText(alarm.getAlarm().getDesc());
 			this.prioriteAlarm.setText("Priorité : " + alarm.getAlarm().getPriorite());
@@ -389,7 +461,6 @@ public class View {
 		if(this.scrollAlarm.getSelectionModel().getSelectedItem() != null){
 			return this.scrollAlarm.getSelectionModel().getSelectedItem().getAlarm();
 		}
-		
 		return null;
 	}
 	
@@ -428,5 +499,69 @@ public class View {
 	 */
 	public Controller getController(){
 		return this.controller;
+	}
+	
+	
+	public void disableButtonDeleteAndTreat(){
+		buttonAddAlarmRandom.setDisable(false);
+		buttonResetAlarms.setDisable(false);
+		buttonDeleteAlarm.setDisable(true);
+		buttonTreatAlarm.setDisable(true);
+		buttonSortByTime.setDisable(false);
+		buttonSortByPriority.setDisable(false);
+	}
+	
+	public void disableButtonSortDeleteAndTreat(){
+		buttonAddAlarmRandom.setDisable(false);
+		buttonResetAlarms.setDisable(false);
+		buttonDeleteAlarm.setDisable(true);
+		buttonTreatAlarm.setDisable(true);
+		buttonSortByTime.setDisable(true);
+		buttonSortByPriority.setDisable(true);
+	}
+	
+	public void disableButtonResetSortDeleteAndTreat(){
+		buttonAddAlarmRandom.setDisable(false);
+		buttonResetAlarms.setDisable(true);
+		buttonDeleteAlarm.setDisable(true);
+		buttonTreatAlarm.setDisable(true);
+		buttonSortByTime.setDisable(true);
+		buttonSortByPriority.setDisable(true);
+	}
+	
+	public void noDisableButton(){
+		buttonAddAlarmRandom.setDisable(false);
+		buttonResetAlarms.setDisable(false);
+		buttonDeleteAlarm.setDisable(false);
+		buttonTreatAlarm.setDisable(false);
+		buttonSortByTime.setDisable(false);
+		buttonSortByPriority.setDisable(false);
+	}
+	
+	public void disableButtonTreat(){
+		buttonAddAlarmRandom.setDisable(false);
+		buttonResetAlarms.setDisable(false);
+		buttonDeleteAlarm.setDisable(false);
+		buttonTreatAlarm.setDisable(true);
+		buttonSortByTime.setDisable(false);
+		buttonSortByPriority.setDisable(false);
+	}
+	
+	public void disableButtonSortAndTreat(){
+		buttonAddAlarmRandom.setDisable(false);
+		buttonResetAlarms.setDisable(false);
+		buttonDeleteAlarm.setDisable(false);
+		buttonTreatAlarm.setDisable(true);
+		buttonSortByTime.setDisable(true);
+		buttonSortByPriority.setDisable(true);
+	}
+	
+	public void disableButtonSort(){
+		buttonAddAlarmRandom.setDisable(false);
+		buttonResetAlarms.setDisable(false);
+		buttonDeleteAlarm.setDisable(false);
+		buttonTreatAlarm.setDisable(false);
+		buttonSortByTime.setDisable(true);
+		buttonSortByPriority.setDisable(true);
 	}
 }
