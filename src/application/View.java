@@ -32,6 +32,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 /**
  * Classe représentant la vue du logiciel.
@@ -410,6 +411,7 @@ public class View {
 		mediaPlayer2.setBalance(1);
 		
 		mediaPlayer1.play();
+		mediaPlayer2.setStartTime(Duration.seconds(1));
 		mediaPlayer2.play();
 	}
 	
