@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Random;
 
+import application.audiovisuel.AudioVisuel;
 import application.priorite.Priorite;
 
 /**
@@ -24,25 +25,42 @@ public class Alarm implements Serializable  {
 	private String desc;
 	private boolean isTreated;
 	private Timestamp created;
+	private AudioVisuel type;
 	
 	/**
 	 * Génération  d'une alarme aléatoire.
 	 */
-	public Alarm(){
-		Date d = new Date();
-		
-		this.created = new Timestamp(d.getTime());
+	public Alarm(){		
+		this.created = new Timestamp(new Date().getTime());
 		this.nom = "Alarme " + ++cptRandom;
 		
 		switch(random(4)){
-			case 0: this.priorite = Priorite.Basse; break;
-			case 1: this.priorite = Priorite.Moyenne; break;
-			case 2: this.priorite = Priorite.Haute; break;
-			case 3: this.priorite = Priorite.Max; break;
-			default: System.out.println("Err rand");
+			case 0: 
+				this.priorite = Priorite.Basse;
+				this.type = AudioVisuel.AUDIO;
+				break;
+				
+			case 1: 
+				this.priorite = Priorite.Moyenne;
+				this.type = AudioVisuel.VISUEL;
+				break;
+				
+			case 2: 
+				this.priorite = Priorite.Haute;
+				this.type = AudioVisuel.AUDIOVISUEL;
+				break;
+				
+			case 3: 
+				this.priorite = Priorite.Max;
+				this.type = AudioVisuel.AUDIOVISUEL;
+				break;
+				
+			default: 
+				System.out.println("Err rand");
+				break;
 		}
 		
-		this.desc = "Alarme de priorité " + this.priorite;
+		this.desc = "Alarme type : " + this.type + " - Alarme de priorité " + this.priorite;
 		this.isTreated = false;
 		
 	}
@@ -56,12 +74,26 @@ public class Alarm implements Serializable  {
 	 * @param p 
 	 * 			Priorité de l'alarme.
 	 */
-	public Alarm(String nom, String desc, Priorite p){
-		Date d = new Date();
-		
-		this.created = new Timestamp(d.getTime());
+	public Alarm(String nom, String desc, Priorite p){		
+		this.created = new Timestamp(new Date().getTime());
 		this.nom = nom;
-		this.priorite = p;		
+		this.priorite = p;
+		
+		switch(p){
+			case Basse:
+				this.type = AudioVisuel.AUDIO;
+				break;
+			case Moyenne:
+				this.type = AudioVisuel.VISUEL;
+				break;
+			case Haute:
+				this.type = AudioVisuel.AUDIOVISUEL;
+				break;
+			case Max:
+				this.type = AudioVisuel.AUDIOVISUEL;
+				break;
+		}
+		
 		this.desc = desc;
 		this.isTreated = false;
 	}
@@ -92,6 +124,13 @@ public class Alarm implements Serializable  {
 	 */
 	public Timestamp getTimestamp(){
 		return this.created;
+	}
+	
+	/**
+	 * @return Type AudioVisuel de l'alarme.
+	 */
+	public AudioVisuel getTypeAudioVisuel(){
+		return this.type;
 	}
 	
 	/**

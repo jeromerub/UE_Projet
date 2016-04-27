@@ -97,6 +97,7 @@ public class View {
 			this.buttonSortByTime = new Button();
 			this.buttonSortByPriority = new Button();
 		
+			primaryStage.setScene(scene);
 			this.setPrimaryStage(primaryStage);
 			
 			/* Ajout de la feuille de style css */
@@ -107,13 +108,13 @@ public class View {
 			
 			this.controller = c;
 			
+			/* Mise à jour du model */
+			
+			this.getController().getModel().setView(this);
+			
 			/* Chargement des alarmes */
 			
-			this.scrollAlarm = new ListView<AlarmView>();
-			
-			for(Alarm a : this.getController().getModel().getListAlarm()){
-				this.scrollAlarm.getItems().add(new AlarmView(a, scene.getWidth() - 210, this));
-			}
+			this.scrollAlarm = this.getController().getAlarmsAsListView();
 			
 			/* Permet de ne jamais avoir 2 alarmes identiques (provisoire) */
 			
@@ -214,7 +215,7 @@ public class View {
 			
 			/* Activations et désactivation boutons */
 			
-			switch (getController().getModel().getListAlarm().size()){
+			switch (getController().getModel().getVisualListAlarm().size()){
 				case 0:
 					disableButtonResetSortDeleteAndTreat();
 					break;
@@ -240,7 +241,7 @@ public class View {
 				public void handle(ActionEvent arg0) {			
 					getController().putAlarm();
 					
-					switch (getController().getModel().getListAlarm().size()){
+					switch (getController().getModel().getVisualListAlarm().size()){
 						case 0:
 							//Interdit
 						case 1:
@@ -266,7 +267,7 @@ public class View {
 				public void handle(ActionEvent arg0) {
 					getController().resetAlarms();
 					
-					switch (getController().getModel().getListAlarm().size()){
+					switch (getController().getModel().getVisualListAlarm().size()){
 						case 0:
 							disableButtonResetSortDeleteAndTreat();
 							break;
@@ -293,7 +294,7 @@ public class View {
 				public void handle(ActionEvent arg0) {
 					getController().deleteAlarm(getSelectedAlarm());
 					
-					switch (getController().getModel().getListAlarm().size()){
+					switch (getController().getModel().getVisualListAlarm().size()){
 						case 0:
 							disableButtonResetSortDeleteAndTreat();
 							break;
@@ -320,7 +321,7 @@ public class View {
 				public void handle(ActionEvent arg0) {
 					getController().treatAlarm(getSelectedAlarm());
 					
-					switch (getController().getModel().getListAlarm().size()){
+					switch (getController().getModel().getVisualListAlarm().size()){
 						case 0:
 							//Interdit
 						case 1:
@@ -346,7 +347,7 @@ public class View {
 				public void handle(ActionEvent arg0) {
 					getController().sortAlarmsByTime();
 					
-					switch (getController().getModel().getListAlarm().size()){
+					switch (getController().getModel().getVisualListAlarm().size()){
 						case 0:
 							//Interdit
 						case 1:
@@ -370,7 +371,7 @@ public class View {
 				@Override
 				public void handle(ActionEvent arg0) {
 					getController().sortAlarmsByPriority();
-					switch (getController().getModel().getListAlarm().size()){
+					switch (getController().getModel().getVisualListAlarm().size()){
 						case 0:
 							//Interdit
 						case 1:
@@ -406,7 +407,6 @@ public class View {
 			root.getChildren().add(botLeft);
 			root.getChildren().add(botRight);
 			
-			primaryStage.setScene(scene);
 			primaryStage.show();
 			
 		/* Catch exceptions */
@@ -424,7 +424,7 @@ public class View {
 		
 		if(alarm != null){
 			if (alarm.getAlarm().isTreated()){
-				switch (getController().getModel().getListAlarm().size()){
+				switch (getController().getModel().getVisualListAlarm().size()){
 					case 0:
 						//Interdit
 					case 1:
@@ -435,7 +435,7 @@ public class View {
 						break;
 				}
 			} else {
-				switch (getController().getModel().getListAlarm().size()){
+				switch (getController().getModel().getVisualListAlarm().size()){
 					case 0:
 						//Interdit
 					case 1:

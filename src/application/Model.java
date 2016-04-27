@@ -13,6 +13,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import application.alarm.Alarm;
+import application.audiovisuel.AudioVisuel;
 
 /**
  * Classe représentant notre modèle de données.
@@ -229,6 +230,20 @@ public class Model implements Serializable {
 	 */
 	public List<Alarm> getListAlarm(){
 		return this.listAlarm;
+	}
+	
+	/**
+	 * @return La liste des alarmes Visuelles et AudioVIsuelles.
+	 */
+	public List<Alarm> getVisualListAlarm(){
+		List<Alarm> result = new ArrayList<Alarm>();
+		
+		for(Alarm a : getListAlarm()){
+			if(a.getTypeAudioVisuel() != AudioVisuel.AUDIO)
+				result.add(a);
+		}
+		
+		return result;
 	}
 	
 	/**
