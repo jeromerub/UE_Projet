@@ -411,7 +411,7 @@ public class View {
 		mediaPlayer2.setBalance(1);
 		
 		mediaPlayer1.play();
-		mediaPlayer2.setStartTime(Duration.seconds(1));
+		mediaPlayer2.setStartTime(Duration.seconds(0.5));
 		mediaPlayer2.play();
 	}
 	
