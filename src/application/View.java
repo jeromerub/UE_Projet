@@ -1,10 +1,14 @@
 package application;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Optional;
 
+import javax.sound.sampled.UnsupportedAudioFileException;
+import javafx.scene.media.MediaPlayer;
 import application.alarm.Alarm;
 import application.alarm.AlarmView;
-
+import application.priorite.Priorite;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 
@@ -19,13 +23,16 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.media.Media;
 import javafx.scene.control.Alert.AlertType;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 /**
  * Classe représentant la vue du logiciel.
@@ -497,6 +504,80 @@ public class View {
 		result = dialog.showAndWait();
 		
 		return result.get();
+	}
+	
+	/**
+	 * @return Alarme selectionnée.
+	 */
+	/**
+	 * Emet un son 
+	 */
+	public void emettreSon(){
+		File f1 = new File("src/application/son/alarm.mp3");
+		Media media1 = new Media(f1.toURI().toString());
+		MediaPlayer mediaPlayer1 = new MediaPlayer(media1);
+		
+		File f2 = new File("src/application/son/alarm.mp3");
+		Media media2 = new Media(f2.toURI().toString());
+		MediaPlayer mediaPlayer2 = new MediaPlayer(media2);
+		
+		mediaPlayer1.setBalance(-1);
+		mediaPlayer2.setBalance(1);
+		
+		mediaPlayer1.play();
+		mediaPlayer2.setStartTime(Duration.seconds(0.5));
+		mediaPlayer2.play();
+	}
+	
+	/**
+	 * Affiche une nouvelle fenêtre avec les infos de la dernière alarme
+	 * @param a
+	 * 			Alarme a afficher
+	 */
+	public void newWindow(Alarm a){
+		Group root = new Group();
+        Scene scene = new Scene(root);
+
+        Stage stage = new Stage();
+        
+        Group groupNom = new Group();
+        Group groupDesc = new Group();
+        Group groupPriorite = new Group();
+		
+        Text nom = new Text(a.getNom());
+        Text desc = new Text(a.getDesc());
+        Text priorite = new Text("Priorité : " + a.getPriorite().toString());
+
+        stage.setScene(scene);
+        stage.setTitle(a.getNom());
+        stage.setMinWidth(800);
+        stage.setMinHeight(200);
+        stage.setX(50);
+        stage.setY(50);
+        
+        groupNom.setLayoutX(10);
+        groupNom.setLayoutY(80);
+        
+        groupDesc.setLayoutX(10);
+        groupDesc.setLayoutY(130);
+        
+        groupPriorite.setLayoutX(10);
+        groupPriorite.setLayoutY(180);
+        
+        groupNom.getChildren().add(nom);
+        groupDesc.getChildren().add(desc);
+        groupPriorite.getChildren().add(priorite);
+        
+        nom.setFont(new Font(80));
+        desc.setFont(new Font(58));
+        priorite.setFont(new Font(58));
+        
+        root.getChildren().add(groupNom);
+        root.getChildren().add(groupDesc);
+        root.getChildren().add(groupPriorite);
+        
+        stage.show();
+        //View.pStage.toFront();
 	}
 	
 	/**
