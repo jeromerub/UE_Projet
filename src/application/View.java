@@ -9,6 +9,7 @@ import application.alarm.Alarm;
 import application.alarm.AlarmView;
 import application.audiovisuel.AudioVisuel;
 import application.figures.OngletListAlarms;
+import application.priorite.Priorite;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -41,6 +42,7 @@ import javafx.util.Duration;
  *
  */
 public class View {
+	private Priorite plusHautePriorite = Priorite.Basse;
 	
 	private static Stage pStage = null;
 	private Controller controller;
@@ -247,6 +249,7 @@ public class View {
 	 */
 	public void refreshList(){
 		ListView<AlarmView> list;
+		Alarm a;
 		
 		if(visualOnly)
 			list = this.getController().getVisualAlarmsAsListView();
@@ -254,6 +257,14 @@ public class View {
 			list = this.getController().getAlarmsAsListView();
 		
 		this.setListView(list);
+		
+		a=findAlarmMaxPrio();
+		if (this.plusHautePriorite.equals(Priorite.Max)){
+			emettreSon(a);
+		}
+		else{
+			stopSonAlarmMax();
+		}
 	}
 	
 	/**
@@ -271,6 +282,7 @@ public class View {
 		dialog.setContentText("Etes-vous sur de vouloir supprimer cette alarme : " + a.getNom());
 		
 		result = dialog.showAndWait();
+		
 		
 		return result.get();
 	}
@@ -333,12 +345,38 @@ public class View {
 	}
 	
 	/**
-	 * Arrete tout les sons.
+	 * Arrete tous les sons qui ne sont pas l'alarme max
 	 */
 	public void stopSon(){
-		for (int i = 0; i < this.soundsAlarms.size(); ++i){
+		//for (int i = 0; i < this.soundsAlarms.size(); ++i){
+		for (int i = 0; i < 6; ++i){
 			this.soundsAlarms.get(i).stop();
 		}
+	}
+	
+	/**
+	 * Arrete les sons de l'alarme max
+	 */
+	public void stopSonAlarmMax(){
+		for (int i = 6; i < this.soundsAlarms.size(); ++i){
+			this.soundsAlarms.get(i).stop();
+		}
+	}
+	
+	/**
+	 * Met a jour la variable plus haute priorite et renvoie l'alarme avec cette plus haute priorite
+	 * @return l'alarme avec la plus grande priorite
+	 */
+	public Alarm findAlarmMaxPrio(){
+		this.plusHautePriorite=Priorite.Basse;
+		Alarm a=null;
+		for(AlarmView av : scrollAlarm.getItems()){
+			if ((av.getAlarm().getPriorite().compareTo(this.plusHautePriorite) >= 0) && (av.getAlarm().isTreated()==false)){
+				this.plusHautePriorite = av.getAlarm().getPriorite();
+				a=av.getAlarm();
+			}
+		}
+		return a;
 	}
 	
 	/**
@@ -550,6 +588,9 @@ public class View {
 		
 		this.soundsAlarms.get(6).setBalance(-1);
 		this.soundsAlarms.get(7).setBalance(1);
+		
+		this.soundsAlarms.get(6).setCycleCount(64);
+		this.soundsAlarms.get(7).setCycleCount(64);
 	}
 	
 	/**
@@ -771,9 +812,17 @@ public class View {
     	
     	scrollAlarm.setPrefWidth(800);
 		scrollAlarm.setPrefHeight(550);
+		Alarm a = null;
 		
 		for(AlarmView av : scrollAlarm.getItems()){
 			av.setFondWidth(View.getPrimaryStage().getScene().getWidth() - 210);
+		}
+		a=findAlarmMaxPrio();
+		if (this.plusHautePriorite.equals(Priorite.Max)){
+			emettreSon(a);
+		}
+		else{
+			stopSonAlarmMax();
 		}
 
 		scrollAlarm.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<AlarmView>() {

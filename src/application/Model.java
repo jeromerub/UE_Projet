@@ -107,9 +107,15 @@ public class Model implements Serializable {
 		
 		if(a.getTypeAudioVisuel() != AudioVisuel.AUDIO)
 			this.getView().newWindow(a);
-		
-		if(a.getPriorite().compareTo(getHigherPriority()) >= 0)
+
+		if (getHigherPriority()!=Priorite.Max){
 			this.getView().emettreSon(a);
+		}
+		else{
+			if (a.getPriorite()==Priorite.Max){
+				this.getView().emettreSon(a);
+			}
+		}
 		
 		save();
 		notifyView();
@@ -239,7 +245,7 @@ public class Model implements Serializable {
 		Priorite result = Priorite.Basse;
 		
 		for(Alarm a : getListAlarm()){
-			if(a.getPriorite().compareTo(result) > 0)
+			if((a.getPriorite().compareTo(result) > 0) && a.isTreated()==false)
 				result = a.getPriorite();
 				
 		}
