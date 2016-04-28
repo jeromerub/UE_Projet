@@ -905,7 +905,7 @@ public class View {
 			public void handle(ActionEvent arg0) {
 				getController().deleteAlarm(getSelectedAlarm());
 				nbAlarm = getController().getModel().getVisualListAlarm().size();
-				System.out.println("av " + nbAlarm + " " + etat);
+				
 				switch (etat){
 					case noAlarm:
 						//Interdit
@@ -956,9 +956,7 @@ public class View {
 							disableButtonDeleteAndTreat();
 						}
 						break;
-				}
-				System.out.println("ap " + nbAlarm + " " + etat);
-				
+				}				
 			}
 			
 		});	
