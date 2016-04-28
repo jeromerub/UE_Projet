@@ -223,6 +223,7 @@ public class View {
 		
 		if(alarm != null){
 			if (alarm.getAlarm().isTreated()){
+				
 				switch (this.etat){
 					case noAlarm:
 						//Interdit
@@ -264,6 +265,7 @@ public class View {
 				}
 				*/
 			} else {
+				
 				switch (this.etat){
 					case noAlarm:
 						//Interdit
@@ -766,33 +768,41 @@ public class View {
 				getController().putAlarm();
 				
 				switch (etat){
-				case noAlarm:
-					etat = Etat.oneAlarmNotSelected;
-					
-					break;
-				case oneAlarmNotSelected:
-					etat = Etat.oneAlarmSelected;
-					disableButtonSort();
-					break;
-				case oneAlarmSelected:
-					etat = Etat.oneAlarmSelected;
-					disableButtonSort();
-					break;
-				case oneAlarmSelectedTreated:
-					//Interdit
-					break;
-				case manyAlarmNotSelected:
-					etat = Etat.manyAlarmSelectedTreated;
-					noDisableButton();
-					break;
-				case manyAlarmSelected:
-					etat = Etat.manyAlarmSelectedTreated;
-					noDisableButton();
-					break;
-				case manyAlarmSelectedTreated:
-					etat = Etat.manyAlarmSelectedTreated;
-					noDisableButton();
-					break;
+					case noAlarm:
+						etat = Etat.oneAlarmNotSelected;
+						nbAlarm++;
+						disableButtonSortDeleteAndTreat();
+						break;
+					case oneAlarmNotSelected:
+						etat = Etat.manyAlarmNotSelected;
+						nbAlarm++;
+						disableButtonDeleteAndTreat();
+						break;
+					case oneAlarmSelected:
+						etat = Etat.manyAlarmNotSelected;
+						nbAlarm++;
+						disableButtonDeleteAndTreat();
+						break;
+					case oneAlarmSelectedTreated:
+						etat = Etat.manyAlarmNotSelected;
+						nbAlarm++;
+						disableButtonDeleteAndTreat();
+						break;
+					case manyAlarmNotSelected:
+						etat = Etat.manyAlarmNotSelected;
+						nbAlarm++;
+						disableButtonDeleteAndTreat();
+						break;
+					case manyAlarmSelected:
+						etat = Etat.manyAlarmNotSelected;
+						nbAlarm++;
+						disableButtonDeleteAndTreat();
+						break;
+					case manyAlarmSelectedTreated:
+						etat = Etat.manyAlarmNotSelected;
+						nbAlarm++;
+						disableButtonDeleteAndTreat();
+						break;
 				}
 				/*
 				switch (getController().getModel().getVisualListAlarm().size()){
@@ -821,7 +831,42 @@ public class View {
 			@Override
 			public void handle(ActionEvent arg0) {
 				getController().resetAlarms();
-				
+				switch (etat){
+					case noAlarm:
+						//Interdit
+						break;
+					case oneAlarmNotSelected:
+						etat = Etat.manyAlarmNotSelected;
+						nbAlarm++;
+						disableButtonDeleteAndTreat();
+						break;
+					case oneAlarmSelected:
+						etat = Etat.manyAlarmNotSelected;
+						nbAlarm++;
+						disableButtonDeleteAndTreat();
+						break;
+					case oneAlarmSelectedTreated:
+						etat = Etat.manyAlarmNotSelected;
+						nbAlarm++;
+						disableButtonDeleteAndTreat();
+						break;
+					case manyAlarmNotSelected:
+						etat = Etat.manyAlarmNotSelected;
+						nbAlarm++;
+						disableButtonDeleteAndTreat();
+						break;
+					case manyAlarmSelected:
+						etat = Etat.manyAlarmNotSelected;
+						nbAlarm++;
+						disableButtonDeleteAndTreat();
+						break;
+					case manyAlarmSelectedTreated:
+						etat = Etat.manyAlarmNotSelected;
+						nbAlarm++;
+						disableButtonDeleteAndTreat();
+						break;
+				}
+				/*
 				switch (getController().getModel().getVisualListAlarm().size()){
 					case 0:
 						disableButtonResetSortDeleteAndTreat();
@@ -833,6 +878,7 @@ public class View {
 						disableButtonDeleteAndTreat();
 						break;
 				}
+				*/
 			}
 			
 		});
