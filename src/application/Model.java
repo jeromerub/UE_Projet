@@ -23,6 +23,8 @@ import application.priorite.Priorite;
 public class Model implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
+	private static transient int volume = 100;
+	
 	private transient View view;
 	private List<Alarm> listAlarm = new ArrayList<Alarm>();
 	
@@ -95,6 +97,7 @@ public class Model implements Serializable {
 	public void notifyView(){
 		this.getView().refreshList();
 		this.getView().refreshTopDesc();
+		this.getView().refreshVolume();
 	}
 	
 	/**
@@ -108,11 +111,10 @@ public class Model implements Serializable {
 		if(a.getTypeAudioVisuel() != AudioVisuel.AUDIO)
 			this.getView().newWindow(a);
 
-		if (getHigherPriority()!=Priorite.Max){
+		if (getHigherPriority() != Priorite.Max){
 			this.getView().emettreSon(a);
-		}
-		else{
-			if (a.getPriorite()==Priorite.Max){
+		} else {
+			if (a.getPriorite() == Priorite.Max){
 				this.getView().emettreSon(a);
 			}
 		}
@@ -331,5 +333,20 @@ public class Model implements Serializable {
 	 */
 	public void setSortedReverse(){
 		this.isSortedReverse = true;
+	}
+	
+	/**
+	 * Génère un volume aléatoire puis le retourne
+	 * @return Le volume de l'appli.
+	 */
+	public static int getVolume(){
+		return Model.volume;
+	}
+	
+	/**
+	 * Modifie le volume de l'appli.
+	 */
+	public static void setVolume(int v){
+		Model.volume = v;
 	}
 }
