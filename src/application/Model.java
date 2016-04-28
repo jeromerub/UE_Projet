@@ -247,7 +247,7 @@ public class Model implements Serializable {
 		Priorite result = Priorite.Basse;
 		
 		for(Alarm a : getListAlarm()){
-			if((a.getPriorite().compareTo(result) > 0) && a.isTreated()==false)
+			if((a.getPriorite().compareTo(result) > 0) && a.isTreated() == false)
 				result = a.getPriorite();
 				
 		}
