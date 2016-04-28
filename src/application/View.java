@@ -223,12 +223,15 @@ public class View {
 		
 		if(alarm != null){
 			if (alarm.getAlarm().isTreated()){
+				
+				/* Selection d'une alarme traitée */
+				
 				switch (this.etat){
 					case noAlarm:
 						//Interdit
 						break;
 					case oneAlarmNotSelected:
-						this.etat = Etat.oneAlarmSelected;
+						this.etat = Etat.oneAlarmSelectedTreated;
 						disableButtonSortAndTreat();
 						break;
 					case oneAlarmSelected:
@@ -236,7 +239,7 @@ public class View {
 						break;
 					case oneAlarmSelectedTreated:
 						this.etat=Etat.oneAlarmSelectedTreated;
-						disableButtonSort();
+						disableButtonSortAndTreat();
 						break;
 					case manyAlarmNotSelected:
 						this.etat = Etat.manyAlarmSelectedTreated;
@@ -251,19 +254,10 @@ public class View {
 						disableButtonTreat();
 						break;
 				}
-				/*
-				switch (getController().getModel().getVisualListAlarm().size()){
-					case 0:
-						//Interdit
-					case 1:
-						disableButtonSortAndTreat();
-						break;
-					default:
-						disableButtonTreat();
-						break;
-				}
-				*/
 			} else {
+				
+				/* Selection d'une alarme non traitée */
+				
 				switch (this.etat){
 					case noAlarm:
 						//Interdit
@@ -280,30 +274,18 @@ public class View {
 						//Interdit
 						break;
 					case manyAlarmNotSelected:
-						this.etat = Etat.manyAlarmSelectedTreated;
+						this.etat = Etat.manyAlarmSelected;
 						noDisableButton();
 						break;
 					case manyAlarmSelected:
-						this.etat = Etat.manyAlarmSelectedTreated;
+						this.etat = Etat.manyAlarmSelected;
 						noDisableButton();
 						break;
 					case manyAlarmSelectedTreated:
-						this.etat = Etat.manyAlarmSelectedTreated;
-						noDisableButton();
-						break;
-					}
-				/*
-				switch (getController().getModel().getVisualListAlarm().size()){
-					case 0:
-						//Interdit
-					case 1:
-						disableButtonSort();
-						break;
-					default:
+						this.etat = Etat.manyAlarmSelected;
 						noDisableButton();
 						break;
 				}
-				*/
 			}
 			
 			this.nomAlarm.setText(alarm.getAlarm().getNom());
@@ -314,6 +296,40 @@ public class View {
 			else this.treatedAlarm.setText("Alarme non-traitée");
 			
 		} else {
+			
+			/* Dé-sélection */
+			
+			switch (this.etat){
+				case noAlarm:
+					this.etat = Etat.noAlarm;
+					disableButtonResetSortDeleteAndTreat();
+					break;
+				case oneAlarmNotSelected:
+					this.etat = Etat.oneAlarmNotSelected;
+					disableButtonSortDeleteAndTreat();
+					break;
+				case oneAlarmSelected:
+					this.etat = Etat.oneAlarmNotSelected;
+					disableButtonSortDeleteAndTreat();
+					break;
+				case oneAlarmSelectedTreated:
+					this.etat = Etat.oneAlarmNotSelected;
+					disableButtonSortDeleteAndTreat();
+					break;
+				case manyAlarmNotSelected:
+					this.etat = Etat.manyAlarmNotSelected;
+					disableButtonDeleteAndTreat();
+					break;
+				case manyAlarmSelected:
+					this.etat = Etat.manyAlarmNotSelected;
+					disableButtonDeleteAndTreat();
+					break;
+				case manyAlarmSelectedTreated:
+					this.etat = Etat.manyAlarmNotSelected;
+					disableButtonDeleteAndTreat();
+					break;
+			}
+			
 			this.nomAlarm.setText("");
 			this.descAlarm.setText("");
 			this.prioriteAlarm.setText("");
