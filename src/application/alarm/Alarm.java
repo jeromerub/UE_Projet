@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Random;
 
+import application.Model;
 import application.audiovisuel.AudioVisuel;
 import application.priorite.Priorite;
 
@@ -58,6 +59,10 @@ public class Alarm implements Serializable  {
 			default: 
 				System.out.println("Err rand");
 				break;
+		}
+		
+		if(this.type == AudioVisuel.AUDIO && Model.getVolume() <= 25){
+			this.type = AudioVisuel.VISUEL;
 		}
 		
 		this.desc = "Alarme type : " + this.type + " - Alarme de priorité " + this.priorite;
@@ -153,7 +158,7 @@ public class Alarm implements Serializable  {
 	 * 			Borne supérieure exclue.
 	 * @return Nombre aléatoire généré.
 	 */
-	private static int random(int high) {
+	public static int random(int high) {
 		return random.nextInt(high);
 	}
 }

@@ -23,6 +23,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Slider;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TouchEvent;
 import javafx.scene.media.Media;
@@ -64,6 +65,9 @@ public class View {
 	private Button buttonTreatAlarm;
 	private Button buttonSortByTime ;
 	private Button buttonSortByPriority;
+	
+	private Slider masterVolume;
+	private Text volumeText;
 	
 	private OngletListAlarms ongletVisual;
 	private OngletListAlarms ongletAll;
@@ -111,6 +115,7 @@ public class View {
 			initButtons();
 			initAlarmList();
 			initOnglets();
+			initSlider();
 
 			/* Permet de ne jamais avoir 2 alarmes identiques (provisoire) */
 			
@@ -182,6 +187,8 @@ public class View {
 			botLeft.getChildren().add(buttonTreatAlarm);
 			botLeft.getChildren().add(buttonSortByTime);
 			botLeft.getChildren().add(buttonSortByPriority);
+			botLeft.getChildren().add(masterVolume);
+			botLeft.getChildren().add(volumeText);
 			
 			botRight.getChildren().add(botRightRect);
 			botRight.getChildren().add(scrollAlarm);
@@ -198,6 +205,13 @@ public class View {
 			
 		} catch(Exception e) {
 			e.printStackTrace();
+		}
+	}
+	
+	public void refreshVolume(){
+		for(MediaPlayer mp : soundsAlarms){
+			double vol = Model.getVolume();
+			mp.setVolume(vol/100);
 		}
 	}
 	
@@ -628,42 +642,48 @@ public class View {
 	 * Initialise les sons.
 	 */
 	private void initSoundsAlarms(){
-		this.soundsAlarms = new ArrayList<MediaPlayer>(8);
+		soundsAlarms = new ArrayList<MediaPlayer>(8);
 		
-		this.soundsAlarms.add(new MediaPlayer(new Media(new File("src/application/son/alarmBas.mp3").toURI().toString())));
-		this.soundsAlarms.add(new MediaPlayer(new Media(new File("src/application/son/alarmBas.mp3").toURI().toString())));
-		this.soundsAlarms.add(new MediaPlayer(new Media(new File("src/application/son/alarmMoy.mp3").toURI().toString())));
-		this.soundsAlarms.add(new MediaPlayer(new Media(new File("src/application/son/alarmMoy.mp3").toURI().toString())));
-		this.soundsAlarms.add(new MediaPlayer(new Media(new File("src/application/son/alarmHau.mp3").toURI().toString())));
-		this.soundsAlarms.add(new MediaPlayer(new Media(new File("src/application/son/alarmHau.mp3").toURI().toString())));
-		this.soundsAlarms.add(new MediaPlayer(new Media(new File("src/application/son/alarmMax.mp3").toURI().toString())));
-		this.soundsAlarms.add(new MediaPlayer(new Media(new File("src/application/son/alarmMax.mp3").toURI().toString())));
+		soundsAlarms.add(new MediaPlayer(new Media(new File("src/application/son/alarmBas.mp3").toURI().toString())));
+		soundsAlarms.add(new MediaPlayer(new Media(new File("src/application/son/alarmBas.mp3").toURI().toString())));
+		soundsAlarms.add(new MediaPlayer(new Media(new File("src/application/son/alarmMoy.mp3").toURI().toString())));
+		soundsAlarms.add(new MediaPlayer(new Media(new File("src/application/son/alarmMoy.mp3").toURI().toString())));
+		soundsAlarms.add(new MediaPlayer(new Media(new File("src/application/son/alarmHau.mp3").toURI().toString())));
+		soundsAlarms.add(new MediaPlayer(new Media(new File("src/application/son/alarmHau.mp3").toURI().toString())));
+		soundsAlarms.add(new MediaPlayer(new Media(new File("src/application/son/alarmMax.mp3").toURI().toString())));
+		soundsAlarms.add(new MediaPlayer(new Media(new File("src/application/son/alarmMax.mp3").toURI().toString())));
 		
 		
-		this.soundsAlarms.get(0).setBalance(-1);
-		this.soundsAlarms.get(1).setBalance(1);
+		soundsAlarms.get(0).setBalance(-1);
+		soundsAlarms.get(1).setBalance(1);
 		
-		this.soundsAlarms.get(2).setBalance(-1);
-		this.soundsAlarms.get(3).setBalance(1);
+		soundsAlarms.get(2).setBalance(-1);
+		soundsAlarms.get(3).setBalance(1);
 		
-		this.soundsAlarms.get(4).setBalance(-1);
-		this.soundsAlarms.get(5).setBalance(1);
+		soundsAlarms.get(4).setBalance(-1);
+		soundsAlarms.get(5).setBalance(1);
 		
-		this.soundsAlarms.get(6).setBalance(-1);
-		this.soundsAlarms.get(7).setBalance(1);
+		soundsAlarms.get(6).setBalance(-1);
+		soundsAlarms.get(7).setBalance(1);
 		
-		this.soundsAlarms.get(6).setCycleCount(64);
-		this.soundsAlarms.get(7).setCycleCount(64);
+		soundsAlarms.get(6).setCycleCount(64);
+		soundsAlarms.get(7).setCycleCount(64);
+		
+		for(MediaPlayer mp : soundsAlarms){
+			double vol = Model.getVolume();
+			mp.setVolume(vol/100);
+		}
 	}
 	
 	/**
 	 * Initialise les labels.
 	 */
-	private void initLabels(){
+	private void initLabels(){		
 		nomAlarm = new Text();
 		descAlarm = new Label();
 		prioriteAlarm = new Text();
 		treatedAlarm = new Text();
+		volumeText = new Text();
 		
 		nomAlarm.setLayoutX(20);
 		nomAlarm.setLayoutY(40);
@@ -682,6 +702,11 @@ public class View {
 		treatedAlarm.setLayoutX(250);
 		treatedAlarm.setLayoutY(180);
 		treatedAlarm.setId("treated-infoalarm");
+		
+		volumeText.setText("Vol :");
+		volumeText.setLayoutX(5);
+		volumeText.setLayoutY(57);
+		volumeText.setId("vol-text");
 	}
 	
 	/**
@@ -1009,6 +1034,26 @@ public class View {
 				visualOnly = false;
 				refreshList();
 				event.consume();
+			}
+    		
+    	});
+    }
+    
+    /**
+     * Initialise le slider du volume.
+     */
+    private void initSlider(){
+    	masterVolume = new Slider(0, 100, 100);
+    	
+    	masterVolume.setLayoutX(50);
+    	masterVolume.setLayoutY(45);
+    	
+    	masterVolume.valueProperty().addListener(new ChangeListener<Number>(){
+
+			@Override
+			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
+				Model.setVolume(arg2.intValue());
+				refreshVolume();
 			}
     		
     	});
