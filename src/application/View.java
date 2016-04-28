@@ -318,11 +318,11 @@ public class View {
 		
 		this.setListView(list);
 		
-		a=findAlarmMaxPrio();
+		a = findAlarmMaxPrio();
+		
 		if (this.plusHautePriorite.equals(Priorite.Max)){
 			emettreSon(a);
-		}
-		else{
+		} else {
 			stopSonAlarmMax();
 		}
 	}
@@ -408,14 +408,13 @@ public class View {
 	 * Arrete tous les sons qui ne sont pas l'alarme max
 	 */
 	public void stopSon(){
-		//for (int i = 0; i < this.soundsAlarms.size(); ++i){
 		for (int i = 0; i < 6; ++i){
 			this.soundsAlarms.get(i).stop();
 		}
 	}
 	
 	/**
-	 * Arrete les sons de l'alarme max
+	 * Arrete les sons de l'alarme max.
 	 */
 	public void stopSonAlarmMax(){
 		for (int i = 6; i < this.soundsAlarms.size(); ++i){
@@ -428,14 +427,17 @@ public class View {
 	 * @return l'alarme avec la plus grande priorite
 	 */
 	public Alarm findAlarmMaxPrio(){
-		this.plusHautePriorite=Priorite.Basse;
-		Alarm a=null;
+		Alarm a = null;
+		
+		this.plusHautePriorite = Priorite.Basse;
+		
 		for(AlarmView av : scrollAlarm.getItems()){
-			if ((av.getAlarm().getPriorite().compareTo(this.plusHautePriorite) >= 0) && (av.getAlarm().isTreated()==false)){
+			if ((av.getAlarm().getPriorite().compareTo(this.plusHautePriorite) >= 0) && (av.getAlarm().isTreated() == false)){
 				this.plusHautePriorite = av.getAlarm().getPriorite();
-				a=av.getAlarm();
+				a = av.getAlarm();
 			}
 		}
+		
 		return a;
 	}
 	
@@ -734,7 +736,8 @@ public class View {
 		buttonSortByTime = new Button();
 		buttonSortByPriority = new Button();
 		
-		/* Activations et désactivation boutons */
+		/* Activations et désactivation boutons, choix de l'état initial */
+		
 		this.nbAlarm = getController().getModel().getVisualListAlarm().size();
 		
 		switch (this.nbAlarm){
@@ -828,8 +831,7 @@ public class View {
 						if (nbAlarm == 0){
 							etat = Etat.noAlarm;
 							disableButtonResetSortDeleteAndTreat();
-						}
-						else {
+						} else {
 							etat = Etat.oneAlarmNotSelected;
 							disableButtonSortDeleteAndTreat();
 						}
@@ -838,8 +840,7 @@ public class View {
 						if (nbAlarm == 0){
 							etat = Etat.noAlarm;
 							disableButtonResetSortDeleteAndTreat();
-						}
-						else {
+						} else {
 							etat = Etat.oneAlarmSelected;
 							disableButtonSort();
 						}
@@ -848,8 +849,7 @@ public class View {
 						if (nbAlarm == 0){
 							etat = Etat.noAlarm;
 							disableButtonResetSortDeleteAndTreat();
-						}
-						else{
+						} else {
 							etat = Etat.oneAlarmSelectedTreated;
 							disableButtonSortAndTreat();
 						}
@@ -858,8 +858,7 @@ public class View {
 						if (nbAlarm == 0){
 							etat = Etat.noAlarm;
 							disableButtonResetSortDeleteAndTreat();
-						}
-						else{
+						} else {
 							etat = Etat.manyAlarmNotSelected;
 							disableButtonDeleteAndTreat();
 						}
@@ -868,8 +867,7 @@ public class View {
 						if (nbAlarm == 0){
 							etat = Etat.noAlarm;
 							disableButtonResetSortDeleteAndTreat();
-						}
-						else{
+						} else {
 							etat = Etat.manyAlarmSelected;
 							noDisableButton();
 						}
@@ -878,8 +876,7 @@ public class View {
 						if (nbAlarm == 0){
 							etat = Etat.noAlarm;
 							disableButtonResetSortDeleteAndTreat();
-						}
-						else{
+						} else {
 							etat = Etat.manyAlarmSelectedTreated;
 							disableButtonTreat();
 						}
@@ -913,8 +910,7 @@ public class View {
 						if (nbAlarm == 0){
 							etat = Etat.noAlarm;
 							disableButtonResetSortDeleteAndTreat();
-						}
-						else {
+						} else {
 							etat = Etat.noAlarm;
 							disableButtonResetSortDeleteAndTreat();
 						}
@@ -923,8 +919,7 @@ public class View {
 						if (nbAlarm == 0){
 							etat = Etat.noAlarm;
 							disableButtonResetSortDeleteAndTreat();
-						}
-						else{
+						} else {
 							etat = Etat.noAlarm;
 							disableButtonResetSortDeleteAndTreat();
 						}
@@ -936,8 +931,7 @@ public class View {
 						if (nbAlarm == 1){
 							etat = Etat.oneAlarmNotSelected;
 							disableButtonSortDeleteAndTreat();
-						}
-						else{
+						} else {
 							etat = Etat.manyAlarmNotSelected;
 							disableButtonDeleteAndTreat();
 						}
@@ -946,8 +940,7 @@ public class View {
 						if (nbAlarm == 1){
 							etat = Etat.oneAlarmNotSelected;
 							disableButtonSortDeleteAndTreat();
-						}
-						else{
+						} else {
 							etat = Etat.manyAlarmNotSelected;
 							disableButtonDeleteAndTreat();
 						}
@@ -1009,16 +1002,6 @@ public class View {
 			@Override
 			public void handle(ActionEvent arg0) {
 				getController().sortAlarmsByTime();
-				
-				switch (getController().getModel().getVisualListAlarm().size()){
-					case 0:
-						//Interdit
-					case 1:
-						//Interdit
-					default:
-						disableButtonDeleteAndTreat();
-						break;
-				}
 			}
 			
 		});	
@@ -1034,15 +1017,6 @@ public class View {
 			@Override
 			public void handle(ActionEvent arg0) {
 				getController().sortAlarmsByPriority();
-				switch (getController().getModel().getVisualListAlarm().size()){
-					case 0:
-						//Interdit
-					case 1:
-						//Interdit
-					default:
-						disableButtonDeleteAndTreat();
-						break;
-				}
 			}
 			
 		});	
@@ -1052,20 +1026,22 @@ public class View {
      * Initialise et charge la liste du model.
      */
     private void initAlarmList(){
+    	Alarm a = null;
+    	
     	scrollAlarm = this.getController().getVisualAlarmsAsListView();
     	
     	scrollAlarm.setPrefWidth(800);
 		scrollAlarm.setPrefHeight(550);
-		Alarm a = null;
 		
 		for(AlarmView av : scrollAlarm.getItems()){
 			av.setFondWidth(View.getPrimaryStage().getScene().getWidth() - 210);
 		}
-		a=findAlarmMaxPrio();
+		
+		a = findAlarmMaxPrio();
+		
 		if (this.plusHautePriorite.equals(Priorite.Max)){
 			emettreSon(a);
-		}
-		else{
+		} else {
 			stopSonAlarmMax();
 		}
 
