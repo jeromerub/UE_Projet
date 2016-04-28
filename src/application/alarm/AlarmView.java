@@ -1,7 +1,7 @@
 package application.alarm;
 
 import application.View;
-
+import application.etat.Etat;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
@@ -24,6 +24,7 @@ import javafx.scene.text.Text;
 public class AlarmView extends Parent {
 	
 	/* Constantes code couleurs */
+	
 	public static final Color rouge = new Color(0.72, 0.12, 0.12, 1);
 	public static final Color orange = new Color(0.92, 0.49, 0.23, 1);
 	public static final Color jaune = new Color(0.83, 0.80, 0.08, 1);
@@ -119,6 +120,55 @@ public class AlarmView extends Parent {
 			@Override
 			public void handle(ActionEvent event){
 				view.getController().deleteAlarm(current.getAlarm());
+		        view.setNbAlarms(view.getController().getModel().getVisualListAlarm().size());
+				
+				switch (view.getEtat()){
+					case noAlarm:
+						//Interdit
+						break;
+					case oneAlarmNotSelected:
+						//Interdit
+						break;
+					case oneAlarmSelected:
+						if (view.getNbAlarms() == 0){
+							view.setEtat(Etat.noAlarm);
+							view.disableButtonResetSortDeleteAndTreat();
+						} else {
+							view.setEtat(Etat.noAlarm);
+							view.disableButtonResetSortDeleteAndTreat();
+						}
+						break;
+					case oneAlarmSelectedTreated:
+						if (view.getNbAlarms() == 0){
+							view.setEtat(Etat.noAlarm);
+							view.disableButtonResetSortDeleteAndTreat();
+						} else {
+							view.setEtat(Etat.noAlarm);
+							view.disableButtonResetSortDeleteAndTreat();
+						}
+						break;
+					case manyAlarmNotSelected:
+						//Interdit
+						break;
+					case manyAlarmSelected:
+						if (view.getNbAlarms() == 1){
+							view.setEtat(Etat.oneAlarmNotSelected);
+							view.disableButtonSortDeleteAndTreat();
+						} else {
+							view.setEtat(Etat.manyAlarmNotSelected);
+							view.disableButtonDeleteAndTreat();
+						}
+						break;
+					case manyAlarmSelectedTreated:
+						if (view.getNbAlarms() == 1){
+							view.setEtat(Etat.oneAlarmNotSelected);
+							view.disableButtonSortDeleteAndTreat();
+						} else {
+							view.setEtat(Etat.manyAlarmNotSelected);
+							view.disableButtonDeleteAndTreat();
+						}
+						break;
+				}	
 			}
 		});
 		
@@ -175,6 +225,36 @@ public class AlarmView extends Parent {
 		    		hideDelete();
 		    	} else {
 		    		view.getController().getModel().treatAlarm(current.getAlarm());
+		    		
+		    		switch (view.getEtat()){
+						case noAlarm:
+							//Interdit
+							break;
+						case oneAlarmNotSelected:
+							view.setEtat(Etat.oneAlarmNotSelected);
+							view.disableButtonSortDeleteAndTreat();
+							break;
+						case oneAlarmSelected:
+							view.setEtat(Etat.oneAlarmSelected);
+							view.disableButtonSort();
+							break;
+						case oneAlarmSelectedTreated:
+							view.setEtat(Etat.oneAlarmSelectedTreated);
+							view.disableButtonSortAndTreat();
+							break;
+						case manyAlarmNotSelected:
+							view.setEtat(Etat.manyAlarmNotSelected);
+							view.disableButtonDeleteAndTreat();
+							break;
+						case manyAlarmSelected:
+							view.setEtat(Etat.manyAlarmSelected);
+							view.noDisableButton();
+							break;
+						case manyAlarmSelectedTreated:
+							view.setEtat(Etat.manyAlarmSelectedTreated);
+							view.disableButtonTreat();
+							break;
+					}
 		    	}
 		    	
 		        event.consume();

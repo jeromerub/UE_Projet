@@ -39,21 +39,18 @@ import javafx.util.Duration;
  * Classe représentant la vue du logiciel.
  * @author Floo'
  */
-/**
- * @author Floo'
- *
- */
-public class View {
+public class View {	
+	private static Stage pStage = null;
+	private Controller controller;
+	
 	private Etat etat;
 	private int nbAlarm;
 	private Priorite plusHautePriorite = Priorite.Basse;
 	
-	private static Stage pStage = null;
-	private Controller controller;
-	
 	private List<MediaPlayer> soundsAlarms;
 	
 	private ListView<AlarmView> scrollAlarm;
+	
 	private Text nomAlarm;
 	private Label descAlarm;
 	private Text prioriteAlarm;
@@ -208,6 +205,9 @@ public class View {
 		}
 	}
 	
+	/**
+	 * Rafraichissement du volume des alarmes.
+	 */
 	public void refreshVolume(){
 		for(MediaPlayer mp : soundsAlarms){
 			double vol = Model.getVolume();
@@ -223,7 +223,6 @@ public class View {
 		
 		if(alarm != null){
 			if (alarm.getAlarm().isTreated()){
-				
 				
 				/* Selection d'une alarme traitée */
 				
@@ -256,7 +255,6 @@ public class View {
 						break;
 				}
 			} else {
-				
 				
 				/* Selection d'une alarme non traitée */
 				
@@ -298,39 +296,6 @@ public class View {
 			else this.treatedAlarm.setText("Alarme non-traitée");
 			
 		} else {
-			
-			/* Dé-sélection */
-			/*
-			switch (this.etat){
-				case noAlarm:
-					this.etat = Etat.noAlarm;
-					disableButtonResetSortDeleteAndTreat();
-					break;
-				case oneAlarmNotSelected:
-					this.etat = Etat.oneAlarmNotSelected;
-					disableButtonSortDeleteAndTreat();
-					break;
-				case oneAlarmSelected:
-					this.etat = Etat.oneAlarmNotSelected;
-					disableButtonSortDeleteAndTreat();
-					break;
-				case oneAlarmSelectedTreated:
-					this.etat = Etat.oneAlarmNotSelected;
-					disableButtonSortDeleteAndTreat();
-					break;
-				case manyAlarmNotSelected:
-					this.etat = Etat.manyAlarmNotSelected;
-					disableButtonDeleteAndTreat();
-					break;
-				case manyAlarmSelected:
-					this.etat = Etat.manyAlarmNotSelected;
-					disableButtonDeleteAndTreat();
-					break;
-				case manyAlarmSelectedTreated:
-					this.etat = Etat.manyAlarmNotSelected;
-					disableButtonDeleteAndTreat();
-					break;
-			}*/
 			
 			this.nomAlarm.setText("");
 			this.descAlarm.setText("");
@@ -643,6 +608,36 @@ public class View {
 	}
 	
 	/**
+	 * @param n
+	 * 			Le nouveau nombre d'alarmes.
+	 */
+	public void setNbAlarms(int n){
+		this.nbAlarm = n;
+	}
+	
+	/**
+	 * @return Le nombre d'alarme courant dans la vue.
+	 */
+	public int getNbAlarms(){
+		return this.nbAlarm;
+	}
+	
+	/**
+	 * @return L'etat courant.
+	 */
+	public Etat getEtat(){
+		return this.etat;
+	}
+	
+	/**
+	 * @param e
+	 * 			Le nouvel état.
+	 */
+	public void setEtat(Etat e){
+		this.etat = e;
+	}
+	
+	/**
 	 * @return Référence vers l'objet Stage.
 	 */
 	public static Stage getPrimaryStage() {
@@ -651,6 +646,7 @@ public class View {
 
     /**
      * @param pStage
+     * 			L'objet PrimaryStage.
      */
     private void setPrimaryStage(Stage pStage) {
         View.pStage = pStage;

@@ -1,6 +1,7 @@
 package application.alarm;
 
 import application.View;
+import application.etat.Etat;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.input.TouchEvent;
@@ -51,6 +52,56 @@ public class ButtonDelete extends Parent {
 		    @Override 
 		    public void handle(TouchEvent event) {
 		        view.getController().deleteAlarm(av.getAlarm());
+		        view.setNbAlarms(view.getController().getModel().getVisualListAlarm().size());
+				
+				switch (view.getEtat()){
+					case noAlarm:
+						//Interdit
+						break;
+					case oneAlarmNotSelected:
+						//Interdit
+						break;
+					case oneAlarmSelected:
+						if (view.getNbAlarms() == 0){
+							view.setEtat(Etat.noAlarm);
+							view.disableButtonResetSortDeleteAndTreat();
+						} else {
+							view.setEtat(Etat.noAlarm);
+							view.disableButtonResetSortDeleteAndTreat();
+						}
+						break;
+					case oneAlarmSelectedTreated:
+						if (view.getNbAlarms() == 0){
+							view.setEtat(Etat.noAlarm);
+							view.disableButtonResetSortDeleteAndTreat();
+						} else {
+							view.setEtat(Etat.noAlarm);
+							view.disableButtonResetSortDeleteAndTreat();
+						}
+						break;
+					case manyAlarmNotSelected:
+						//Interdit
+						break;
+					case manyAlarmSelected:
+						if (view.getNbAlarms() == 1){
+							view.setEtat(Etat.oneAlarmNotSelected);
+							view.disableButtonSortDeleteAndTreat();
+						} else {
+							view.setEtat(Etat.manyAlarmNotSelected);
+							view.disableButtonDeleteAndTreat();
+						}
+						break;
+					case manyAlarmSelectedTreated:
+						if (view.getNbAlarms() == 1){
+							view.setEtat(Etat.oneAlarmNotSelected);
+							view.disableButtonSortDeleteAndTreat();
+						} else {
+							view.setEtat(Etat.manyAlarmNotSelected);
+							view.disableButtonDeleteAndTreat();
+						}
+						break;
+				}	
+		        
 		        event.consume();
 		    }
 		    
