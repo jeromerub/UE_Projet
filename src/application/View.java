@@ -300,7 +300,7 @@ public class View {
 		} else {
 			
 			/* Dé-sélection */
-			
+			/*
 			switch (this.etat){
 				case noAlarm:
 					this.etat = Etat.noAlarm;
@@ -330,7 +330,7 @@ public class View {
 					this.etat = Etat.manyAlarmNotSelected;
 					disableButtonDeleteAndTreat();
 					break;
-			}
+			}*/
 			
 			this.nomAlarm.setText("");
 			this.descAlarm.setText("");
@@ -823,6 +823,7 @@ public class View {
 			public void handle(ActionEvent arg0) {
 				getController().resetAlarms();
 				nbAlarm = getController().getModel().getVisualListAlarm().size();
+
 				switch (etat){
 					case noAlarm:
 						//Interdit
@@ -904,7 +905,7 @@ public class View {
 			public void handle(ActionEvent arg0) {
 				getController().deleteAlarm(getSelectedAlarm());
 				nbAlarm = getController().getModel().getVisualListAlarm().size();
-				
+				System.out.println("av " + nbAlarm + " " + etat);
 				switch (etat){
 					case noAlarm:
 						//Interdit
@@ -918,8 +919,8 @@ public class View {
 							disableButtonResetSortDeleteAndTreat();
 						}
 						else {
-							etat = Etat.oneAlarmSelected;
-							disableButtonSort();
+							etat = Etat.noAlarm;
+							disableButtonResetSortDeleteAndTreat();
 						}
 						break;
 					case oneAlarmSelectedTreated:
@@ -928,8 +929,8 @@ public class View {
 							disableButtonResetSortDeleteAndTreat();
 						}
 						else{
-							etat = Etat.oneAlarmSelectedTreated;
-							disableButtonSortAndTreat();
+							etat = Etat.noAlarm;
+							disableButtonResetSortDeleteAndTreat();
 						}
 						break;
 					case manyAlarmNotSelected:
@@ -941,8 +942,8 @@ public class View {
 							disableButtonSortDeleteAndTreat();
 						}
 						else{
-							etat = Etat.manyAlarmSelected;
-							noDisableButton();
+							etat = Etat.manyAlarmNotSelected;
+							disableButtonDeleteAndTreat();
 						}
 						break;
 					case manyAlarmSelectedTreated:
@@ -951,11 +952,12 @@ public class View {
 							disableButtonSortDeleteAndTreat();
 						}
 						else{
-							etat = Etat.manyAlarmSelectedTreated;
-							disableButtonTreat();
+							etat = Etat.manyAlarmNotSelected;
+							disableButtonDeleteAndTreat();
 						}
 						break;
 				}
+				System.out.println("ap " + nbAlarm + " " + etat);
 				
 			}
 			
@@ -981,8 +983,8 @@ public class View {
 						//Interdit
 						break;
 					case oneAlarmSelected:
-						etat = Etat.oneAlarmSelectedTreated;
-						disableButtonSortAndTreat();
+						etat = Etat.oneAlarmNotSelected;
+						disableButtonSortDeleteAndTreat();
 						break;
 					case oneAlarmSelectedTreated:
 						//Interdit
@@ -991,7 +993,8 @@ public class View {
 						//Interdit
 						break;
 					case manyAlarmSelected:
-						etat = Etat.manyAlarmSelectedTreated;
+						etat = Etat.manyAlarmNotSelected;
+						disableButtonDeleteAndTreat();
 						break;
 					case manyAlarmSelectedTreated:
 						//Interdit
