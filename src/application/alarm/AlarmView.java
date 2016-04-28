@@ -174,7 +174,7 @@ public class AlarmView extends Parent {
 		    	if(isDeleteVisible){
 		    		hideDelete();
 		    	} else {
-		    		setTreated();
+		    		view.getController().getModel().treatAlarm(current.getAlarm());
 		    	}
 		    	
 		        event.consume();
