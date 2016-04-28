@@ -52,7 +52,7 @@ public class ButtonDelete extends Parent {
 		    @Override 
 		    public void handle(TouchEvent event) {
 		        view.getController().deleteAlarm(av.getAlarm());
-		        view.setNbAlarms(view.getController().getModel().getVisualListAlarm().size());
+		        view.setNbAlarms(view.getListView().getItems().size());
 				
 				switch (view.getEtat()){
 					case noAlarm:

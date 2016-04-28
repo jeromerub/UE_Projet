@@ -120,7 +120,7 @@ public class AlarmView extends Parent {
 			@Override
 			public void handle(ActionEvent event){
 				view.getController().deleteAlarm(current.getAlarm());
-		        view.setNbAlarms(view.getController().getModel().getVisualListAlarm().size());
+		        view.setNbAlarms(view.getListView().getItems().size());
 				
 				switch (view.getEtat()){
 					case noAlarm:

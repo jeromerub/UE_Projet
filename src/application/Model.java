@@ -98,6 +98,7 @@ public class Model implements Serializable {
 		this.getView().refreshList();
 		this.getView().refreshTopDesc();
 		this.getView().refreshVolume();
+		this.getView().refreshSortInfo();
 	}
 	
 	/**
@@ -120,6 +121,7 @@ public class Model implements Serializable {
 		}
 		
 		save();
+		sort();
 		notifyView();
 	}
 	
@@ -155,26 +157,9 @@ public class Model implements Serializable {
 	}
 
 	/**
-	 * Tri la liste dans l'ordre chronologique.
-	 */
-	public void sortByTimeUp(){
-		Collections.sort(this.listAlarm, new Comparator<Alarm>(){
-			public int compare(Alarm a1, Alarm a2){
-				return a1.getTimestamp().compareTo(a2.getTimestamp());
-			}
-		});
-		
-		/* MaJ de la liste du model */
-		this.setListAlarm(this.listAlarm);
-		this.setSortedTime();
-		this.setSortedNormal();
-		notifyView();
-	}
-	
-	/**
 	 * Tri la liste dans l'ordre anti-chronologique.
 	 */
-	public void sortByTimeDown(){
+	public void sortByTimeUp(){
 		Collections.sort(this.listAlarm, new Comparator<Alarm>(){
 			public int compare(Alarm a1, Alarm a2){
 				return a2.getTimestamp().compareTo(a1.getTimestamp());
@@ -184,7 +169,26 @@ public class Model implements Serializable {
 		/* MaJ de la liste du model */
 		this.setListAlarm(this.listAlarm);
 		this.setSortedTime();
+		this.setSortedNormal();
+		save();
+		notifyView();
+	}
+	
+	/**
+	 * Tri la liste dans l'ordre chronologique.
+	 */
+	public void sortByTimeDown(){
+		Collections.sort(this.listAlarm, new Comparator<Alarm>(){
+			public int compare(Alarm a1, Alarm a2){
+				return a1.getTimestamp().compareTo(a2.getTimestamp());
+			}
+		});
+		
+		/* MaJ de la liste du model */
+		this.setListAlarm(this.listAlarm);
+		this.setSortedTime();
 		this.setSortedReverse();
+		save();
 		notifyView();
 	}
 	
@@ -202,6 +206,7 @@ public class Model implements Serializable {
 		this.setListAlarm(this.listAlarm);
 		this.setSortedPrio();
 		this.setSortedNormal();
+		save();
 		notifyView();
 	}
 	
@@ -219,7 +224,29 @@ public class Model implements Serializable {
 		this.setListAlarm(this.listAlarm);
 		this.setSortedPrio();
 		this.setSortedReverse();
+		save();
 		notifyView();
+	}
+	
+	/**
+	 * Tri la liste selon son état.
+	 */
+	private void sort(){
+		if(this.isSortedPrio && !this.isSortedReverse){
+			sortByPrioUp();
+		}
+		
+		if(this.isSortedPrio && this.isSortedReverse){
+			sortByPrioDown();
+		}
+		
+		if(this.isSortedTime && !this.isSortedReverse){
+			sortByTimeUp();
+		}
+		
+		if(this.isSortedTime && this.isSortedReverse){
+			sortByTimeDown();
+		}
 	}
 	
 	/* Getter/Setters */
@@ -299,7 +326,7 @@ public class Model implements Serializable {
 	}
 	
 	/**
-	 * @return "True" si trié par ordre inverse (antichronologique ou priorité faible à max).
+	 * @return "True" si trié par ordre inverse (chronologique ou priorité faible à max).
 	 */
 	public boolean getSortedReverse(){
 		return this.isSortedReverse;
@@ -322,14 +349,14 @@ public class Model implements Serializable {
 	}
 	
 	/**
-	 * Indique que le tri est normal (chronologique ou priorité max à faible).
+	 * Indique que le tri est normal (antichronologique ou priorité max à faible).
 	 */
 	public void setSortedNormal(){
 		this.isSortedReverse = false;
 	}
 	
 	/**
-	 * Indique que le tri est normal (anti-chronologique ou priorité faible à max).
+	 * Indique que le tri est normal (chronologique ou priorité faible à max).
 	 */
 	public void setSortedReverse(){
 		this.isSortedReverse = true;

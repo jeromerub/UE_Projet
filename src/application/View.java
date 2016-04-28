@@ -109,10 +109,12 @@ public class View {
 			
 			initSoundsAlarms();
 			initLabels();
-			initButtons();
 			initAlarmList();
+			initButtons();
 			initOnglets();
 			initSlider();
+			
+			refreshSortInfo();
 
 			/* Permet de ne jamais avoir 2 alarmes identiques (provisoire) */
 			
@@ -327,6 +329,27 @@ public class View {
 		}
 	}
 	
+	public void refreshSortInfo(){
+		switch(this.getController().getSortType()){
+			case PrioUp:
+				this.buttonSortByPriority.setText("Sort Prio ^");
+				this.buttonSortByTime.setText("Sort Time");
+				break;
+			case PrioDown:
+				this.buttonSortByPriority.setText("Sort Prio v");
+				this.buttonSortByTime.setText("Sort Time");
+				break;
+			case TimeUp:
+				this.buttonSortByPriority.setText("Sort Prio");
+				this.buttonSortByTime.setText("Sort Time ^");
+				break;
+			case TimeDown:
+				this.buttonSortByPriority.setText("Sort Prio");
+				this.buttonSortByTime.setText("Sort Time v");
+				break;
+		}
+	}
+	
 	/**
 	 * Affiche un popUp de validation de suppression et attend la réponse.
 	 * @param a 
@@ -457,7 +480,7 @@ public class View {
         Group groupPriorite = new Group();
 		
         Text nom = new Text(a.getNom());
-        Text desc = new Text(a.getDesc());
+        Text desc = new Text(a.getDesc() + " ");
         Text priorite = new Text("Priorité : " + a.getPriorite().toString());
 
         stage.setScene(scene);
@@ -467,11 +490,27 @@ public class View {
         stage.setX(50);
         stage.setY(50);
         
-        groupNom.setLayoutX(10);
-        groupNom.setLayoutY(80);
+        switch(a.getPriorite()){
+        	case Basse:
+        		scene.setFill(AlarmView.vert);
+        		break;
+        	case Moyenne:
+        		scene.setFill(AlarmView.jaune);
+        		break;
+        	case Haute:
+        		scene.setFill(AlarmView.orange);
+        		break;
+        	case Max:
+        		scene.setFill(AlarmView.rouge);
+        		break;
+        }
         
+        groupNom.setLayoutX(10);
+        groupNom.setLayoutY(60);
+        
+        groupDesc.maxWidth(500);
         groupDesc.setLayoutX(10);
-        groupDesc.setLayoutY(130);
+        groupDesc.setLayoutY(105);
         
         groupPriorite.setLayoutX(10);
         groupPriorite.setLayoutY(180);
@@ -480,8 +519,8 @@ public class View {
         groupDesc.getChildren().add(desc);
         groupPriorite.getChildren().add(priorite);
         
-        nom.setFont(new Font(80));
-        desc.setFont(new Font(58));
+        nom.setFont(new Font(60));
+        desc.setFont(new Font(42));
         priorite.setFont(new Font(58));
         
         root.getChildren().add(groupNom);
@@ -738,7 +777,7 @@ public class View {
 		
 		/* Activations et désactivation boutons, choix de l'état initial */
 		
-		this.nbAlarm = getController().getModel().getVisualListAlarm().size();
+		this.nbAlarm = getListView().getItems().size();
 		
 		switch (this.nbAlarm){
 			case 0:
@@ -821,7 +860,7 @@ public class View {
 			@Override
 			public void handle(ActionEvent arg0) {
 				getController().resetAlarms();
-				nbAlarm = getController().getModel().getVisualListAlarm().size();
+				nbAlarm = getListView().getItems().size();;
 
 				switch (etat){
 					case noAlarm:
@@ -897,7 +936,7 @@ public class View {
 			@Override
 			public void handle(ActionEvent arg0) {
 				getController().deleteAlarm(getSelectedAlarm());
-				nbAlarm = getController().getModel().getVisualListAlarm().size();
+				nbAlarm = getListView().getItems().size();
 				
 				switch (etat){
 					case noAlarm:
@@ -1073,6 +1112,96 @@ public class View {
 				ongletAll.setUnselected();
 				visualOnly = true;
 				refreshList();
+				
+				nbAlarm = getListView().getItems().size();
+				
+				switch (etat){
+					case noAlarm:
+						if(nbAlarm == 0){
+							etat = Etat.noAlarm;
+							disableButtonResetSortDeleteAndTreat();
+						} else if(nbAlarm == 1){
+							etat = Etat.oneAlarmNotSelected;
+							disableButtonSortDeleteAndTreat();
+						} else {
+							etat = Etat.manyAlarmNotSelected;
+							disableButtonDeleteAndTreat();
+						}
+						break;
+					case oneAlarmNotSelected:
+						if(nbAlarm == 0){
+							etat = Etat.noAlarm;
+							disableButtonResetSortDeleteAndTreat();
+						} else if(nbAlarm == 1){
+							etat = Etat.oneAlarmNotSelected;
+							disableButtonSortDeleteAndTreat();
+						} else {
+							etat = Etat.manyAlarmNotSelected;
+							disableButtonDeleteAndTreat();
+						}
+						break;
+					case oneAlarmSelected:
+						if(nbAlarm == 0){
+							etat = Etat.noAlarm;
+							disableButtonResetSortDeleteAndTreat();
+						} else if(nbAlarm == 1){
+							etat = Etat.oneAlarmNotSelected;
+							disableButtonSortDeleteAndTreat();
+						} else {
+							etat = Etat.manyAlarmNotSelected;
+							disableButtonDeleteAndTreat();
+						}
+						break;
+					case oneAlarmSelectedTreated:
+						if(nbAlarm == 0){
+							etat = Etat.noAlarm;
+							disableButtonResetSortDeleteAndTreat();
+						} else if(nbAlarm == 1){
+							etat = Etat.oneAlarmNotSelected;
+							disableButtonSortDeleteAndTreat();
+						} else {
+							etat = Etat.manyAlarmNotSelected;
+							disableButtonDeleteAndTreat();
+						}
+						break;
+					case manyAlarmNotSelected:
+						if(nbAlarm == 0){
+							etat = Etat.noAlarm;
+							disableButtonResetSortDeleteAndTreat();
+						} else if(nbAlarm == 1){
+							etat = Etat.oneAlarmNotSelected;
+							disableButtonSortDeleteAndTreat();
+						} else {
+							etat = Etat.manyAlarmNotSelected;
+							disableButtonDeleteAndTreat();
+						}
+						break;
+					case manyAlarmSelected:
+						if(nbAlarm == 0){
+							etat = Etat.noAlarm;
+							disableButtonResetSortDeleteAndTreat();
+						} else if(nbAlarm == 1){
+							etat = Etat.oneAlarmNotSelected;
+							disableButtonSortDeleteAndTreat();
+						} else {
+							etat = Etat.manyAlarmNotSelected;
+							disableButtonDeleteAndTreat();
+						}
+						break;
+					case manyAlarmSelectedTreated:
+						if(nbAlarm == 0){
+							etat = Etat.noAlarm;
+							disableButtonResetSortDeleteAndTreat();
+						} else if(nbAlarm == 1){
+							etat = Etat.oneAlarmNotSelected;
+							disableButtonSortDeleteAndTreat();
+						} else {
+							etat = Etat.manyAlarmNotSelected;
+							disableButtonDeleteAndTreat();
+						}
+						break;
+				}
+				
 				event.consume();
 			}
     		
@@ -1086,6 +1215,96 @@ public class View {
 				ongletAll.setUnselected();
 				visualOnly = true;
 				refreshList();
+				
+				nbAlarm = getListView().getItems().size();
+				
+				switch (etat){
+					case noAlarm:
+						if(nbAlarm == 0){
+							etat = Etat.noAlarm;
+							disableButtonResetSortDeleteAndTreat();
+						} else if(nbAlarm == 1){
+							etat = Etat.oneAlarmNotSelected;
+							disableButtonSortDeleteAndTreat();
+						} else {
+							etat = Etat.manyAlarmNotSelected;
+							disableButtonDeleteAndTreat();
+						}
+						break;
+					case oneAlarmNotSelected:
+						if(nbAlarm == 0){
+							etat = Etat.noAlarm;
+							disableButtonResetSortDeleteAndTreat();
+						} else if(nbAlarm == 1){
+							etat = Etat.oneAlarmNotSelected;
+							disableButtonSortDeleteAndTreat();
+						} else {
+							etat = Etat.manyAlarmNotSelected;
+							disableButtonDeleteAndTreat();
+						}
+						break;
+					case oneAlarmSelected:
+						if(nbAlarm == 0){
+							etat = Etat.noAlarm;
+							disableButtonResetSortDeleteAndTreat();
+						} else if(nbAlarm == 1){
+							etat = Etat.oneAlarmNotSelected;
+							disableButtonSortDeleteAndTreat();
+						} else {
+							etat = Etat.manyAlarmNotSelected;
+							disableButtonDeleteAndTreat();
+						}
+						break;
+					case oneAlarmSelectedTreated:
+						if(nbAlarm == 0){
+							etat = Etat.noAlarm;
+							disableButtonResetSortDeleteAndTreat();
+						} else if(nbAlarm == 1){
+							etat = Etat.oneAlarmNotSelected;
+							disableButtonSortDeleteAndTreat();
+						} else {
+							etat = Etat.manyAlarmNotSelected;
+							disableButtonDeleteAndTreat();
+						}
+						break;
+					case manyAlarmNotSelected:
+						if(nbAlarm == 0){
+							etat = Etat.noAlarm;
+							disableButtonResetSortDeleteAndTreat();
+						} else if(nbAlarm == 1){
+							etat = Etat.oneAlarmNotSelected;
+							disableButtonSortDeleteAndTreat();
+						} else {
+							etat = Etat.manyAlarmNotSelected;
+							disableButtonDeleteAndTreat();
+						}
+						break;
+					case manyAlarmSelected:
+						if(nbAlarm == 0){
+							etat = Etat.noAlarm;
+							disableButtonResetSortDeleteAndTreat();
+						} else if(nbAlarm == 1){
+							etat = Etat.oneAlarmNotSelected;
+							disableButtonSortDeleteAndTreat();
+						} else {
+							etat = Etat.manyAlarmNotSelected;
+							disableButtonDeleteAndTreat();
+						}
+						break;
+					case manyAlarmSelectedTreated:
+						if(nbAlarm == 0){
+							etat = Etat.noAlarm;
+							disableButtonResetSortDeleteAndTreat();
+						} else if(nbAlarm == 1){
+							etat = Etat.oneAlarmNotSelected;
+							disableButtonSortDeleteAndTreat();
+						} else {
+							etat = Etat.manyAlarmNotSelected;
+							disableButtonDeleteAndTreat();
+						}
+						break;
+				}
+				
 				event.consume();
 			}
     		
@@ -1104,6 +1323,96 @@ public class View {
 				ongletVisual.setUnselected();
 				visualOnly = false;
 				refreshList();
+				
+				nbAlarm = getListView().getItems().size();
+				
+				switch (etat){
+					case noAlarm:
+						if(nbAlarm == 0){
+							etat = Etat.noAlarm;
+							disableButtonResetSortDeleteAndTreat();
+						} else if(nbAlarm == 1){
+							etat = Etat.oneAlarmNotSelected;
+							disableButtonSortDeleteAndTreat();
+						} else {
+							etat = Etat.manyAlarmNotSelected;
+							disableButtonDeleteAndTreat();
+						}
+						break;
+					case oneAlarmNotSelected:
+						if(nbAlarm == 0){
+							etat = Etat.noAlarm;
+							disableButtonResetSortDeleteAndTreat();
+						} else if(nbAlarm == 1){
+							etat = Etat.oneAlarmNotSelected;
+							disableButtonSortDeleteAndTreat();
+						} else {
+							etat = Etat.manyAlarmNotSelected;
+							disableButtonDeleteAndTreat();
+						}
+						break;
+					case oneAlarmSelected:
+						if(nbAlarm == 0){
+							etat = Etat.noAlarm;
+							disableButtonResetSortDeleteAndTreat();
+						} else if(nbAlarm == 1){
+							etat = Etat.oneAlarmNotSelected;
+							disableButtonSortDeleteAndTreat();
+						} else {
+							etat = Etat.manyAlarmNotSelected;
+							disableButtonDeleteAndTreat();
+						}
+						break;
+					case oneAlarmSelectedTreated:
+						if(nbAlarm == 0){
+							etat = Etat.noAlarm;
+							disableButtonResetSortDeleteAndTreat();
+						} else if(nbAlarm == 1){
+							etat = Etat.oneAlarmNotSelected;
+							disableButtonSortDeleteAndTreat();
+						} else {
+							etat = Etat.manyAlarmNotSelected;
+							disableButtonDeleteAndTreat();
+						}
+						break;
+					case manyAlarmNotSelected:
+						if(nbAlarm == 0){
+							etat = Etat.noAlarm;
+							disableButtonResetSortDeleteAndTreat();
+						} else if(nbAlarm == 1){
+							etat = Etat.oneAlarmNotSelected;
+							disableButtonSortDeleteAndTreat();
+						} else {
+							etat = Etat.manyAlarmNotSelected;
+							disableButtonDeleteAndTreat();
+						}
+						break;
+					case manyAlarmSelected:
+						if(nbAlarm == 0){
+							etat = Etat.noAlarm;
+							disableButtonResetSortDeleteAndTreat();
+						} else if(nbAlarm == 1){
+							etat = Etat.oneAlarmNotSelected;
+							disableButtonSortDeleteAndTreat();
+						} else {
+							etat = Etat.manyAlarmNotSelected;
+							disableButtonDeleteAndTreat();
+						}
+						break;
+					case manyAlarmSelectedTreated:
+						if(nbAlarm == 0){
+							etat = Etat.noAlarm;
+							disableButtonResetSortDeleteAndTreat();
+						} else if(nbAlarm == 1){
+							etat = Etat.oneAlarmNotSelected;
+							disableButtonSortDeleteAndTreat();
+						} else {
+							etat = Etat.manyAlarmNotSelected;
+							disableButtonDeleteAndTreat();
+						}
+						break;
+				}
+				
 				event.consume();
 			}
     		
@@ -1117,6 +1426,96 @@ public class View {
 				ongletVisual.setUnselected();
 				visualOnly = false;
 				refreshList();
+				
+				nbAlarm = getListView().getItems().size();
+				
+				switch (etat){
+					case noAlarm:
+						if(nbAlarm == 0){
+							etat = Etat.noAlarm;
+							disableButtonResetSortDeleteAndTreat();
+						} else if(nbAlarm == 1){
+							etat = Etat.oneAlarmNotSelected;
+							disableButtonSortDeleteAndTreat();
+						} else {
+							etat = Etat.manyAlarmNotSelected;
+							disableButtonDeleteAndTreat();
+						}
+						break;
+					case oneAlarmNotSelected:
+						if(nbAlarm == 0){
+							etat = Etat.noAlarm;
+							disableButtonResetSortDeleteAndTreat();
+						} else if(nbAlarm == 1){
+							etat = Etat.oneAlarmNotSelected;
+							disableButtonSortDeleteAndTreat();
+						} else {
+							etat = Etat.manyAlarmNotSelected;
+							disableButtonDeleteAndTreat();
+						}
+						break;
+					case oneAlarmSelected:
+						if(nbAlarm == 0){
+							etat = Etat.noAlarm;
+							disableButtonResetSortDeleteAndTreat();
+						} else if(nbAlarm == 1){
+							etat = Etat.oneAlarmNotSelected;
+							disableButtonSortDeleteAndTreat();
+						} else {
+							etat = Etat.manyAlarmNotSelected;
+							disableButtonDeleteAndTreat();
+						}
+						break;
+					case oneAlarmSelectedTreated:
+						if(nbAlarm == 0){
+							etat = Etat.noAlarm;
+							disableButtonResetSortDeleteAndTreat();
+						} else if(nbAlarm == 1){
+							etat = Etat.oneAlarmNotSelected;
+							disableButtonSortDeleteAndTreat();
+						} else {
+							etat = Etat.manyAlarmNotSelected;
+							disableButtonDeleteAndTreat();
+						}
+						break;
+					case manyAlarmNotSelected:
+						if(nbAlarm == 0){
+							etat = Etat.noAlarm;
+							disableButtonResetSortDeleteAndTreat();
+						} else if(nbAlarm == 1){
+							etat = Etat.oneAlarmNotSelected;
+							disableButtonSortDeleteAndTreat();
+						} else {
+							etat = Etat.manyAlarmNotSelected;
+							disableButtonDeleteAndTreat();
+						}
+						break;
+					case manyAlarmSelected:
+						if(nbAlarm == 0){
+							etat = Etat.noAlarm;
+							disableButtonResetSortDeleteAndTreat();
+						} else if(nbAlarm == 1){
+							etat = Etat.oneAlarmNotSelected;
+							disableButtonSortDeleteAndTreat();
+						} else {
+							etat = Etat.manyAlarmNotSelected;
+							disableButtonDeleteAndTreat();
+						}
+						break;
+					case manyAlarmSelectedTreated:
+						if(nbAlarm == 0){
+							etat = Etat.noAlarm;
+							disableButtonResetSortDeleteAndTreat();
+						} else if(nbAlarm == 1){
+							etat = Etat.oneAlarmNotSelected;
+							disableButtonSortDeleteAndTreat();
+						} else {
+							etat = Etat.manyAlarmNotSelected;
+							disableButtonDeleteAndTreat();
+						}
+						break;
+				}
+				
 				event.consume();
 			}
     		

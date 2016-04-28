@@ -5,6 +5,7 @@ import java.util.List;
 import application.alarm.Alarm;
 import application.alarm.AlarmView;
 import application.audiovisuel.AudioVisuel;
+import application.sorttype.SortType;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ListView;
 
@@ -137,6 +138,26 @@ public class Controller {
 			/* Tri de la liste du model par date décroissante */
 			this.getModel().sortByPrioDown();
 		}
+	}
+	
+	public SortType getSortType(){
+		if(getModel().getSortedPrio() && getModel().getSortedReverse()){
+			return SortType.PrioUp;
+		}
+		
+		if(getModel().getSortedPrio() && !getModel().getSortedReverse()){
+			return SortType.PrioDown;
+		}
+		
+		if(getModel().getSortedTime() && getModel().getSortedReverse()){
+			return SortType.TimeUp;
+		}
+		
+		if(getModel().getSortedTime() && !getModel().getSortedReverse()){
+			return SortType.TimeDown;
+		}
+		
+		return null;
 	}
 	
 	/**
