@@ -26,6 +26,9 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.Slider;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TouchEvent;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
@@ -55,6 +58,11 @@ public class View {
 	private Label descAlarm;
 	private Text prioriteAlarm;
 	private Text treatedAlarm;
+	
+	private Button buttonAddAlarmBasse;
+	private Button buttonAddAlarmMoyenne;
+	private Button buttonAddAlarmHaute;
+	private Button buttonAddAlarmMax;
 	
 	private Button buttonAddAlarmRandom;
 	private Button buttonResetAlarms;
@@ -96,8 +104,8 @@ public class View {
 			/* Paramètres de la fenêtre */
 			
 			primaryStage.setTitle("Gestionnaire d'alarmes multimodal 1.0");
-			primaryStage.setMinHeight(520);
-			primaryStage.setMinWidth(718);
+			primaryStage.setMinHeight(680);
+			primaryStage.setMinWidth(720);
 			primaryStage.setScene(scene);
 			primaryStage.getScene().getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			this.setPrimaryStage(primaryStage);
@@ -110,6 +118,7 @@ public class View {
 			initSoundsAlarms();
 			initLabels();
 			initAlarmList();
+			initButtonAddAlarmByPrio();
 			initButtons();
 			initOnglets();
 			initSlider();
@@ -168,6 +177,8 @@ public class View {
 			    	botLeftRect.setHeight(newSceneHeight.floatValue() - 200);
 			    	botRightRect.setHeight(newSceneHeight.floatValue() - 200);
 			    	scrollAlarm.setPrefHeight(newSceneHeight.floatValue() - 200);
+			    	ongletVisual.setLayoutY(pStage.getScene().getHeight() - 100);
+			    	ongletAll.setLayoutY(pStage.getScene().getHeight() - 50);
 			    }
 			});
 			
@@ -180,7 +191,11 @@ public class View {
 			top.getChildren().add(treatedAlarm);
 			
 			botLeft.getChildren().add(botLeftRect);
-			botLeft.getChildren().add(buttonAddAlarmRandom);
+			//botLeft.getChildren().add(buttonAddAlarmRandom);
+			botLeft.getChildren().add(buttonAddAlarmBasse);
+			botLeft.getChildren().add(buttonAddAlarmMoyenne);
+			botLeft.getChildren().add(buttonAddAlarmHaute);
+			botLeft.getChildren().add(buttonAddAlarmMax);
 			botLeft.getChildren().add(buttonResetAlarms);
 			botLeft.getChildren().add(buttonDeleteAlarm);
 			botLeft.getChildren().add(buttonTreatAlarm);
@@ -760,8 +775,298 @@ public class View {
 		
 		volumeText.setText("Vol :");
 		volumeText.setLayoutX(5);
-		volumeText.setLayoutY(57);
+		volumeText.setLayoutY(82);
 		volumeText.setId("vol-text");
+	}
+	
+	/**
+	 * Initialise les bouton d'ajout d'alarmes.
+	 */
+	private void initButtonAddAlarmByPrio(){
+		buttonAddAlarmBasse = new Button();
+		buttonAddAlarmMoyenne = new Button();
+		buttonAddAlarmHaute = new Button();
+		buttonAddAlarmMax = new Button();
+		
+		buttonAddAlarmBasse.setLayoutX(5);
+		buttonAddAlarmBasse.setLayoutY(5);
+		buttonAddAlarmBasse.setPrefWidth(42);
+		buttonAddAlarmBasse.setPrefHeight(50);
+		buttonAddAlarmBasse.setId("button-add-basse");
+		
+		buttonAddAlarmBasse.setOnAction(new EventHandler<ActionEvent>(){
+			
+			/* Ajout d'une alarme de priorité basse */
+			
+			@Override
+			public void handle(ActionEvent arg0) {			
+				getController().putAlarm(Priorite.Basse);
+				nbAlarm = getListView().getItems().size();
+				
+				switch (etat){
+					case noAlarm:
+						if(nbAlarm == 0){
+							etat = Etat.noAlarm;
+							disableButtonResetSortDeleteAndTreat();
+						} else {
+							etat = Etat.oneAlarmNotSelected;
+							disableButtonSortDeleteAndTreat();
+						}
+						
+						break;
+					case oneAlarmNotSelected:
+						if(nbAlarm == 1){
+							etat = Etat.oneAlarmNotSelected;
+							disableButtonSortDeleteAndTreat();
+						} else {
+							etat = Etat.manyAlarmNotSelected;
+							disableButtonDeleteAndTreat();
+						}
+						break;
+					case oneAlarmSelected:
+						if(nbAlarm == 1){
+							etat = Etat.oneAlarmNotSelected;
+							disableButtonSortDeleteAndTreat();
+						} else {
+							etat = Etat.manyAlarmNotSelected;
+							disableButtonDeleteAndTreat();
+						}
+						break;
+					case oneAlarmSelectedTreated:
+						if(nbAlarm == 1){
+							etat = Etat.oneAlarmNotSelected;
+							disableButtonSortDeleteAndTreat();
+						} else {
+							etat = Etat.manyAlarmNotSelected;
+							disableButtonDeleteAndTreat();
+						}
+						break;
+					case manyAlarmNotSelected:
+						etat = Etat.manyAlarmNotSelected;
+						disableButtonDeleteAndTreat();
+						break;
+					case manyAlarmSelected:
+						etat = Etat.manyAlarmNotSelected;
+						disableButtonDeleteAndTreat();
+						break;
+					case manyAlarmSelectedTreated:
+						etat = Etat.manyAlarmNotSelected;
+						disableButtonDeleteAndTreat();
+						break;
+				}
+			}
+			
+		});
+		
+		buttonAddAlarmMoyenne.setLayoutX(54);
+		buttonAddAlarmMoyenne.setLayoutY(5);
+		buttonAddAlarmMoyenne.setPrefWidth(42);
+		buttonAddAlarmMoyenne.setPrefHeight(50);
+		buttonAddAlarmMoyenne.setId("button-add-moyenne");
+		
+		buttonAddAlarmMoyenne.setOnAction(new EventHandler<ActionEvent>(){
+			
+			/* Ajout d'une alarme de priorité moyenne */
+			
+			@Override
+			public void handle(ActionEvent arg0) {			
+				getController().putAlarm(Priorite.Moyenne);
+				nbAlarm = getListView().getItems().size();
+				
+				switch (etat){
+					case noAlarm:
+						if(nbAlarm == 0){
+							etat = Etat.noAlarm;
+							disableButtonResetSortDeleteAndTreat();
+						} else {
+							etat = Etat.oneAlarmNotSelected;
+							disableButtonSortDeleteAndTreat();
+						}
+						
+						break;
+					case oneAlarmNotSelected:
+						if(nbAlarm == 1){
+							etat = Etat.oneAlarmNotSelected;
+							disableButtonSortDeleteAndTreat();
+						} else {
+							etat = Etat.manyAlarmNotSelected;
+							disableButtonDeleteAndTreat();
+						}
+						break;
+					case oneAlarmSelected:
+						if(nbAlarm == 1){
+							etat = Etat.oneAlarmNotSelected;
+							disableButtonSortDeleteAndTreat();
+						} else {
+							etat = Etat.manyAlarmNotSelected;
+							disableButtonDeleteAndTreat();
+						}
+						break;
+					case oneAlarmSelectedTreated:
+						if(nbAlarm == 1){
+							etat = Etat.oneAlarmNotSelected;
+							disableButtonSortDeleteAndTreat();
+						} else {
+							etat = Etat.manyAlarmNotSelected;
+							disableButtonDeleteAndTreat();
+						}
+						break;
+					case manyAlarmNotSelected:
+						etat = Etat.manyAlarmNotSelected;
+						disableButtonDeleteAndTreat();
+						break;
+					case manyAlarmSelected:
+						etat = Etat.manyAlarmNotSelected;
+						disableButtonDeleteAndTreat();
+						break;
+					case manyAlarmSelectedTreated:
+						etat = Etat.manyAlarmNotSelected;
+						disableButtonDeleteAndTreat();
+						break;
+				}
+			}
+			
+		});
+		
+		buttonAddAlarmHaute.setLayoutX(103);
+		buttonAddAlarmHaute.setLayoutY(5);
+		buttonAddAlarmHaute.setPrefWidth(42);
+		buttonAddAlarmHaute.setPrefHeight(50);
+		buttonAddAlarmHaute.setId("button-add-haute");
+		
+		buttonAddAlarmHaute.setOnAction(new EventHandler<ActionEvent>(){
+			
+			/* Ajout d'une alarme de priorité haute */
+			
+			@Override
+			public void handle(ActionEvent arg0) {			
+				getController().putAlarm(Priorite.Haute);
+				nbAlarm = getListView().getItems().size();
+				
+				switch (etat){
+					case noAlarm:
+						if(nbAlarm == 0){
+							etat = Etat.noAlarm;
+							disableButtonResetSortDeleteAndTreat();
+						} else {
+							etat = Etat.oneAlarmNotSelected;
+							disableButtonSortDeleteAndTreat();
+						}
+						
+						break;
+					case oneAlarmNotSelected:
+						if(nbAlarm == 1){
+							etat = Etat.oneAlarmNotSelected;
+							disableButtonSortDeleteAndTreat();
+						} else {
+							etat = Etat.manyAlarmNotSelected;
+							disableButtonDeleteAndTreat();
+						}
+						break;
+					case oneAlarmSelected:
+						if(nbAlarm == 1){
+							etat = Etat.oneAlarmNotSelected;
+							disableButtonSortDeleteAndTreat();
+						} else {
+							etat = Etat.manyAlarmNotSelected;
+							disableButtonDeleteAndTreat();
+						}
+						break;
+					case oneAlarmSelectedTreated:
+						if(nbAlarm == 1){
+							etat = Etat.oneAlarmNotSelected;
+							disableButtonSortDeleteAndTreat();
+						} else {
+							etat = Etat.manyAlarmNotSelected;
+							disableButtonDeleteAndTreat();
+						}
+						break;
+					case manyAlarmNotSelected:
+						etat = Etat.manyAlarmNotSelected;
+						disableButtonDeleteAndTreat();
+						break;
+					case manyAlarmSelected:
+						etat = Etat.manyAlarmNotSelected;
+						disableButtonDeleteAndTreat();
+						break;
+					case manyAlarmSelectedTreated:
+						etat = Etat.manyAlarmNotSelected;
+						disableButtonDeleteAndTreat();
+						break;
+				}
+			}
+			
+		});
+		
+		buttonAddAlarmMax.setLayoutX(152);
+		buttonAddAlarmMax.setLayoutY(5);
+		buttonAddAlarmMax.setPrefWidth(42);
+		buttonAddAlarmMax.setPrefHeight(50);
+		buttonAddAlarmMax.setId("button-add-max");
+		
+		buttonAddAlarmMax.setOnAction(new EventHandler<ActionEvent>(){
+			
+			/* Ajout d'une alarme de priorité max */
+			
+			@Override
+			public void handle(ActionEvent arg0) {			
+				getController().putAlarm(Priorite.Max);
+				nbAlarm = getListView().getItems().size();
+				
+				switch (etat){
+					case noAlarm:
+						if(nbAlarm == 0){
+							etat = Etat.noAlarm;
+							disableButtonResetSortDeleteAndTreat();
+						} else {
+							etat = Etat.oneAlarmNotSelected;
+							disableButtonSortDeleteAndTreat();
+						}
+						
+						break;
+					case oneAlarmNotSelected:
+						if(nbAlarm == 1){
+							etat = Etat.oneAlarmNotSelected;
+							disableButtonSortDeleteAndTreat();
+						} else {
+							etat = Etat.manyAlarmNotSelected;
+							disableButtonDeleteAndTreat();
+						}
+						break;
+					case oneAlarmSelected:
+						if(nbAlarm == 1){
+							etat = Etat.oneAlarmNotSelected;
+							disableButtonSortDeleteAndTreat();
+						} else {
+							etat = Etat.manyAlarmNotSelected;
+							disableButtonDeleteAndTreat();
+						}
+						break;
+					case oneAlarmSelectedTreated:
+						if(nbAlarm == 1){
+							etat = Etat.oneAlarmNotSelected;
+							disableButtonSortDeleteAndTreat();
+						} else {
+							etat = Etat.manyAlarmNotSelected;
+							disableButtonDeleteAndTreat();
+						}
+						break;
+					case manyAlarmNotSelected:
+						etat = Etat.manyAlarmNotSelected;
+						disableButtonDeleteAndTreat();
+						break;
+					case manyAlarmSelected:
+						etat = Etat.manyAlarmNotSelected;
+						disableButtonDeleteAndTreat();
+						break;
+					case manyAlarmSelectedTreated:
+						etat = Etat.manyAlarmNotSelected;
+						disableButtonDeleteAndTreat();
+						break;
+				}
+			}
+			
+		});
 	}
 	
 	/**
@@ -799,6 +1104,7 @@ public class View {
 		buttonAddAlarmRandom.setLayoutX(5);
 		buttonAddAlarmRandom.setLayoutY(5);
 		buttonAddAlarmRandom.setPrefWidth(190);
+		buttonAddAlarmRandom.setPrefHeight(50);
 		buttonAddAlarmRandom.setText("Add Random Alarm");
 		buttonAddAlarmRandom.setOnAction(new EventHandler<ActionEvent>(){
 			
@@ -865,8 +1171,9 @@ public class View {
 		});
 		
 		buttonResetAlarms.setLayoutX(5);
-		buttonResetAlarms.setLayoutY(75);
+		buttonResetAlarms.setLayoutY(100);
 		buttonResetAlarms.setPrefWidth(190);
+		buttonResetAlarms.setPrefHeight(50);
 		buttonResetAlarms.setText("Reset All");
 		buttonResetAlarms.setOnAction(new EventHandler<ActionEvent>(){
 
@@ -941,8 +1248,9 @@ public class View {
 		});
 		
 		buttonDeleteAlarm.setLayoutX(5);
-		buttonDeleteAlarm.setLayoutY(110);
+		buttonDeleteAlarm.setLayoutY(155);
 		buttonDeleteAlarm.setPrefWidth(190);
+		buttonDeleteAlarm.setPrefHeight(50);
 		buttonDeleteAlarm.setText("Delete Alarm");
 		buttonDeleteAlarm.setOnAction(new EventHandler<ActionEvent>(){
 
@@ -1005,8 +1313,9 @@ public class View {
 		});	
 		
 		buttonTreatAlarm.setLayoutX(5);
-		buttonTreatAlarm.setLayoutY(145);
+		buttonTreatAlarm.setLayoutY(210);
 		buttonTreatAlarm.setPrefWidth(190);
+		buttonTreatAlarm.setPrefHeight(50);
 		buttonTreatAlarm.setText("Treat Alarm");
 		buttonTreatAlarm.setOnAction(new EventHandler<ActionEvent>(){
 
@@ -1046,8 +1355,9 @@ public class View {
 		});	
 		
 		buttonSortByTime.setLayoutX(5);
-		buttonSortByTime.setLayoutY(180);
+		buttonSortByTime.setLayoutY(265);
 		buttonSortByTime.setPrefWidth(90);
+		buttonSortByTime.setPrefHeight(50);
 		buttonSortByTime.setText("Sort Time");
 		buttonSortByTime.setOnAction(new EventHandler<ActionEvent>(){
 
@@ -1061,8 +1371,9 @@ public class View {
 		});	
 		
 		buttonSortByPriority.setLayoutX(105);
-		buttonSortByPriority.setLayoutY(180);
+		buttonSortByPriority.setLayoutY(265);
 		buttonSortByPriority.setPrefWidth(90);
+		buttonSortByPriority.setPrefHeight(50);
 		buttonSortByPriority.setText("Sort Prio");
 		buttonSortByPriority.setOnAction(new EventHandler<ActionEvent>(){
 
@@ -1114,7 +1425,7 @@ public class View {
     	visualOnly = true;
     	
     	ongletVisual.setLayoutX(120);
-    	ongletVisual.setLayoutY(420);
+    	ongletVisual.setLayoutY(pStage.getScene().getHeight() - 100);
     	ongletVisual.setSelected();
     	
     	/* Events touch/click */
@@ -1326,7 +1637,7 @@ public class View {
     	});
     	
     	ongletAll.setLayoutX(120);
-    	ongletAll.setLayoutY(450);
+    	ongletAll.setLayoutY(pStage.getScene().getHeight() - 50);
     	
     	/* Events touch/click */
     	
@@ -1544,7 +1855,7 @@ public class View {
     	masterVolume = new Slider(0, 100, 100);
     	
     	masterVolume.setLayoutX(50);
-    	masterVolume.setLayoutY(45);
+    	masterVolume.setLayoutY(70);
     	
     	masterVolume.valueProperty().addListener(new ChangeListener<Number>(){
 

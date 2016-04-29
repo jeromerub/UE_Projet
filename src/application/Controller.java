@@ -5,6 +5,7 @@ import java.util.List;
 import application.alarm.Alarm;
 import application.alarm.AlarmView;
 import application.audiovisuel.AudioVisuel;
+import application.priorite.Priorite;
 import application.sorttype.SortType;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ListView;
@@ -70,6 +71,16 @@ public class Controller {
 	 */
 	public void putAlarm(){
 		Alarm a = new Alarm();
+		this.getModel().addAlarm(a);
+	}
+	
+	/**
+	 * Ajoute une alarme aléatoire de priorité p.
+	 * @param p
+	 * 			Priorité de l'alarme.
+	 */
+	public void putAlarm(Priorite p){
+		Alarm a = new Alarm(p);
 		this.getModel().addAlarm(a);
 	}
 	

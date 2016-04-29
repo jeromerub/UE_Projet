@@ -22,14 +22,14 @@ public class OngletListAlarms extends Parent {
 	 * 			Vue de l'application.
 	 */
 	public OngletListAlarms(String name, View v){
-		fond = new Rectangle(0, 0, 80, 25);
+		fond = new Rectangle(0, 0, 80, 50);
 		fond.setFill(Color.WHITE);
-		fond.setStroke(Color.BLACK);
+		fond.setStroke(Color.WHITE);
 		fond.setStrokeWidth(3);
 		
 		title = new Label(name);
 		title.setLayoutX(6);
-		title.setLayoutY(3);
+		title.setLayoutY(15);
 		title.setId("onglet-text");
 		
 		this.getChildren().add(fond);

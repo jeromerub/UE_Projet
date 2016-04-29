@@ -57,3 +57,19 @@
 #vol-text {
 	-fx-font: 20px "Serif";
 }
+
+#button-add-basse {
+	-fx-base: #74DF00;
+}
+
+#button-add-moyenne {
+	-fx-base: #D7DF01;
+}
+
+#button-add-haute {
+	-fx-base: #FAAC58;
+}
+
+#button-add-max {
+	-fx-base: #FF0000;
+}

@@ -71,6 +71,35 @@ public class Alarm implements Serializable  {
 	}
 	
 	/**
+	 * Création d'une alarme avec une priorité.
+	 * @param p 
+	 * 			Priorité de l'alarme.
+	 */
+	public Alarm(Priorite p){		
+		this.created = new Timestamp(new Date().getTime());
+		this.nom = "Alarme " + ++cptRandom;
+		this.priorite = p;
+		
+		switch(p){
+			case Basse:
+				this.type = AudioVisuel.AUDIO;
+				break;
+			case Moyenne:
+				this.type = AudioVisuel.VISUEL;
+				break;
+			case Haute:
+				this.type = AudioVisuel.AUDIOVISUEL;
+				break;
+			case Max:
+				this.type = AudioVisuel.AUDIOVISUEL;
+				break;
+		}
+		
+		this.desc = "Alarme type : " + this.type + " - Alarme de priorité " + this.priorite;
+		this.isTreated = false;
+	}
+	
+	/**
 	 * Création d'une alarme avec un nom, une description et une priorité.
 	 * @param nom 
 	 * 			Nom de l'alarme.
