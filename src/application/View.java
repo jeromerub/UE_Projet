@@ -807,41 +807,56 @@ public class View {
 			@Override
 			public void handle(ActionEvent arg0) {			
 				getController().putAlarm();
+				nbAlarm = getListView().getItems().size();
 				
 				switch (etat){
 					case noAlarm:
-						etat = Etat.oneAlarmNotSelected;
-						nbAlarm++;
-						disableButtonSortDeleteAndTreat();
+						if(nbAlarm == 0){
+							etat = Etat.noAlarm;
+							disableButtonResetSortDeleteAndTreat();
+						} else {
+							etat = Etat.oneAlarmNotSelected;
+							disableButtonSortDeleteAndTreat();
+						}
+						
 						break;
 					case oneAlarmNotSelected:
-						etat = Etat.manyAlarmNotSelected;
-						nbAlarm++;
-						disableButtonDeleteAndTreat();
+						if(nbAlarm == 1){
+							etat = Etat.oneAlarmNotSelected;
+							disableButtonSortDeleteAndTreat();
+						} else {
+							etat = Etat.manyAlarmNotSelected;
+							disableButtonDeleteAndTreat();
+						}
 						break;
 					case oneAlarmSelected:
-						etat = Etat.manyAlarmNotSelected;
-						nbAlarm++;
-						disableButtonDeleteAndTreat();
+						if(nbAlarm == 1){
+							etat = Etat.oneAlarmNotSelected;
+							disableButtonSortDeleteAndTreat();
+						} else {
+							etat = Etat.manyAlarmNotSelected;
+							disableButtonDeleteAndTreat();
+						}
 						break;
 					case oneAlarmSelectedTreated:
-						etat = Etat.manyAlarmNotSelected;
-						nbAlarm++;
-						disableButtonDeleteAndTreat();
+						if(nbAlarm == 1){
+							etat = Etat.oneAlarmNotSelected;
+							disableButtonSortDeleteAndTreat();
+						} else {
+							etat = Etat.manyAlarmNotSelected;
+							disableButtonDeleteAndTreat();
+						}
 						break;
 					case manyAlarmNotSelected:
 						etat = Etat.manyAlarmNotSelected;
-						nbAlarm++;
 						disableButtonDeleteAndTreat();
 						break;
 					case manyAlarmSelected:
 						etat = Etat.manyAlarmNotSelected;
-						nbAlarm++;
 						disableButtonDeleteAndTreat();
 						break;
 					case manyAlarmSelectedTreated:
 						etat = Etat.manyAlarmNotSelected;
-						nbAlarm++;
 						disableButtonDeleteAndTreat();
 						break;
 				}
