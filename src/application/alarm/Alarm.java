@@ -95,6 +95,10 @@ public class Alarm implements Serializable  {
 				break;
 		}
 		
+		if(this.type == AudioVisuel.AUDIO && Model.getVolume() <= 25){
+			this.type = AudioVisuel.VISUEL;
+		}
+		
 		this.desc = "Alarme type : " + this.type + " - Alarme de priorité " + this.priorite;
 		this.isTreated = false;
 	}
