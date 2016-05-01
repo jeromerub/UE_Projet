@@ -1366,6 +1366,33 @@ public class View {
 			@Override
 			public void handle(ActionEvent arg0) {
 				getController().sortAlarmsByTime();
+				
+				switch (etat){
+					case noAlarm:
+						//Interdit
+						break;
+					case oneAlarmNotSelected:
+						//Interdit
+						break;
+					case oneAlarmSelected:
+						//Interdit
+						break;
+					case oneAlarmSelectedTreated:
+						//Interdit
+						break;
+					case manyAlarmNotSelected:
+						etat = Etat.manyAlarmNotSelected;
+						disableButtonDeleteAndTreat();
+						break;
+					case manyAlarmSelected:
+						etat = Etat.manyAlarmNotSelected;
+						disableButtonDeleteAndTreat();
+						break;
+					case manyAlarmSelectedTreated:
+						etat = Etat.manyAlarmNotSelected;
+						disableButtonDeleteAndTreat();
+						break;
+				}
 			}
 			
 		});	
@@ -1382,6 +1409,33 @@ public class View {
 			@Override
 			public void handle(ActionEvent arg0) {
 				getController().sortAlarmsByPriority();
+				
+				switch (etat){
+					case noAlarm:
+						//Interdit
+						break;
+					case oneAlarmNotSelected:
+						//Interdit
+						break;
+					case oneAlarmSelected:
+						//Interdit
+						break;
+					case oneAlarmSelectedTreated:
+						//Interdit
+						break;
+					case manyAlarmNotSelected:
+						etat = Etat.manyAlarmNotSelected;
+						disableButtonDeleteAndTreat();
+						break;
+					case manyAlarmSelected:
+						etat = Etat.manyAlarmNotSelected;
+						disableButtonDeleteAndTreat();
+						break;
+					case manyAlarmSelectedTreated:
+						etat = Etat.manyAlarmNotSelected;
+						disableButtonDeleteAndTreat();
+						break;
+				}
 			}
 			
 		});	
