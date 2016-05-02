@@ -235,24 +235,24 @@ public class AlarmView extends Parent {
 							view.disableButtonSortDeleteAndTreat();
 							break;
 						case oneAlarmSelected:
-							view.setEtat(Etat.oneAlarmSelected);
-							view.disableButtonSort();
+							view.setEtat(Etat.oneAlarmNotSelected);
+							view.disableButtonSortDeleteAndTreat();
 							break;
 						case oneAlarmSelectedTreated:
-							view.setEtat(Etat.oneAlarmSelectedTreated);
-							view.disableButtonSortAndTreat();
+							view.setEtat(Etat.oneAlarmNotSelected);
+							view.disableButtonSortDeleteAndTreat();
 							break;
 						case manyAlarmNotSelected:
 							view.setEtat(Etat.manyAlarmNotSelected);
 							view.disableButtonDeleteAndTreat();
 							break;
 						case manyAlarmSelected:
-							view.setEtat(Etat.manyAlarmSelected);
-							view.noDisableButton();
+							view.setEtat(Etat.manyAlarmNotSelected);
+							view.disableButtonDeleteAndTreat();
 							break;
 						case manyAlarmSelectedTreated:
-							view.setEtat(Etat.manyAlarmSelectedTreated);
-							view.disableButtonTreat();
+							view.setEtat(Etat.manyAlarmNotSelected);
+							view.disableButtonDeleteAndTreat();
 							break;
 					}
 		    	}
