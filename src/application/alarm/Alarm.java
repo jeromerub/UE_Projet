@@ -10,7 +10,7 @@ import application.audiovisuel.AudioVisuel;
 import application.priorite.Priorite;
 
 /**
- * Classe qui repr√©sente une alarme.
+ * Classe qui reprÈsente une alarme.
  * @author Floo'
  */
 public class Alarm implements Serializable  {
@@ -29,7 +29,7 @@ public class Alarm implements Serializable  {
 	private AudioVisuel type;
 	
 	/**
-	 * G√©n√©ration  d'une alarme al√©atoire.
+	 * GÈnÈration  d'une alarme alÈatoire.
 	 */
 	public Alarm(){		
 		this.created = new Timestamp(new Date().getTime());
@@ -65,15 +65,15 @@ public class Alarm implements Serializable  {
 			this.type = AudioVisuel.VISUEL;
 		}
 		
-		this.desc = "Alarme type : " + this.type + " - Alarme de priorit√© " + this.priorite;
+		this.desc = "Alarme type : " + this.type + " - Alarme de prioritÈ " + this.priorite;
 		this.isTreated = false;
 		
 	}
 	
 	/**
-	 * Cr√©ation d'une alarme avec une priorit√©.
+	 * CrÈation d'une alarme avec une prioritÈ.
 	 * @param p 
-	 * 			Priorit√© de l'alarme.
+	 * 			PrioritÈ de l'alarme.
 	 */
 	public Alarm(Priorite p){		
 		this.created = new Timestamp(new Date().getTime());
@@ -99,18 +99,18 @@ public class Alarm implements Serializable  {
 			this.type = AudioVisuel.VISUEL;
 		}
 		
-		this.desc = "Alarme type : " + this.type + " - Alarme de priorit√© " + this.priorite;
+		this.desc = "Alarme type : " + this.type + " - Alarme de prioritÈ " + this.priorite;
 		this.isTreated = false;
 	}
 	
 	/**
-	 * Cr√©ation d'une alarme avec un nom, une description et une priorit√©.
+	 * CrÈation d'une alarme avec un nom, une description et une prioritÈ.
 	 * @param nom 
 	 * 			Nom de l'alarme.
 	 * @param desc 
 	 * 			Description de l'alarme.
 	 * @param p 
-	 * 			Priorit√© de l'alarme.
+	 * 			PrioritÈ de l'alarme.
 	 */
 	public Alarm(String nom, String desc, Priorite p){		
 		this.created = new Timestamp(new Date().getTime());
@@ -151,14 +151,14 @@ public class Alarm implements Serializable  {
 	}
 
 	/**
-	 * @return Priorit√© de l'alarme.
+	 * @return PrioritÈ de l'alarme.
 	 */
 	public Priorite getPriorite(){
 		return this.priorite;
 	}
 	
 	/**
-	 * @return Timestamp √† la cr√©ation de l'alarme.
+	 * @return Timestamp √† la crÈation de l'alarme.
 	 */
 	public Timestamp getTimestamp(){
 		return this.created;
@@ -172,24 +172,24 @@ public class Alarm implements Serializable  {
 	}
 	
 	/**
-	 * Passe une alarme dans l'√©tat "trait√©e".
+	 * Passe une alarme dans l'Ètat "traitÈe".
 	 */
 	public void setTreated(){
 		this.isTreated = true;
 	}
 	
 	/**
-	 * @return True si l'alarme est trait√©e, False sinon.
+	 * @return True si l'alarme est traitÈe, False sinon.
 	 */
 	public boolean isTreated(){
 		return this.isTreated;
 	}
 	
 	/** 
-	 * G√©n√®re un nombre entre 0 (inclu) et high (exclu).
+	 * GÈn√®re un nombre entre 0 (inclu) et high (exclu).
 	 * @param high
-	 * 			Borne sup√©rieure exclue.
-	 * @return Nombre al√©atoire g√©n√©r√©.
+	 * 			Borne supÈrieure exclue.
+	 * @return Nombre alÈatoire gÈnÈrÈ.
 	 */
 	public static int random(int high) {
 		return random.nextInt(high);
